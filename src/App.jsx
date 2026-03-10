@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
@@ -50,7 +50,22 @@ function StoreOnlyRoute({ children }) {
 
 function AppContent() {
   const loc = useLocation();
+  const { booting } = useAuth();
   const isAdminArea = loc.pathname.startsWith("/admin");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [loc.pathname]);
+
+  if (booting) {
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-slate-600 sm:px-6 lg:px-8">
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

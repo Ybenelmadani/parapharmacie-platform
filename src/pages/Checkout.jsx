@@ -96,6 +96,7 @@ export default function Checkout() {
         customer_email: form.email,
         customer_phone: form.phone,
         shipping_address: form.address,
+        payment_method: "cash_on_delivery",
       });
 
       await refresh();
@@ -161,6 +162,13 @@ export default function Checkout() {
                 required
               />
             </div>
+          </div>
+
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
+            <p className="font-semibold">Payment method: Cash on delivery only.</p>
+            <p className="mt-1 text-sm">
+              You will pay when your order is delivered.
+            </p>
           </div>
 
           <button
