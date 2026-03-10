@@ -18,6 +18,10 @@ export default function ProductForm() {
   const [status, setStatus] = useState(true);
   const [categoryId, setCategoryId] = useState("");
   const [brandId, setBrandId] = useState("");
+  const [sku, setSku] = useState("");
+  const [barcode, setBarcode] = useState("");
+  const [price, setPrice] = useState("0");
+  const [stock, setStock] = useState("0");
 
   const loadMeta = async () => {
     const [catRes, brandRes] = await Promise.all([
@@ -37,11 +41,16 @@ export default function ProductForm() {
   const loadForEdit = async () => {
     const res = await http.get(`/admin/products/${id}`);
     const p = res?.data || {};
+    const primaryVariant = Array.isArray(p.variants) && p.variants.length > 0 ? p.variants[0] : null;
 
     setName(p.name || "");
     setStatus(Boolean(p.status));
     setCategoryId(p.category_id ? String(p.category_id) : "");
     setBrandId(p.brand_id ? String(p.brand_id) : "");
+    setSku(primaryVariant?.sku || "");
+    setBarcode(primaryVariant?.barcode || "");
+    setPrice(primaryVariant?.price != null ? String(primaryVariant.price) : "0");
+    setStock(primaryVariant?.stock != null ? String(primaryVariant.stock) : "0");
   };
 
   useEffect(() => {
@@ -85,6 +94,18 @@ export default function ProductForm() {
       setError("Category and brand are required.");
       return;
     }
+    if (!sku.trim()) {
+      setError("SKU is required.");
+      return;
+    }
+    if (Number.isNaN(Number(price)) || Number(price) < 0) {
+      setError("Price must be a valid number >= 0.");
+      return;
+    }
+    if (!Number.isInteger(Number(stock)) || Number(stock) < 0) {
+      setError("Stock must be an integer >= 0.");
+      return;
+    }
 
     setSaving(true);
     setError("");
@@ -94,6 +115,10 @@ export default function ProductForm() {
       status,
       category_id: Number(categoryId),
       brand_id: Number(brandId),
+      sku: sku.trim(),
+      barcode: barcode.trim() || null,
+      price: Number(price),
+      stock: Number(stock),
     };
 
     try {
@@ -182,6 +207,50 @@ export default function ProductForm() {
               <option value="1">Active</option>
               <option value="0">Inactive</option>
             </select>
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "12px", color: "#475569", marginBottom: "6px" }}>SKU</label>
+            <input
+              value={sku}
+              onChange={(e) => setSku(e.target.value)}
+              placeholder="PAINT-EXAMPLE-001"
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "12px", color: "#475569", marginBottom: "6px" }}>Barcode (optional)</label>
+            <input
+              value={barcode}
+              onChange={(e) => setBarcode(e.target.value)}
+              placeholder="Barcode"
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "12px", color: "#475569", marginBottom: "6px" }}>Price</label>
+            <input
+              type="number"
+              min={0}
+              step="0.01"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "12px", color: "#475569", marginBottom: "6px" }}>Stock</label>
+            <input
+              type="number"
+              min={0}
+              step="1"
+              value={stock}
+              onChange={(e) => setStock(e.target.value)}
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+            />
           </div>
         </div>
 

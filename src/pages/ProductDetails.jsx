@@ -10,6 +10,8 @@ import { CatalogAPI } from "../api/catalog";
 import { useCart } from "../context/CartContext";
 import { ReviewsAPI } from "../api/reviews";
 
+const LOW_STOCK_LIMIT = 10;
+
 export default function ProductDetails() {
   const { id } = useParams();
   const { add } = useCart();
@@ -29,6 +31,13 @@ export default function ProductDetails() {
   }, [id]);
 
   const selectedVariant = useMemo(() => p?.variants?.find(v => v.id === variantId), [p, variantId]);
+  const selectedStock = Number(selectedVariant?.stock || 0);
+  const stockMeta =
+    selectedStock <= 0
+      ? { label: "En rupture", className: "bg-rose-100 text-rose-700" }
+      : selectedStock <= LOW_STOCK_LIMIT
+        ? { label: `Stock faible (${selectedStock})`, className: "bg-amber-100 text-amber-700" }
+        : { label: `En stock (${selectedStock})`, className: "bg-emerald-100 text-emerald-700" };
 
   if (!p) {
     return <Container className="py-10">Loading…</Container>;
@@ -46,6 +55,9 @@ export default function ProductDetails() {
         <div>
           <div className="text-xs text-slate-500">{p.brand?.name} • {p.category?.name}</div>
           <h1 className="mt-1 text-3xl font-black">{p.name}</h1>
+          <div className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-bold ${stockMeta.className}`}>
+            {stockMeta.label}
+          </div>
           <p className="mt-3 text-slate-600">{p.description}</p>
 
           <div className="mt-6">
@@ -71,7 +83,7 @@ export default function ProductDetails() {
                 if (!variantId) return;
                 add(variantId, qty);
               }}
-              disabled={!variantId || (selectedVariant?.stock ?? 0) <= 0}
+              disabled={!variantId || selectedStock <= 0}
             >
               Add to cart
             </Button>
@@ -82,7 +94,7 @@ export default function ProductDetails() {
             </div>
           </div>
 
-          {(selectedVariant?.stock ?? 0) <= 0 && (
+          {selectedStock <= 0 && (
             <div className="mt-3 text-sm text-rose-600">Out of stock</div>
           )}
 

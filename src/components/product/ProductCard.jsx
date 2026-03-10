@@ -6,6 +6,8 @@ import { useCart } from "../../context/CartContext";
 import { CatalogAPI } from "../../api/catalog";
 import { resolveMediaUrl } from "../../utils/media";
 
+const LOW_STOCK_LIMIT = 10;
+
 export default function ProductCard({ p }) {
   const { add } = useCart();
   const [adding, setAdding] = useState(false);
@@ -14,6 +16,16 @@ export default function ProductCard({ p }) {
     p.images?.find((i) => i.is_main)?.image_path || p.images?.[0]?.image_path
   );
   const firstAvailableVariant = p.variants?.find((v) => Number(v.stock) > 0) || p.variants?.[0] || null;
+  const totalStock = Array.isArray(p.variants)
+    ? p.variants.reduce((sum, v) => sum + (Number(v?.stock) || 0), 0)
+    : 0;
+  const isOutOfStock = totalStock <= 0;
+  const isLowStock = totalStock > 0 && totalStock <= LOW_STOCK_LIMIT;
+  const stockBadge = isOutOfStock
+    ? { label: "En rupture", className: "bg-slate-100 text-slate-700" }
+    : isLowStock
+      ? { label: `Stock faible (${totalStock})`, className: "bg-amber-500 text-white" }
+      : { label: `En stock (${totalStock})`, className: "bg-emerald-500 text-white" };
 
   const resolveVariantId = async () => {
     if (firstAvailableVariant?.id) return firstAvailableVariant.id;
@@ -26,7 +38,7 @@ export default function ProductCard({ p }) {
   };
 
   const handleAddToCart = async () => {
-    if (adding) return;
+    if (adding || isOutOfStock) return;
 
     setAdding(true);
     try {
@@ -61,6 +73,10 @@ export default function ProductCard({ p }) {
           </div>
         </Link>
 
+        <div className={`absolute left-3 top-3 z-10 rounded-md px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide shadow-sm ${stockBadge.className}`}>
+          {stockBadge.label}
+        </div>
+
         <Link
           to={`/products/${p.id}`}
           aria-label={`View ${p.name}`}
@@ -77,13 +93,15 @@ export default function ProductCard({ p }) {
         <div className="mt-1 font-bold">{p.name}</div>
 
         <div className="mt-2 text-slate-700">
-          <span className="text-sm">See variants</span>
+          <span className="text-sm">
+            {isOutOfStock ? "Unavailable" : isLowStock ? `Only ${totalStock} left` : "See variants"}
+          </span>
         </div>
 
         <div className="mt-4">
-          <Button className="w-full gap-2" onClick={handleAddToCart} disabled={adding}>
+          <Button className="w-full gap-2" onClick={handleAddToCart} disabled={adding || isOutOfStock}>
             <ShoppingCart size={16} />
-            {adding ? "Adding..." : "Add to cart"}
+            {adding ? "Adding..." : isOutOfStock ? "Out of stock" : "Add to cart"}
           </Button>
         </div>
       </div>
