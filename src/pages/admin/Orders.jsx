@@ -97,7 +97,7 @@ export default function Orders() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search order ID, user, email, phone"
+            placeholder="Search order ID, customer, email, phone"
             style={{ flex: "1 1 280px", minWidth: "220px", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
           />
           <select
@@ -152,12 +152,12 @@ export default function Orders() {
                   return (
                     <tr key={o.id} style={{ borderTop: "1px solid #e2e8f0" }}>
                       <td>{o.id}</td>
-                      <td>{o.user?.name ?? o.user_id}</td>
+                      <td>{o.customer_name ?? o.user?.name ?? o.user_id ?? "Guest"}</td>
                       <td style={{ maxWidth: "170px", whiteSpace: "normal", overflowWrap: "anywhere", wordBreak: "break-word", lineHeight: "1.25" }}>
-                        {o.user?.email ?? "-"}
+                        {o.customer_email ?? o.user?.email ?? "-"}
                       </td>
-                      <td>{o.user?.phone ?? "-"}</td>
-                      <td>{o.user?.address ?? o.shipping_address ?? "-"}</td>
+                      <td>{o.customer_phone ?? o.user?.phone ?? "-"}</td>
+                      <td>{o.shipping_address ?? o.user?.address ?? "-"}</td>
                       <td>
                         <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "999px", fontWeight: 800, fontSize: "12px", textTransform: "capitalize", ...statusStyle }}>
                           {currentStatus}

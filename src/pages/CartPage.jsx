@@ -1,12 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
 import { resolveMediaUrl } from "../utils/media";
 
 export default function CartPage() {
   const nav = useNavigate();
-  const { user } = useAuth();
   const { items, total, updateQty, remove, clear, loading } = useCart();
 
   return (
@@ -89,7 +87,7 @@ export default function CartPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between gap-3">
+                    <div className="mt-4 flex items-center justify-between gap-3 ">
                       <div className="flex items-center gap-2">
                         <label className="text-sm text-slate-600">Qty</label>
                         <input
@@ -109,7 +107,7 @@ export default function CartPage() {
                         </button>
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-right ">
                         <div className="text-xs text-slate-500">Subtotal</div>
                         <div className="font-bold">
                           {(Number(it.unit_price) * it.quantity).toFixed(2)} USD
@@ -137,20 +135,9 @@ export default function CartPage() {
             <span className="text-xl font-black">{total.toFixed(2)} USD</span>
           </div>
 
-          {!user ? (
-            <div className="mt-4 p-3 rounded-xl bg-amber-50 text-amber-800 text-sm">
-              Please login to checkout.
-              <div className="mt-2">
-                <Link className="underline font-semibold" to="/login">
-                  Go to Login
-                </Link>
-              </div>
-            </div>
-          ) : null}
-
           <button
             onClick={() => nav("/checkout")}
-            disabled={!user || items.length === 0}
+            disabled={items.length === 0}
             className="mt-4 w-full rounded-xl bg-black text-white py-3 font-semibold disabled:opacity-50"
           >
             Go to checkout

@@ -94,9 +94,7 @@ function AppContent() {
           path="/checkout"
           element={
             <StoreOnlyRoute>
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
+              <Checkout />
             </StoreOnlyRoute>
           }
         />

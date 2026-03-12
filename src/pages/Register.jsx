@@ -48,6 +48,9 @@ export default function Register() {
   return (
     <div className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-black mb-4">Create account</h1>
+      <p className="mb-4 text-sm text-slate-600">
+        Creating an account is optional for customers. You can still browse and place orders as a guest.
+      </p>
 
       {err ? (
         <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-700 text-sm">

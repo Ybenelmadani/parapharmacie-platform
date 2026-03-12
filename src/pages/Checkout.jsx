@@ -33,7 +33,7 @@ export default function Checkout() {
 
   // IMPORTANT: charger le panier sur cette page
   useEffect(() => {
-    if (user) refresh();
+    refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -53,21 +53,12 @@ export default function Checkout() {
     return <div className="max-w-5xl mx-auto p-6 text-slate-600">Loading…</div>;
   }
 
-  // 2) not logged in
-  if (!user) {
-    return (
-      <div className="max-w-5xl mx-auto p-6 text-slate-600">
-        Please login to checkout.
-      </div>
-    );
-  }
-
-  // 3) cart loading
+  // 2) cart loading
   if (loading) {
     return <div className="max-w-5xl mx-auto p-6 text-slate-600">Loading cart…</div>;
   }
 
-  // 4) empty cart based ONLY on CartContext items
+  // 3) empty cart based ONLY on CartContext items
   if (items.length === 0) {
     return (
       <div className="max-w-5xl mx-auto p-6">
@@ -100,7 +91,7 @@ export default function Checkout() {
       });
 
       await refresh();
-      nav("/my-orders");
+      nav(user ? "/my-orders" : "/", { replace: true });
     } catch (e2) {
       const msg =
         e2?.response?.data?.message ||

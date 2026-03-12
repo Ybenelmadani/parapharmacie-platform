@@ -12,6 +12,14 @@ export default function Users() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+  });
 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
@@ -82,6 +90,46 @@ export default function Users() {
     }
   };
 
+  const setCreateField = (key, value) => {
+    setCreateForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const createUser = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setCreating(true);
+
+    try {
+      await http.post("/admin/users", {
+        name: createForm.name,
+        email: createForm.email,
+        password: createForm.password,
+        phone: createForm.phone || undefined,
+        address: createForm.address || undefined,
+      });
+
+      setSuccess("Admin account created successfully.");
+      setCreateForm({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        address: "",
+      });
+      await load(page);
+    } catch (e) {
+      const apiMsg =
+        e?.response?.data?.message ||
+        (e?.response?.data?.errors
+          ? Object.values(e.response.data.errors).flat().join(" | ")
+          : "Failed to create account.");
+      setError(apiMsg);
+    } finally {
+      setCreating(false);
+    }
+  };
+
   const hasPrev = pagination.current_page > 1;
   const hasNext = pagination.current_page < pagination.last_page;
 
@@ -93,6 +141,80 @@ export default function Users() {
       {success ? <AdminAlert type="success">{success}</AdminAlert> : null}
 
       <div style={{ background: "#fff", borderRadius: "16px", padding: "16px", boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)", border: "1px solid #e2e8f0" }}>
+        <form
+          onSubmit={createUser}
+          style={{
+            marginBottom: "18px",
+            padding: "16px",
+            borderRadius: "14px",
+            border: "1px solid #dbeafe",
+            background: "#f8fbff",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", alignItems: "center", marginBottom: "12px" }}>
+            <div>
+              <div style={{ fontWeight: 900, fontSize: "18px", color: "#0f172a" }}>Create admin</div>
+              <div style={{ color: "#475569", fontSize: "14px" }}>This form creates an admin account only.</div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px" }}>
+            <input
+              value={createForm.name}
+              onChange={(e) => setCreateField("name", e.target.value)}
+              placeholder="Full name"
+              style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+              required
+            />
+            <input
+              value={createForm.email}
+              onChange={(e) => setCreateField("email", e.target.value)}
+              placeholder="Email"
+              style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+              required
+            />
+            <input
+              type="password"
+              value={createForm.password}
+              onChange={(e) => setCreateField("password", e.target.value)}
+              placeholder="Password (min 6)"
+              style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+              required
+            />
+            <input
+              value={createForm.phone}
+              onChange={(e) => setCreateField("phone", e.target.value)}
+              placeholder="Phone (optional)"
+              style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
+            />
+            <input
+              value={createForm.address}
+              onChange={(e) => setCreateField("address", e.target.value)}
+              placeholder="Address (optional)"
+              style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px", gridColumn: "1 / -1" }}
+            />
+          </div>
+
+          <div style={{ marginTop: "12px", display: "flex", justifyContent: "flex-end" }}>
+            <button
+              type="submit"
+              disabled={creating}
+              style={{
+                padding: "10px 16px",
+                border: 0,
+                borderRadius: "10px",
+                background: "#0f172a",
+                color: "#fff",
+                fontWeight: 800,
+                opacity: creating ? 0.7 : 1,
+                cursor: creating ? "not-allowed" : "pointer",
+              }}
+            >
+              {creating ? "Creating..." : "Create admin"}
+            </button>
+          </div>
+        </form>
+
         <div style={{ marginBottom: "14px", display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
           <input
             value={search}

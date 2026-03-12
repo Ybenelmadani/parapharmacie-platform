@@ -31,6 +31,9 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-black mb-4">Login</h1>
+      <p className="mb-4 text-sm text-slate-600">
+        Customer accounts are optional. Visitors can order without signing up, while admins sign in here to manage the store.
+      </p>
 
       {err ? (
         <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-700 text-sm">
@@ -64,7 +67,7 @@ export default function Login() {
       </form>
 
       <p className="mt-4 text-sm text-slate-600">
-        No account? <Link className="underline" to="/register">Create one</Link>
+        No account? <Link className="underline" to="/register">Create one if you want faster reorders and order history</Link>
       </p>
     </div>
   );

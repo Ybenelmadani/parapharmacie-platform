@@ -17,10 +17,6 @@ export function CartProvider({ children }) {
   );
 
   const refresh = useCallback(async () => {
-    if (!user) {
-      setItems([]);
-      return;
-    }
     setLoading(true);
     try {
       const res = await http.get("/cart");
@@ -28,25 +24,20 @@ export function CartProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     refresh();
-  }, [refresh]);
+  }, [refresh, user?.id]);
 
   const add = useCallback(async (variantId, quantity = 1) => {
-    if (!user) {
-      // UX : envoyer vers login
-      window.location.href = "/login";
-      return;
-    }
     const res = await http.post("/cart/items", {
       product_variant_id: variantId,
       quantity,
     });
     setItems(res.data?.items || []);
     setOpen(true);
-  }, [user]);
+  }, []);
 
   const updateQty = useCallback(async (cartItemId, quantity) => {
     const res = await http.patch(`/cart/items/${cartItemId}`, { quantity });

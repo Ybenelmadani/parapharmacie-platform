@@ -187,13 +187,13 @@ export default function Home() {
           description:
             "Browse the latest arrivals from your live catalog data.",
           image: firstCatalogImage,
-          bg: "from-[#f6ead8] to-[#f9f2e8]",
-          accent: "text-[#d86d42]",
+          bg: "from-neutral-100 to-neutral-100",
+          accent: "text-neutral-900",
         },
       ];
     }
 
-    return source.map((product, idx) => ({
+    return source.map((product) => ({
       id: product.id,
       eyebrow: product?.category?.name?.toUpperCase() || "FEATURED",
       title: product?.name || "Studio Selection",
@@ -204,8 +204,8 @@ export default function Home() {
         shortText(product?.description, 170) ||
         "Carefully selected materials from your real catalog products and categories.",
       image: getProductImage(product) || firstCatalogImage,
-      bg: idx % 2 === 0 ? "from-[#f6ead8] to-[#f9f2e8]" : "from-[#dbe6f5] to-[#eef3fb]",
-      accent: idx % 2 === 0 ? "text-[#d86d42]" : "text-[#1f3a67]",
+      bg: "from-neutral-100 to-neutral-100",
+      accent: "text-neutral-900",
     }));
   }, [products, firstCatalogImage]);
 
@@ -301,18 +301,18 @@ export default function Home() {
   const currentSlide = heroSlides[Math.min(heroIndex, Math.max(0, heroSlides.length - 1))];
 
   return (
-    <div className="min-h-screen bg-[#fcfaf7] pb-14 text-neutral-900">
+    <div className="min-h-screen bg-neutral-50 pb-14 text-neutral-900">
       <main>
         <section className="pt-7 md:pt-9">
           <Container>
             <Reveal className="overflow-hidden rounded-[34px] border border-black/5 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
               <div className="grid min-h-[620px] lg:grid-cols-2">
-                <div className={`bg-gradient-to-br ${currentSlide?.bg || "from-[#f6ead8] to-[#f9f2e8]"} p-8 md:p-12 lg:p-16`}>
+                <div className={`bg-gradient-to-br ${currentSlide?.bg || "from-neutral-100 to-neutral-100"} p-8 md:p-12 lg:p-16`}>
                   <div
                     key={`hero-copy-${currentSlide?.id || "fallback"}`}
                     className="animate-in fade-in slide-in-from-left-8 duration-700"
                   >
-                    <p className={`mb-6 text-xs uppercase tracking-[0.35em] ${currentSlide?.accent || "text-[#d86d42]"}`}>
+                    <p className={`mb-6 text-xs uppercase tracking-[0.35em] ${currentSlide?.accent || "text-neutral-900"}`}>
                       {currentSlide?.eyebrow || "FEATURED"}
                     </p>
                     <h1 className="mb-6 text-4xl font-semibold leading-[0.95] tracking-tight text-neutral-900 md:text-6xl">
@@ -413,14 +413,17 @@ export default function Home() {
           </Container>
         </section>
 
-        <section className="bg-[#e9e6df] py-20">
+        <section className="bg-neutral-50 py-20">
           <Container>
             <Reveal>
               <h2 className="mb-10 text-center text-4xl font-black tracking-tight text-neutral-900 md:text-6xl">
                 Categories
               </h2>
             </Reveal>
-            <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+            
+             {/* className="d-flex justify-content-between flex-wrap" */}
+
+            <div   className="grid gap-8 sm:grid-cols-4 xl:grid-cols-4 " >
               {loading &&
                 Array.from({ length: 8 }).map((_, idx) => (
                   <div key={`cat-skeleton-${idx}`} className="h-[220px] animate-pulse rounded-md bg-neutral-200" />
@@ -461,10 +464,12 @@ export default function Home() {
             <Reveal>
               <SectionTitle eyebrow="GIFT SELECTION" title="Hornmark's Gift" action="View all products" to="/products?q=gift" />
             </Reveal>
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            
+            
+            <div  className="grid gap-6 md:grid-cols-4 xl:grid-cols-4">
               {loading &&
                 Array.from({ length: 4 }).map((_, idx) => (
-                  <div key={`gift-skeleton-${idx}`} className="h-[430px] animate-pulse rounded-[28px] border border-neutral-200 bg-neutral-200" />
+                  <div key={`gift-skeleton-${idx}`} className="h-[430px] animate-pulse rounded-[28px] border border-neutral-200 bg-neutral-200"/>
                 ))}
               {!loading &&
                 giftProducts.map((product, index) => (
@@ -476,12 +481,12 @@ export default function Home() {
           </Container>
         </section>
 
-        <section className="border-y border-black/5 bg-[#f6f1ea] py-24">
+        <section className="border-y border-black/5 bg-neutral-50 py-24">
           <Container>
             <Reveal>
               <SectionTitle eyebrow="NEW PRODUCTS" title="New Products" action="Browse newest arrivals" to="/products" />
             </Reveal>
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-3 xl:grid-cols-3">
               {loading &&
                 Array.from({ length: 6 }).map((_, idx) => (
                   <div key={`new-skeleton-${idx}`} className="h-[430px] animate-pulse rounded-[28px] border border-neutral-200 bg-neutral-200" />
@@ -498,8 +503,8 @@ export default function Home() {
 
         <section className="py-24">
           <Container>
-            <div className="mb-8 grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
-              <Reveal className="relative overflow-hidden rounded-[34px] bg-[#0f172a] p-10 text-white md:p-12">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-2">
+              <Reveal className="relative overflow-hidden rounded-[34px] bg-neutral-900 p-10 text-white md:p-12">
                 <p className="mb-4 text-xs uppercase tracking-[0.35em] text-white/60">BRANDS</p>
                 <h2 className="mb-5 text-4xl font-semibold md:text-5xl">The World of Adwart</h2>
                 <p className="max-w-2xl text-lg leading-8 text-white/80">
@@ -552,14 +557,14 @@ export default function Home() {
               </Reveal>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid items-stretch gap-6 md:grid-cols-3">
               {storyCards.map((story, index) => (
-                <Reveal key={story.id} delay={index * 90}>
-                  <div className="rounded-[28px] border border-neutral-200 bg-white p-8 transition-shadow hover:shadow-xl">
+                <Reveal key={story.id} delay={index * 90} className="h-full">
+                  <div className="flex h-full flex-col rounded-[28px] border border-neutral-200 bg-white p-8 transition-shadow hover:shadow-xl">
                     <p className="mb-4 text-xs uppercase tracking-[0.35em] text-neutral-500">Episode</p>
                     <h3 className="mb-4 text-2xl font-semibold text-neutral-900">{story.title}</h3>
                     <p className="mb-6 leading-7 text-neutral-600">{story.description}</p>
-                    <div className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900">
+                    <div className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-neutral-900">
                       {story.rating > 0 ? `Rating: ${story.rating}/5` : "Read more"}
                       <ChevronRight className="h-4 w-4" />
                     </div>
