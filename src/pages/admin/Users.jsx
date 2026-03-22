@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { http } from "../../api/http";
 import AdminAlert from "../../components/admin/AdminAlert";
+import { useI18n } from "../../context/I18nContext";
 
 const ROLE_STYLE = {
   admin: { background: "#dbeafe", color: "#1e3a8a" },
@@ -8,6 +9,126 @@ const ROLE_STYLE = {
 };
 
 export default function Users() {
+  const { pick } = useI18n();
+  const ui = pick({
+    fr: {
+      title: "Utilisateurs",
+      loadError: "Impossible de charger les utilisateurs.",
+      confirmChangeRole: "Confirmer le changement de role vers",
+      roleUpdated: "Role mis a jour avec succes.",
+      roleUpdateError: "Impossible de mettre a jour le role.",
+      accountCreated: "Compte administrateur cree avec succes.",
+      accountCreateError: "Impossible de creer le compte.",
+      createAdmin: "Creer un admin",
+      createAdminHelp: "Ce formulaire cree uniquement un compte administrateur.",
+      fullName: "Nom complet",
+      email: "Email",
+      password: "Mot de passe (min 6)",
+      phoneOptional: "Telephone (optionnel)",
+      addressOptional: "Adresse (optionnelle)",
+      creating: "Creation...",
+      createAdminButton: "Creer l'admin",
+      searchPlaceholder: "Rechercher par nom, email ou telephone",
+      allRoles: "Tous les roles",
+      admin: "Admin",
+      user: "Utilisateur",
+      reset: "Reinitialiser",
+      loading: "Chargement des utilisateurs...",
+      empty: "Aucun utilisateur trouve.",
+      id: "ID",
+      name: "Nom",
+      role: "Role",
+      phone: "Telephone",
+      address: "Adresse",
+      changeRole: "Changer le role",
+      total: "Total",
+      users: "utilisateurs",
+      page: "Page",
+      previous: "Precedent",
+      next: "Suivant",
+    },
+    en: {
+      title: "Users",
+      loadError: "Failed to load users.",
+      confirmChangeRole: "Confirm change role to",
+      roleUpdated: "Role updated successfully.",
+      roleUpdateError: "Failed to update role.",
+      accountCreated: "Admin account created successfully.",
+      accountCreateError: "Failed to create account.",
+      createAdmin: "Create admin",
+      createAdminHelp: "This form creates an admin account only.",
+      fullName: "Full name",
+      email: "Email",
+      password: "Password (min 6)",
+      phoneOptional: "Phone (optional)",
+      addressOptional: "Address (optional)",
+      creating: "Creating...",
+      createAdminButton: "Create admin",
+      searchPlaceholder: "Search name, email or phone",
+      allRoles: "All roles",
+      admin: "Admin",
+      user: "User",
+      reset: "Reset",
+      loading: "Loading users...",
+      empty: "No users found.",
+      id: "ID",
+      name: "Name",
+      role: "Role",
+      phone: "Phone",
+      address: "Address",
+      changeRole: "Change role",
+      total: "Total",
+      users: "users",
+      page: "Page",
+      previous: "Previous",
+      next: "Next",
+    },
+    ar: {
+      title: "المستخدمون",
+      loadError: "تعذر تحميل المستخدمين.",
+      confirmChangeRole: "تأكيد تغيير الدور إلى",
+      roleUpdated: "تم تحديث الدور بنجاح.",
+      roleUpdateError: "تعذر تحديث الدور.",
+      accountCreated: "تم إنشاء حساب الإدارة بنجاح.",
+      accountCreateError: "تعذر إنشاء الحساب.",
+      createAdmin: "إنشاء مدير",
+      createAdminHelp: "هذا النموذج ينشئ حساب إدارة فقط.",
+      fullName: "الاسم الكامل",
+      email: "البريد الإلكتروني",
+      password: "كلمة المرور (6 على الأقل)",
+      phoneOptional: "الهاتف (اختياري)",
+      addressOptional: "العنوان (اختياري)",
+      creating: "جار الإنشاء...",
+      createAdminButton: "إنشاء مدير",
+      searchPlaceholder: "ابحث بالاسم أو البريد أو الهاتف",
+      allRoles: "كل الأدوار",
+      admin: "مدير",
+      user: "مستخدم",
+      reset: "إعادة التعيين",
+      loading: "جار تحميل المستخدمين...",
+      empty: "لم يتم العثور على مستخدمين.",
+      id: "المعرف",
+      name: "الاسم",
+      role: "الدور",
+      phone: "الهاتف",
+      address: "العنوان",
+      changeRole: "تغيير الدور",
+      total: "الإجمالي",
+      users: "مستخدمين",
+      page: "الصفحة",
+      previous: "السابق",
+      next: "التالي",
+    },
+  });
+
+  const roleLabels = useMemo(
+    () => ({
+      admin: ui.admin,
+      user: ui.user,
+    }),
+    [ui.admin, ui.user]
+  );
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -30,39 +151,55 @@ export default function Users() {
     total: 0,
     per_page: 25,
   });
+  const searchRef = useRef(search);
+  const roleFilterRef = useRef(roleFilter);
 
-  const load = async (targetPage = 1) => {
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
 
-    try {
-      const res = await http.get("/admin/users", {
-        params: {
-          page: targetPage,
-          per_page: pagination.per_page,
-          q: search.trim() || undefined,
-          role: roleFilter || undefined,
-        },
-      });
+  useEffect(() => {
+    roleFilterRef.current = roleFilter;
+  }, [roleFilter]);
 
-      const payload = res?.data ?? {};
-      setUsers(Array.isArray(payload.data) ? payload.data : []);
-      setPagination({
-        current_page: Number(payload.current_page) || targetPage,
-        last_page: Number(payload.last_page) || 1,
-        total: Number(payload.total) || 0,
-        per_page: Number(payload.per_page) || pagination.per_page,
-      });
-    } catch {
-      setError("Failed to load users.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const load = useCallback(
+    async (targetPage = 1, overrides = {}) => {
+      const query = typeof overrides.search === "string" ? overrides.search : searchRef.current;
+      const role = typeof overrides.roleFilter === "string" ? overrides.roleFilter : roleFilterRef.current;
+
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await http.get("/admin/users", {
+          params: {
+            page: targetPage,
+            per_page: pagination.per_page,
+            q: query.trim() || undefined,
+            role: role || undefined,
+          },
+        });
+
+        const payload = res?.data ?? {};
+        setUsers(Array.isArray(payload.data) ? payload.data : []);
+        setPagination({
+          current_page: Number(payload.current_page) || targetPage,
+          last_page: Number(payload.last_page) || 1,
+          total: Number(payload.total) || 0,
+          per_page: Number(payload.per_page) || pagination.per_page,
+        });
+      } catch {
+        setError(ui.loadError);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [pagination.per_page, ui.loadError]
+  );
 
   useEffect(() => {
     load(page);
-  }, [page]);
+  }, [load, page]);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -71,10 +208,10 @@ export default function Users() {
     }, 300);
 
     return () => clearTimeout(t);
-  }, [search, roleFilter]);
+  }, [load, page, roleFilter, search]);
 
   const changeRole = async (id, role) => {
-    const confirmMsg = `Confirm change role to ${role}?`;
+    const confirmMsg = `${ui.confirmChangeRole} ${roleLabels[role] || role}?`;
     if (!window.confirm(confirmMsg)) return;
 
     setError("");
@@ -82,11 +219,11 @@ export default function Users() {
 
     try {
       await http.patch(`/admin/users/${id}/role`, { role });
-      setSuccess("Role updated successfully.");
+      setSuccess(ui.roleUpdated);
       await load(page);
     } catch (e) {
       const apiMsg = e?.response?.data?.message;
-      setError(apiMsg || "Failed to update role.");
+      setError(apiMsg || ui.roleUpdateError);
     }
   };
 
@@ -109,7 +246,7 @@ export default function Users() {
         address: createForm.address || undefined,
       });
 
-      setSuccess("Admin account created successfully.");
+      setSuccess(ui.accountCreated);
       setCreateForm({
         name: "",
         email: "",
@@ -123,7 +260,7 @@ export default function Users() {
         e?.response?.data?.message ||
         (e?.response?.data?.errors
           ? Object.values(e.response.data.errors).flat().join(" | ")
-          : "Failed to create account.");
+          : ui.accountCreateError);
       setError(apiMsg);
     } finally {
       setCreating(false);
@@ -134,8 +271,8 @@ export default function Users() {
   const hasNext = pagination.current_page < pagination.last_page;
 
   return (
-    <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-      <h2 style={{ fontSize: 28, fontWeight: 900, color: "#0f172a", marginBottom: 14 }}>Users</h2>
+    <div style={{ width: "100%", maxWidth: "1500px", margin: "0 auto" }}>
+      <h2 style={{ fontSize: 28, fontWeight: 900, color: "#0f172a", marginBottom: 14 }}>{ui.title}</h2>
 
       {error ? <AdminAlert type="error">{error}</AdminAlert> : null}
       {success ? <AdminAlert type="success">{success}</AdminAlert> : null}
@@ -153,8 +290,8 @@ export default function Users() {
         >
           <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", alignItems: "center", marginBottom: "12px" }}>
             <div>
-              <div style={{ fontWeight: 900, fontSize: "18px", color: "#0f172a" }}>Create admin</div>
-              <div style={{ color: "#475569", fontSize: "14px" }}>This form creates an admin account only.</div>
+              <div style={{ fontWeight: 900, fontSize: "18px", color: "#0f172a" }}>{ui.createAdmin}</div>
+              <div style={{ color: "#475569", fontSize: "14px" }}>{ui.createAdminHelp}</div>
             </div>
           </div>
 
@@ -162,14 +299,14 @@ export default function Users() {
             <input
               value={createForm.name}
               onChange={(e) => setCreateField("name", e.target.value)}
-              placeholder="Full name"
+              placeholder={ui.fullName}
               style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
               required
             />
             <input
               value={createForm.email}
               onChange={(e) => setCreateField("email", e.target.value)}
-              placeholder="Email"
+              placeholder={ui.email}
               style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
               required
             />
@@ -177,20 +314,20 @@ export default function Users() {
               type="password"
               value={createForm.password}
               onChange={(e) => setCreateField("password", e.target.value)}
-              placeholder="Password (min 6)"
+              placeholder={ui.password}
               style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
               required
             />
             <input
               value={createForm.phone}
               onChange={(e) => setCreateField("phone", e.target.value)}
-              placeholder="Phone (optional)"
+              placeholder={ui.phoneOptional}
               style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
             />
             <input
               value={createForm.address}
               onChange={(e) => setCreateField("address", e.target.value)}
-              placeholder="Address (optional)"
+              placeholder={ui.addressOptional}
               style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px", gridColumn: "1 / -1" }}
             />
           </div>
@@ -210,7 +347,7 @@ export default function Users() {
                 cursor: creating ? "not-allowed" : "pointer",
               }}
             >
-              {creating ? "Creating..." : "Create admin"}
+              {creating ? ui.creating : ui.createAdminButton}
             </button>
           </div>
         </form>
@@ -219,7 +356,7 @@ export default function Users() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name, email or phone"
+            placeholder={ui.searchPlaceholder}
             style={{ flex: "1 1 280px", minWidth: "220px", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px" }}
           />
           <select
@@ -227,39 +364,39 @@ export default function Users() {
             onChange={(e) => setRoleFilter(e.target.value)}
             style={{ padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: "10px", background: "#fff" }}
           >
-            <option value="">All roles</option>
-            <option value="admin">admin</option>
-            <option value="user">user</option>
+            <option value="">{ui.allRoles}</option>
+            <option value="admin">{roleLabels.admin}</option>
+            <option value="user">{roleLabels.user}</option>
           </select>
           <button
             onClick={async () => {
               setSearch("");
               setRoleFilter("");
-              if (page === 1) await load(1);
+              if (page === 1) await load(1, { search: "", roleFilter: "" });
               else setPage(1);
             }}
             style={{ padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: "10px", background: "#fff", fontWeight: 700, color: "#0f172a" }}
           >
-            Reset
+            {ui.reset}
           </button>
         </div>
 
         {loading ? (
-          <div style={{ padding: "8px 4px", color: "#64748b", fontWeight: 600 }}>Loading users...</div>
+          <div style={{ padding: "8px 4px", color: "#64748b", fontWeight: 600 }}>{ui.loading}</div>
         ) : users.length === 0 ? (
-          <div style={{ padding: "16px", borderRadius: "10px", background: "#f8fafc", color: "#475569" }}>No users found.</div>
+          <div style={{ padding: "16px", borderRadius: "10px", background: "#f8fafc", color: "#475569" }}>{ui.empty}</div>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table cellPadding="10" style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: "#334155" }}>
-                  <th style={{ textAlign: "left" }}>ID</th>
-                  <th style={{ textAlign: "left" }}>Name</th>
-                  <th style={{ textAlign: "left" }}>Email</th>
-                  <th style={{ textAlign: "left" }}>Role</th>
-                  <th style={{ textAlign: "left" }}>Phone</th>
-                  <th style={{ textAlign: "left" }}>Address</th>
-                  <th style={{ textAlign: "left" }}>Change role</th>
+                  <th style={{ textAlign: "left" }}>{ui.id}</th>
+                  <th style={{ textAlign: "left" }}>{ui.name}</th>
+                  <th style={{ textAlign: "left" }}>{ui.email}</th>
+                  <th style={{ textAlign: "left" }}>{ui.role}</th>
+                  <th style={{ textAlign: "left" }}>{ui.phone}</th>
+                  <th style={{ textAlign: "left" }}>{ui.address}</th>
+                  <th style={{ textAlign: "left" }}>{ui.changeRole}</th>
                 </tr>
               </thead>
 
@@ -274,8 +411,8 @@ export default function Users() {
                       <td>{u.name}</td>
                       <td>{u.email}</td>
                       <td>
-                        <span style={{ padding: "4px 10px", borderRadius: "999px", fontWeight: 700, fontSize: "12px", textTransform: "capitalize", ...roleStyle }}>
-                          {role}
+                        <span style={{ padding: "4px 10px", borderRadius: "999px", fontWeight: 700, fontSize: "12px", ...roleStyle }}>
+                          {roleLabels[role] || role}
                         </span>
                       </td>
                       <td>{u.phone || "-"}</td>
@@ -287,14 +424,14 @@ export default function Users() {
                             onClick={() => changeRole(u.id, "user")}
                             disabled={role === "user"}
                           >
-                            User
+                            {roleLabels.user}
                           </button>
                           <button
                             style={{ padding: "6px 10px", border: 0, borderRadius: "8px", background: "#0284c7", color: "#fff", fontWeight: 700 }}
                             onClick={() => changeRole(u.id, "admin")}
                             disabled={role === "admin"}
                           >
-                            Admin
+                            {roleLabels.admin}
                           </button>
                         </div>
                       </td>
@@ -309,7 +446,7 @@ export default function Users() {
         {!loading ? (
           <div style={{ marginTop: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
             <div style={{ color: "#475569", fontSize: "14px" }}>
-              Total: {pagination.total} users | Page {pagination.current_page} / {pagination.last_page}
+              {ui.total}: {pagination.total} {ui.users} | {ui.page} {pagination.current_page} / {pagination.last_page}
             </div>
             <div style={{ display: "flex", gap: "8px" }}>
               <button
@@ -317,14 +454,14 @@ export default function Users() {
                 disabled={!hasPrev}
                 style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid #cbd5e1", background: hasPrev ? "#fff" : "#f1f5f9", color: "#0f172a", fontWeight: 700, cursor: hasPrev ? "pointer" : "not-allowed" }}
               >
-                Previous
+                {ui.previous}
               </button>
               <button
                 onClick={() => setPage((p) => (hasNext ? p + 1 : p))}
                 disabled={!hasNext}
                 style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid #0f172a", background: hasNext ? "#0f172a" : "#cbd5e1", color: "#fff", fontWeight: 700, cursor: hasNext ? "pointer" : "not-allowed" }}
               >
-                Next
+                {ui.next}
               </button>
             </div>
           </div>

@@ -1,7 +1,14 @@
 import React, { useMemo, useState } from "react";
+import { useI18n } from "../../context/I18nContext";
 import { resolveMediaUrl } from "../../utils/media";
 
 export default function ImageGallery({ images = [] }) {
+  const { pick } = useI18n();
+  const ui = pick({
+    fr: { product: "Produit", noImage: "Aucune image" },
+    en: { product: "Product", noImage: "No image" },
+    ar: { product: "منتج", noImage: "لا توجد صورة" },
+  });
   const ordered = useMemo(() => {
     const main = images.find(i => i.is_main);
     const rest = images.filter(i => !i.is_main);
@@ -14,9 +21,9 @@ export default function ImageGallery({ images = [] }) {
     <div className="grid gap-3">
       <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
         {active ? (
-          <img src={active} alt="Product" className="w-full h-[420px] object-cover" />
+          <img src={active} alt={ui.product} className="h-[280px] w-full object-cover sm:h-[360px] lg:h-[420px]" />
         ) : (
-          <div className="h-[420px] flex items-center justify-center text-slate-400">No image</div>
+          <div className="flex h-[280px] items-center justify-center text-slate-400 sm:h-[360px] lg:h-[420px]">{ui.noImage}</div>
         )}
       </div>
 

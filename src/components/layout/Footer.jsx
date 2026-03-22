@@ -1,124 +1,194 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Music2, Youtube } from "lucide-react";
+import { STORE_CITY, STORE_NAME, STORE_SUPPORT_EMAIL, STORE_SUPPORT_PHONE } from "../../config/store";
+import { useI18n } from "../../context/I18nContext";
 import Container from "./Container";
 
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" strokeWidth="2" />
+      <circle cx="12" cy="12" r="4.1" strokeWidth="2" />
+      <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+      <path d="M14.1 3h2.55c.18 1.58 1.02 3.06 2.35 3.95.76.51 1.66.8 2.59.85v2.6a7.83 7.83 0 0 1-4.94-1.68v6.29a5.98 5.98 0 1 1-5.21-5.93v2.71a3.34 3.34 0 1 0 2.66 3.26V3Z" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+      <path d="M13.26 21v-7.45h2.5l.38-2.9h-2.88V8.8c0-.84.23-1.42 1.43-1.42H16.3V4.79c-.28-.04-1.23-.12-2.33-.12-2.31 0-3.89 1.41-3.89 4v2H7.45v2.9h2.63V21h3.18Z" />
+    </svg>
+  );
+}
+
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("");
-
-  const handleSignup = (e) => {
-    e.preventDefault();
-    const value = email.trim();
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-    if (!isValid) {
-      setStatus("Please enter a valid email.");
-      return;
-    }
-
-    const current = JSON.parse(localStorage.getItem("newsletter_subscribers") || "[]");
-    if (!current.includes(value)) {
-      current.push(value);
-      localStorage.setItem("newsletter_subscribers", JSON.stringify(current));
-    }
-
-    setStatus("Thanks. You are subscribed.");
-    setEmail("");
-  };
+  const { pick } = useI18n();
+  const ui = pick({
+    fr: {
+      joinCommunity: "Rejoignez la communaute",
+      followUs: "Suivez Adwart sur nos reseaux sociaux.",
+      help: "Aide",
+      shopping: "Shopping",
+      moreFrom: "Plus d'Adwart",
+      helpAdvice: "Aide et conseils",
+      shippingTax: "Livraison et taxes",
+      serviceUpdates: "Mises a jour du service",
+      trackOrder: "Suivre ma commande",
+      returns: "Retours",
+      contact: "Contact",
+      productGuides: "Guides produits",
+      reviews: "Avis",
+      priceMatch: "Alignement des prix",
+      giftVouchers: "Cartes cadeaux",
+      rewardPoints: "Points de fidelite",
+      about: "A propos d'Adwart",
+      artBlog: "Blog art",
+      publications: "Publications",
+      artClasses: "Cours d'art",
+      events: "Evenements",
+      expertCoaching: "Coaching expert",
+      webinars: "Webinaires",
+      terms: "CGV",
+      privacy: "Politique de confidentialite",
+      cookies: "Politique de cookies",
+      customerService: "Service client",
+      hours: "9h - 18h Lun - Ven",
+    },
+    en: {
+      joinCommunity: "Join the community",
+      followUs: "Follow Adwart on our social media.",
+      help: "Help",
+      shopping: "Shopping",
+      moreFrom: "More from Adwart",
+      helpAdvice: "Help & advice",
+      shippingTax: "Shipping & tax",
+      serviceUpdates: "Service updates",
+      trackOrder: "Track my order",
+      returns: "Returns",
+      contact: "Contact",
+      productGuides: "Product guides",
+      reviews: "Reviews",
+      priceMatch: "Price match",
+      giftVouchers: "Gift vouchers",
+      rewardPoints: "Reward points",
+      about: "About Adwart",
+      artBlog: "Art blog",
+      publications: "Publications",
+      artClasses: "Art classes",
+      events: "Events",
+      expertCoaching: "Expert coaching",
+      webinars: "Webinars",
+      terms: "T&Cs",
+      privacy: "Privacy Policy",
+      cookies: "Cookie Policy",
+      customerService: "Customer Service",
+      hours: "9AM - 6PM Mon - Fri",
+    },
+    ar: {
+      joinCommunity: "انضم إلى المجتمع",
+      followUs: "تابع Adwart على شبكاتنا الاجتماعية.",
+      help: "المساعدة",
+      shopping: "التسوق",
+      moreFrom: "المزيد من Adwart",
+      helpAdvice: "مساعدة ونصائح",
+      shippingTax: "الشحن والضرائب",
+      serviceUpdates: "تحديثات الخدمة",
+      trackOrder: "تتبع طلبي",
+      returns: "المرتجعات",
+      contact: "اتصل بنا",
+      productGuides: "أدلة المنتجات",
+      reviews: "المراجعات",
+      priceMatch: "مطابقة السعر",
+      giftVouchers: "قسائم الهدايا",
+      rewardPoints: "نقاط المكافآت",
+      about: "حول Adwart",
+      artBlog: "مدونة الفن",
+      publications: "المنشورات",
+      artClasses: "دروس الفن",
+      events: "الفعاليات",
+      expertCoaching: "توجيه الخبراء",
+      webinars: "الندوات",
+      terms: "الشروط والأحكام",
+      privacy: "سياسة الخصوصية",
+      cookies: "سياسة ملفات الارتباط",
+      customerService: "خدمة العملاء",
+      hours: "9 صباحًا - 6 مساءً من الإثنين إلى الجمعة",
+    },
+  });
 
   const helpLinks = [
-    { label: "Help & advice", to: "/info/help-advice" },
-    { label: "Shipping & tax", to: "/info/shipping-tax" },
-    { label: "Service updates", to: "/info/service-updates" },
-    { label: "Track my order", to: "/my-orders" },
-    { label: "Returns", to: "/info/returns" },
-    { label: "Contact", to: "/info/contact" },
+    { label: ui.helpAdvice, to: "/info/help-advice" },
+    { label: ui.shippingTax, to: "/info/shipping-tax" },
+    { label: ui.serviceUpdates, to: "/info/service-updates" },
+    { label: ui.trackOrder, to: "/my-orders" },
+    { label: ui.returns, to: "/info/returns" },
+    { label: ui.contact, to: "/info/contact" },
   ];
 
   const shoppingLinks = [
-    { label: "Product guides", to: "/info/product-guides" },
-    { label: "Reviews", to: "/info/reviews" },
-    { label: "Price match", to: "/info/price-match" },
-    { label: "Gift vouchers", to: "/info/gift-vouchers" },
-    { label: "Reward points", to: "/info/reward-points" },
-  ];
-
-  const partnershipLinks = [
-    { label: "Artist rewards program", to: "/info/artist-rewards-program" },
-    { label: "Student program", to: "/info/student-program" },
-    { label: "Teacher program", to: "/info/teacher-program" },
-    { label: "Affiliate program", to: "/info/affiliate-program" },
-    { label: "Sponsorship program", to: "/info/sponsorship-program" },
-    { label: "Trade & educational", to: "/info/trade-educational" },
+    { label: ui.productGuides, to: "/info/product-guides" },
+    { label: ui.reviews, to: "/info/reviews" },
+    { label: ui.priceMatch, to: "/info/price-match" },
+    { label: ui.giftVouchers, to: "/info/gift-vouchers" },
+    { label: ui.rewardPoints, to: "/info/reward-points" },
   ];
 
   const moreLinks = [
-    { label: "About Adwart", to: "/info/about-artstore" },
-    { label: "Art blog", to: "/info/art-blog" },
-    { label: "Publications", to: "/info/publications" },
-    { label: "Art classes", to: "/info/art-classes" },
-    { label: "Events", to: "/info/events" },
-    { label: "Expert coaching", to: "/info/expert-coaching" },
-    { label: "Webinars", to: "/info/webinars" },
+    { label: ui.about, to: "/info/about-artstore" },
+    { label: ui.artBlog, to: "/info/art-blog" },
+    { label: ui.publications, to: "/info/publications" },
+    { label: ui.artClasses, to: "/info/art-classes" },
+    { label: ui.events, to: "/info/events" },
+    { label: ui.expertCoaching, to: "/info/expert-coaching" },
+    { label: ui.webinars, to: "/info/webinars" },
   ];
 
   const socialLinks = [
-    { label: "Facebook", href: "https://www.facebook.com", icon: Facebook },
-    { label: "Instagram", href: "https://www.instagram.com", icon: Instagram },
-    { label: "YouTube", href: "https://www.youtube.com", icon: Youtube },
-    { label: "TikTok", href: "https://www.tiktok.com", icon: Music2 },
+    { label: "Facebook", href: "https://www.facebook.com/adwart.marrakech", icon: FacebookIcon },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/adwart.marrakech?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+      icon: InstagramIcon,
+    },
+    { label: "TikTok", href: "https://www.tiktok.com/@adwart8?is_from_webapp=1&sender_device=pc", icon: TikTokIcon },
   ];
 
   return (
     <footer className="mt-16 border-t border-white/10 bg-black text-white">
       <Container className="py-12 md:py-14">
-        <div className="grid gap-10 border-b border-white/25 pb-10 md:grid-cols-2 md:gap-16">
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-[0.16em]">Be In The Know</h3>
-            <p className="mt-2 text-base text-white/80">Get art material inspiration and exclusive offers.</p>
-            <form onSubmit={handleSignup} className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-                className="h-12 w-full rounded-md border border-white/70 bg-white px-4 text-base text-black outline-none"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                className="h-12 min-w-[170px] rounded-md border border-white/70 bg-black px-5 text-base font-extrabold uppercase tracking-[0.12em] hover:bg-white hover:text-black"
+        <div className="border-b border-white/25 pb-10">
+          <h3 className="text-lg font-black uppercase tracking-[0.16em]">{ui.joinCommunity}</h3>
+          <p className="mt-2 text-base text-white/80">{ui.followUs}</p>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            {socialLinks.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/90 p-[2px] text-black transition hover:-translate-y-0.5 hover:bg-white"
+                aria-label={label}
               >
-                Sign Up
-              </button>
-            </form>
-            {status && <p className="mt-3 text-sm text-white/80">{status}</p>}
-          </div>
-
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-[0.16em]">Join The Community</h3>
-            <p className="mt-2 text-base text-white/80">Connect with artists via our social media.</p>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              {socialLinks.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 text-white transition hover:bg-white hover:text-black"
-                  aria-label={label}
-                >
-                  <Icon size={20} />
-                </a>
-              ))}
-            </div>
+                <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black text-white">
+                  <Icon />
+                </span>
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h4 className="text-lg font-black uppercase tracking-[0.08em]">Help</h4>
+            <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.help}</h4>
             <ul className="mt-5 space-y-2">
               {helpLinks.map((item) => (
                 <li key={item.label}>
@@ -131,7 +201,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-black uppercase tracking-[0.08em]">Shopping</h4>
+            <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.shopping}</h4>
             <ul className="mt-5 space-y-2">
               {shoppingLinks.map((item) => (
                 <li key={item.label}>
@@ -144,20 +214,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-black uppercase tracking-[0.08em]">Partnerships</h4>
-            <ul className="mt-5 space-y-2">
-              {partnershipLinks.map((item) => (
-                <li key={item.label}>
-                  <Link to={item.to} className="text-sm text-white/85 hover:text-white">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-black uppercase tracking-[0.08em]">More From Adwart</h4>
+            <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.moreFrom}</h4>
             <ul className="mt-5 space-y-2">
               {moreLinks.map((item) => (
                 <li key={item.label}>
@@ -174,28 +231,26 @@ export default function Footer() {
           <div className="space-y-2 text-sm text-white/80">
             <div className="tracking-[0.06em]">
               <Link className="hover:text-white" to="/info/terms-conditions">
-                T&amp;Cs
+                {ui.terms}
               </Link>{" "}
               |{" "}
               <Link className="hover:text-white" to="/info/privacy-policy">
-                Privacy Policy
+                {ui.privacy}
               </Link>{" "}
               |{" "}
               <Link className="hover:text-white" to="/info/cookie-policy">
-                Cookie Policy
+                {ui.cookies}
               </Link>
             </div>
-            <p className="tracking-[0.04em]">&copy; Adwart 2026</p>
-            <p className="tracking-[0.04em]">Customer Service: +212 6 12 34 56 78 | 9AM - 6PM Mon - Fri</p>
-            <p className="tracking-[0.04em]">Casablanca, Morocco</p>
+            <p className="tracking-[0.04em]">&copy; {STORE_NAME} 2026</p>
+            <p className="tracking-[0.04em]">{ui.customerService}: {STORE_SUPPORT_PHONE} | {ui.hours}</p>
+            <p className="tracking-[0.04em]">{STORE_SUPPORT_EMAIL}</p>
+            <p className="tracking-[0.04em]">{STORE_CITY}</p>
           </div>
-          <div className="text-4xl font-black italic tracking-tight">Adwart</div>
+          <div className="text-4xl font-black italic tracking-tight">{STORE_NAME}</div>
         </div>
       </Container>
 
-      <div className="bg-zinc-900 py-3 text-center text-sm text-white/70">
-        This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.
-      </div>
     </footer>
   );
 }

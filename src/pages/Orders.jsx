@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Container from "../components/layout/Container";
 import { OrdersAPI } from "../api/orders";
+import { formatMoney } from "../utils/currency";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -12,7 +13,7 @@ export default function Orders() {
   return (
     <Container className="py-10">
       <h1 className="text-3xl font-black">Orders</h1>
-      <p className="text-sm text-slate-600 mt-1">Your recent orders (demo user_id=1).</p>
+      <p className="text-sm text-slate-600 mt-1">Your recent orders.</p>
 
       <div className="mt-6 space-y-4">
         {orders.map(o => (
@@ -29,7 +30,7 @@ export default function Orders() {
               </div>
               <div className="text-right">
                 <div className="text-xs text-slate-500">Total</div>
-                <div className="text-lg font-black">{Number(o.total).toFixed(2)} USD</div>
+                <div className="text-lg font-black">{formatMoney(o.total)}</div>
               </div>
             </div>
 
@@ -37,7 +38,7 @@ export default function Orders() {
               {(o.items || []).map(it => (
                 <div key={it.id} className="flex justify-between">
                   <span className="text-slate-600">{it.variant?.product?.name} × {it.quantity}</span>
-                  <span className="font-semibold">{Number(it.sub_total).toFixed(2)} USD</span>
+                  <span className="font-semibold">{formatMoney(it.sub_total)}</span>
                 </div>
               ))}
             </div>

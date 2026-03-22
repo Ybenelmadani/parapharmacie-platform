@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { http } from "../api/http";
 
 const AuthContext = createContext(null);
@@ -13,17 +13,17 @@ export function AuthProvider({ children }) {
     try {
       const res = await http.get("/me");
       setUser(res.data);
+      return res.data;
     } catch (e) {
-      // token invalide/expiré => nettoyer
       localStorage.removeItem("token");
       setUser(null);
+      return null;
     } finally {
       setBooting(false);
     }
   }
 
   useEffect(() => {
-    // si token existe, récupérer user
     if (token) fetchMe();
     else setBooting(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -32,12 +32,11 @@ export function AuthProvider({ children }) {
   async function login(email, password) {
     const res = await http.post("/auth/login", { email, password });
     localStorage.setItem("token", res.data.token);
-    setUser(res.data.user); // on a déjà user
+    setUser(res.data.user);
     return res.data;
   }
 
   async function register(payload) {
-    // payload: {name,email,password, phone?, address?}
     const res = await http.post("/auth/register", payload);
     localStorage.setItem("token", res.data.token);
     setUser(res.data.user);
@@ -48,16 +47,21 @@ export function AuthProvider({ children }) {
     try {
       await http.post("/auth/logout");
     } catch (e) {
-      // même si ça échoue, on déconnecte côté front
+      // Front logout should still continue if the API call fails.
     }
     localStorage.removeItem("token");
     setUser(null);
   }
 
-  const value = useMemo(
-    () => ({ user, booting, login, register, logout }),
-    [user, booting]
-  );
+  async function refreshUser() {
+    return fetchMe();
+  }
+
+  function updateUser(partialUser) {
+    setUser((current) => ({ ...(current || {}), ...(partialUser || {}) }));
+  }
+
+  const value = { user, booting, login, register, logout, refreshUser, updateUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
