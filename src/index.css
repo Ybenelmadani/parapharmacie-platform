@@ -27,6 +27,13 @@ html[dir="rtl"] body {
 
 html {
   scroll-behavior: smooth;
+  font-size: 15px;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -38,6 +45,7 @@ html {
 body {
   @apply text-slate-900 antialiased;
   font-family: var(--font-body);
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(59, 130, 246, 0.05), transparent 30%),
     radial-gradient(circle at top right, rgba(3, 4, 94, 0.03), transparent 25%),
@@ -47,6 +55,7 @@ body {
 
 #root {
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 ::selection {

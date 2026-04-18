@@ -352,7 +352,7 @@ export default function Header() {
         closeCartPreview();
       }}
     >
-      <div className="mx-auto flex h-[74px] w-full max-w-[1480px] min-w-0 items-center gap-2 px-3 md:gap-2.5 md:px-4">
+      <div className="mx-auto flex h-[70px] w-full max-w-[1480px] min-w-0 items-center gap-1.5 px-2.5 md:h-[74px] md:gap-2.5 md:px-4">
         <button
           type="button"
           onClick={() => {
@@ -372,9 +372,9 @@ export default function Header() {
           className="min-w-0 flex-1 transition-all hover:scale-[1.01] md:flex-none md:hover:scale-105"
           aria-label={`${ui.homeAria} ${STORE_NAME}`}
         >
-          <span className="flex w-full min-w-0 flex-col justify-center rounded-[22px] border border-slate-200 bg-white px-4 py-2 shadow-sm md:min-w-[168px] md:px-5 md:py-2.5">
-            <span className="truncate text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500 md:tracking-[0.34em]">Parapharmacie Maroc</span>
-            <span className="mt-1 truncate text-[14px] font-black uppercase tracking-[0.2em] text-[#03045e] md:text-base md:tracking-[0.24em]">
+          <span className="flex w-full min-w-0 flex-col justify-center rounded-[20px] border border-slate-200 bg-white px-3 py-2 shadow-sm md:min-w-[168px] md:rounded-[22px] md:px-5 md:py-2.5">
+            <span className="truncate text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 md:text-[10px] md:tracking-[0.34em]">Parapharmacie Maroc</span>
+            <span className="mt-1 truncate text-[12px] font-black uppercase tracking-[0.12em] text-[#03045e] md:text-base md:tracking-[0.24em]">
               {STORE_NAME}
             </span>
           </span>
@@ -414,7 +414,7 @@ export default function Header() {
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1.5 md:gap-2">
           <div className="relative hidden w-[230px] lg:block xl:w-[315px]">
             <input
               type="text"
@@ -688,13 +688,13 @@ export default function Header() {
         <>
           <button
             type="button"
-            className="fixed inset-0 top-[74px] z-40 bg-[#16a34a]/20 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 top-[70px] z-40 bg-[#16a34a]/20 backdrop-blur-sm md:hidden"
             onClick={() => setMobileMenuOpen(false)}
             aria-label={ui.closeMobileMenu}
           />
 
           <div className="absolute inset-x-0 top-full z-[60] md:hidden">
-            <div className="max-h-[calc(100vh-74px)] overflow-y-auto border-t border-[#bfdbfe] bg-[rgba(255,255,255,0.99)] shadow-[0_24px_50px_rgba(59,130,246, 0.12)] backdrop-blur-xl">
+            <div className="max-h-[calc(100vh-70px)] overflow-y-auto border-t border-[#bfdbfe] bg-[rgba(255,255,255,0.99)] shadow-[0_24px_50px_rgba(59,130,246, 0.12)] backdrop-blur-xl">
               <div className="sticky top-0 z-10 border-b border-[#f0e7f8] bg-[rgba(255,255,255,0.98)] px-4 pb-4 pt-4">
               <form
                 onSubmit={(event) => {

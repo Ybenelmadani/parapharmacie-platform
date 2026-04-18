@@ -299,11 +299,11 @@ export default function InfoPage() {
   ];
 
   return (
-    <Container className="py-14">
-      <div className={`mx-auto rounded-3xl border border-slate-200 bg-white p-7 shadow-sm md:p-10 ${isContactPage || isAboutPage ? "max-w-6xl" : "max-w-3xl"}`}>
-        <div className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">{ui.infoLabel.replace("{store}", STORE_NAME)}</div>
-        <h1 className="mt-3 text-3xl font-black text-slate-900 md:text-4xl">{info.title}</h1>
-        <p className="mt-4 text-slate-600">{info.lead}</p>
+    <Container className="py-8 sm:py-10 md:py-14">
+      <div className={`mx-auto rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 md:p-10 ${isContactPage || isAboutPage ? "max-w-6xl" : "max-w-3xl"}`}>
+        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 sm:text-xs sm:tracking-[0.2em]">{ui.infoLabel.replace("{store}", STORE_NAME)}</div>
+        <h1 className="mt-3 text-[2rem] font-black leading-none text-slate-900 sm:text-3xl md:text-4xl">{info.title}</h1>
+        <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">{info.lead}</p>
 
         {isContactPage ? (
           <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.25fr]">
@@ -314,23 +314,23 @@ export default function InfoPage() {
                   href={href}
                   target={key === "location" ? "_blank" : undefined}
                   rel={key === "location" ? "noreferrer" : undefined}
-                  className="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 transition hover:border-slate-300 hover:bg-white"
+                  className="group flex min-w-0 items-start gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition hover:border-slate-300 hover:bg-white sm:gap-4 sm:px-5"
                 >
-                  <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white">
-                    <Icon className="h-5 w-5" />
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white sm:h-12 sm:w-12">
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block text-xs font-bold uppercase tracking-[0.18em] text-slate-500">{label}</span>
-                    <span className="mt-2 block text-base font-semibold text-slate-900" dir={dir}>
+                  <span className="min-w-0 flex-1 overflow-hidden">
+                    <span className="block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 sm:text-xs sm:tracking-[0.18em]">{label}</span>
+                    <span className="mt-2 block break-words text-sm font-semibold leading-6 text-slate-900 sm:text-base" dir={dir}>
                       {value}
                     </span>
                   </span>
                 </a>
               ))}
 
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 sm:px-5">
                 <div className="text-sm font-semibold text-slate-900">{ui.contactMapTitle}</div>
-                <p className="mt-2 text-sm text-slate-600">{ui.contactMapDescription}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{ui.contactMapDescription}</p>
                 <a
                   href={STORE_MAP_LINK}
                   target="_blank"
@@ -344,10 +344,10 @@ export default function InfoPage() {
             </div>
 
             <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-slate-100 shadow-[0_22px_60px_rgba(15,23,42,0.08)]">
-              <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-4">
-                <div>
-                  <div className="text-sm font-semibold text-slate-900">{STORE_NAME}</div>
-                  <div className="mt-1 text-sm text-slate-500">{STORE_CITY}</div>
+              <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-4 sm:px-5">
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold text-slate-900">{STORE_NAME}</div>
+                  <div className="mt-1 truncate text-sm text-slate-500">{STORE_CITY}</div>
                 </div>
                 <a
                   href={STORE_MAP_LINK}
@@ -364,13 +364,13 @@ export default function InfoPage() {
                 src={STORE_MAP_EMBED_URL}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="h-[420px] w-full border-0"
+                className="h-[300px] w-full border-0 sm:h-[360px] md:h-[420px]"
               />
             </div>
           </div>
         ) : isAboutPage ? (
           <div className="mt-8 grid items-start gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="space-y-3 text-slate-600">
+            <div className="space-y-3 text-sm leading-7 text-slate-600 sm:text-base">
               {(info.sections || []).map((section) => (
                 <p key={section}>{section}</p>
               ))}
@@ -387,7 +387,7 @@ export default function InfoPage() {
                 <img
                   src={aboutMainImage}
                   alt={info.title}
-                  className="h-[460px] w-full object-cover"
+                  className="h-[320px] w-full object-cover sm:h-[420px] md:h-[460px]"
                   loading="lazy"
                 />
               </div>
@@ -396,14 +396,14 @@ export default function InfoPage() {
                 <img
                   src={aboutStoreImage}
                   alt={STORE_NAME}
-                  className="h-[220px] w-full rounded-[18px] object-cover"
+                  className="h-[180px] w-full rounded-[18px] object-cover sm:h-[220px]"
                   loading="lazy"
                 />
               </div>
             </div>
           </div>
         ) : (
-          <div className="mt-5 space-y-3 text-slate-600">
+          <div className="mt-5 space-y-3 text-sm leading-7 text-slate-600 sm:text-base">
             {(info.sections || []).map((section) => (
               <p key={section}>{section}</p>
             ))}

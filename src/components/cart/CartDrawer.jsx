@@ -96,11 +96,11 @@ export default function CartDrawer() {
     <div className="fixed inset-0 z-[100]">
       <div className="absolute inset-0 bg-slate-950/35 backdrop-blur-[2px]" onClick={() => setOpen(false)} />
 
-      <div className="absolute right-0 top-0 flex h-full w-full max-w-[380px] flex-col border-l border-black/5 bg-[#f7f5f2] shadow-[0_20px_80px_rgba(15,23,42,0.18)] sm:max-w-[420px] lg:max-w-[460px]">
+      <div className="absolute right-0 top-0 flex h-full w-full max-w-full flex-col border-l border-black/5 bg-[#f7f5f2] shadow-[0_20px_80px_rgba(15,23,42,0.18)] sm:max-w-[420px] lg:max-w-[460px]">
         <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.38em] text-slate-500 sm:text-[11px] sm:tracking-[0.45em]">{ui.miniCart}</p>
-            <h2 className="mt-1.5 text-lg font-semibold uppercase tracking-[0.14em] text-slate-900 sm:mt-2 sm:text-2xl sm:tracking-[0.16em]">{ui.yourCart}</h2>
+            <h2 className="mt-1.5 text-base font-semibold uppercase tracking-[0.1em] text-slate-900 sm:mt-2 sm:text-2xl sm:tracking-[0.16em]">{ui.yourCart}</h2>
           </div>
           <button
             onClick={() => setOpen(false)}
@@ -111,7 +111,7 @@ export default function CartDrawer() {
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-auto px-4 pb-4 sm:px-6 sm:pb-5">
+        <div className="min-h-0 flex-1 overflow-auto px-3 pb-4 sm:px-6 sm:pb-5">
           {loading ? (
             <div className="rounded-[24px] bg-white px-5 py-8 text-center text-slate-500">{ui.loading}</div>
           ) : items.length === 0 ? (
@@ -150,15 +150,15 @@ export default function CartDrawer() {
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <p className="text-[12px] font-semibold uppercase leading-5 text-slate-900 sm:text-[13px]">
+                        <p className="break-words text-[11px] font-semibold uppercase leading-5 text-slate-900 sm:text-[13px]">
                           {product?.name || "Produit"}
                         </p>
                         {variantLabel ? <p className="mt-1 text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.12em]">{variantLabel}</p> : null}
-                        <p className="mt-2 text-base font-semibold text-slate-900 sm:text-lg">{formatMoney(item.unit_price)}</p>
+                        <p className="mt-2 text-[15px] font-semibold text-slate-900 sm:text-lg">{formatMoney(item.unit_price)}</p>
                       </div>
                     </div>
 
-                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
                       <div className="flex h-10 items-center rounded-full bg-[#f1efed] px-1.5 sm:h-11 sm:px-2">
                         <button
                           type="button"
@@ -179,7 +179,7 @@ export default function CartDrawer() {
                         </button>
                       </div>
 
-                      <div className="ml-auto flex items-center gap-2 sm:gap-3">
+                      <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-3">
                         <p className="text-sm font-semibold text-slate-900 sm:text-base">{formatMoney(lineTotal)}</p>
                         <button
                           type="button"
@@ -198,7 +198,7 @@ export default function CartDrawer() {
           )}
         </div>
 
-        <div className="border-t border-black/10 bg-white px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
+        <div className="border-t border-black/10 bg-white px-3 py-3 backdrop-blur sm:px-6 sm:py-4">
           <div className="rounded-[20px] bg-white border border-slate-200 shadow-sm p-3.5 sm:rounded-[24px] sm:p-4">
             <div className="flex items-center justify-between text-sm text-slate-700">
               <span>{articleCount} {articleCount > 1 ? ui.items : ui.item}</span>
@@ -210,8 +210,8 @@ export default function CartDrawer() {
             </div>
             <div className="my-3.5 h-px bg-black/10 sm:my-4" />
             <div className="flex items-center justify-between">
-              <span className="text-base text-slate-900 sm:text-lg">{ui.total}</span>
-              <span className="text-[1.45rem] font-semibold leading-none text-slate-900 sm:text-[1.7rem]">{formatMoney(grandTotal)}</span>
+              <span className="text-[15px] text-slate-900 sm:text-lg">{ui.total}</span>
+              <span className="text-[1.6rem] font-semibold leading-none text-slate-900 sm:text-[1.7rem]">{formatMoney(grandTotal)}</span>
             </div>
           </div>
 
@@ -222,7 +222,7 @@ export default function CartDrawer() {
                 event.preventDefault();
                 navigateFromDrawer("/cart");
               }}
-              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#d8d5d2] px-4 text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#c9c6c2] sm:min-h-[50px] sm:px-5 sm:text-sm"
+              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#d8d5d2] px-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-[#c9c6c2] sm:min-h-[50px] sm:px-5 sm:text-sm"
             >
               {ui.viewCart}
             </Link>
@@ -232,7 +232,7 @@ export default function CartDrawer() {
                 navigateFromDrawer("/checkout");
               }}
               disabled={items.length === 0}
-              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#16a34a] px-4 text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#15803d] disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-[50px] sm:px-5 sm:text-sm"
+              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#16a34a] px-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-[#15803d] disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-[50px] sm:px-5 sm:text-sm"
             >
               {ui.checkout}
             </button>
