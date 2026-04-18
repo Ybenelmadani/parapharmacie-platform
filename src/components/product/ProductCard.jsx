@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
-import Button from "../ui/Button";
 import { useCart } from "../../context/CartContext";
 import { CatalogAPI } from "../../api/catalog";
 import { resolveMediaUrl } from "../../utils/media";

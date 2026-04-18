@@ -125,33 +125,6 @@ export default function Footer() {
     },
   });
 
-  const helpLinks = [
-    { label: ui.helpAdvice, to: "/info/help-advice" },
-    { label: ui.shippingTax, to: "/info/shipping-tax" },
-    { label: ui.serviceUpdates, to: "/info/service-updates" },
-    { label: ui.trackOrder, to: "/my-orders" },
-    { label: ui.returns, to: "/info/returns" },
-    { label: ui.contact, to: "/info/contact" },
-  ];
-
-  const shoppingLinks = [
-    { label: ui.productGuides, to: "/info/product-guides" },
-    { label: ui.reviews, to: "/info/reviews" },
-    { label: ui.priceMatch, to: "/info/price-match" },
-    { label: ui.giftVouchers, to: "/info/gift-vouchers" },
-    { label: ui.rewardPoints, to: "/info/reward-points" },
-  ];
-
-  const moreLinks = [
-    { label: ui.about, to: "/info/about-artstore" },
-    { label: ui.artBlog, to: "/info/art-blog" },
-    { label: ui.publications, to: "/info/publications" },
-    { label: ui.artClasses, to: "/info/art-classes" },
-    { label: ui.events, to: "/info/events" },
-    { label: ui.expertCoaching, to: "/info/expert-coaching" },
-    { label: ui.webinars, to: "/info/webinars" },
-  ];
-
   const socialLinks = [
     { label: "Facebook", href: "https://www.facebook.com", icon: FacebookIcon },
     {
