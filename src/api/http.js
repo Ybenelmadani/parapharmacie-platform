@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const http = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://ecomerce_back-end.test/api",
+  baseURL: process.env.REACT_APP_API_BASE_URL || "http://ecommerce_parapharmacie.test/api",
   headers: { Accept: "application/json" },
 });
 

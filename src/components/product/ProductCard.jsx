@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
 import Button from "../ui/Button";
 import { useCart } from "../../context/CartContext";
 import { CatalogAPI } from "../../api/catalog";
@@ -103,41 +104,50 @@ export default function ProductCard({ p }) {
   };
 
   return (
-    <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-para-marine-100 bg-white shadow-[0_10px_20px_rgba(59,130,246,0.04)] transition-all hover:shadow-[0_20px_40px_rgba(22,163,74,0.08)]"
+    >
       <div className="relative">
         <Link to={`/products/${p.id}`} className="block">
-          <div className="aspect-[4/3] bg-slate-100 overflow-hidden">
+          <div className="aspect-square bg-white overflow-hidden p-6 relative flex items-center justify-center">
             {mainImg ? (
               <img
                 src={mainImg}
                 alt={p.name}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
               />
             ) : (
-              <div className="h-full w-full flex items-center justify-center text-slate-400 text-sm">{ui.noImage}</div>
+              <div className="h-full w-full flex items-center justify-center text-slate-300 text-sm tracking-wide">{ui.noImage}</div>
             )}
           </div>
         </Link>
 
-        <div className={`absolute left-3 top-3 z-10 rounded-md px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide shadow-sm ${stockBadge.className}`}>
-          {stockBadge.label}
-        </div>
+        {stockBadge.label && (
+          <div className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm backdrop-blur-md ${stockBadge.className}`}>
+            {stockBadge.label}
+          </div>
+        )}
 
         <Link
           to={`/products/${p.id}`}
           aria-label={ui.view.replace("{name}", p.name)}
-          className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition-colors hover:bg-slate-900 hover:text-white"
+          className="absolute right-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-para-marine-200 bg-white/95 text-slate-400 shadow-sm transition-all hover:bg-para-green-500 hover:text-white hover:border-transparent"
         >
-          <Eye size={17} />
+          <Eye size={16} />
         </Link>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <div className="truncate text-xs text-slate-500">
-          {p.brand?.name} | {p.category?.name}
+      <div className="flex flex-1 flex-col p-5 bg-[#03045e] text-white relative">
+        <div className="truncate text-[11px] font-semibold tracking-widest uppercase text-white/60 mb-1">
+          {p.brand?.name}
         </div>
         <div
-          className="mt-1 min-h-[70px] font-bold leading-tight text-slate-900"
+          className="min-h-[50px] text-[15px] font-bold leading-tight text-white transition-colors group-hover:text-white/80"
           style={{
             display: "-webkit-box",
             WebkitLineClamp: 2,
@@ -148,22 +158,26 @@ export default function ProductCard({ p }) {
           {p.name}
         </div>
 
-        <div className="mt-2 flex min-h-[28px] items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2 text-slate-700">
-          <span className="text-sm font-medium">
-            {isOutOfStock ? ui.unavailable : isLowStock ? ui.onlyLeft.replace("{count}", totalStock) : ui.seeVariants}
-          </span>
-          <span className="text-sm font-extrabold text-slate-900">
-            {formatMoney(displayPrice)}
-          </span>
+        <div className="mt-3 flex items-center justify-between">
+            <span className="text-lg font-black text-white tracking-tight">
+              {formatMoney(displayPrice)}
+            </span>
+            <span className="text-[11px] font-medium text-white/70 hidden sm:inline-block">
+              {isOutOfStock ? ui.unavailable : isLowStock ? ui.onlyLeft.replace("{count}", totalStock) : ui.seeVariants}
+            </span>
         </div>
 
-        <div className="mt-auto pt-4">
-          <Button className="w-full gap-2" onClick={handleAddToCart} disabled={adding || isOutOfStock}>
+        <div className="mt-4 pt-4 border-t border-white/10">
+          <button 
+            onClick={handleAddToCart} 
+            disabled={adding || isOutOfStock}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all ${isOutOfStock ? 'bg-white/10 text-white/40 cursor-not-allowed' : 'bg-white text-[#03045e] hover:bg-white/90 shadow-[0_8px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_24px_rgba(255,255,255,0.25)]'}`}
+           >
             <ShoppingCart size={16} />
             {adding ? ui.adding : isOutOfStock ? ui.outOfStock : ui.addToCart}
-          </Button>
+          </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

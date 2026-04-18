@@ -1,5 +1,6 @@
 import React, { useLayoutEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, Outlet } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
@@ -23,7 +24,6 @@ import Register from "./pages/Register";
 // Route guards
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-
 // Admin pages
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
@@ -36,7 +36,6 @@ import Users from "./pages/admin/Users";
 import Reviews from "./pages/admin/Reviews";
 import AdminRoute from "./routes/AdminRoute";
 import { useAuth } from "./context/AuthContext";
-import { useI18n } from "./context/I18nContext";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
@@ -53,61 +52,101 @@ function GuestOnlyRoute({ children }) {
   return children;
 }
 
+function AnimatedFrontendLayout() {
+  const loc = useLocation();
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <CartDrawer />
+      <div className="flex-1 flex flex-col">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={loc.pathname}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="flex-1 flex flex-col"
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
 function AppContent() {
   const loc = useLocation();
-  const { booting } = useAuth();
-  const { pick } = useI18n();
-  const isAdminArea = loc.pathname.startsWith("/admin");
-  const ui = pick({
-    fr: { loading: "Chargement..." },
-    en: { loading: "Loading..." },
-    ar: { loading: "جارٍ التحميل..." },
-  });
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [loc.pathname]);
 
-  if (booting) {
-    return (
-      <div className="min-h-screen bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-slate-600 sm:px-6 lg:px-8">
-          {ui.loading}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <>
-      {!isAdminArea && <Header />}
-      {!isAdminArea && <CartDrawer />}
+    <Routes>
+      {/* Admin Area (No animations, standalone layout) */}
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout />
+          </AdminRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="brands" element={<Brands />} />
+        <Route path="products" element={<ProductsAdmin />} />
+        <Route path="products/new" element={<ProductForm />} />
+        <Route path="products/:id/edit" element={<ProductForm />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="users" element={<Users />} />
+        <Route path="reviews" element={<Reviews />} />
+      </Route>
 
-      <Routes>
-        {/* =======================
-            PUBLIC STORE ROUTES
-        ======================== */}
+      {/* Store Frontend with Page Transitions */}
+      <Route element={<AnimatedFrontendLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
 
-        {/* =======================
-            AUTH ROUTES
-        ======================== */}
-        <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
-        <Route path="/register" element={<GuestOnlyRoute><Register /></GuestOnlyRoute>} />
-
-        <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPassword /></GuestOnlyRoute>} />
-        <Route path="/reset-password" element={<GuestOnlyRoute><ResetPassword /></GuestOnlyRoute>} />
-
-        {/* =======================
-            PROTECTED STORE ROUTES
-        ======================== */}
         <Route
-          path="/checkout"
-          element={<Checkout />}
+          path="/login"
+          element={
+            <GuestOnlyRoute>
+              <Login />
+            </GuestOnlyRoute>
+          }
         />
+        <Route
+          path="/register"
+          element={
+            <GuestOnlyRoute>
+              <Register />
+            </GuestOnlyRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <GuestOnlyRoute>
+              <ForgotPassword />
+            </GuestOnlyRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <GuestOnlyRoute>
+              <ResetPassword />
+            </GuestOnlyRoute>
+          }
+        />
+
+        <Route path="/checkout" element={<Checkout />} />
 
         <Route
           path="/my-account"
@@ -117,7 +156,6 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/my-orders"
           element={
@@ -128,32 +166,9 @@ function AppContent() {
         />
         <Route path="/info/:slug" element={<InfoPage />} />
 
-        {/* =======================
-            ADMIN ROUTES (PROTECTED + ROLE)
-        ======================== */}
-        <Route path="/admin" element={
-          <AdminRoute>
-          <AdminLayout/>
-          </AdminRoute>
-          }>
-
-          <Route index element={<Dashboard/>}/>
-          <Route path="categories" element={<Categories/>}/>
-          <Route path="brands" element={<Brands/>}/>
-          <Route path="products" element={<ProductsAdmin/>}/>
-          <Route path="products/new" element={<ProductForm/>}/>
-          <Route path="products/:id/edit" element={<ProductForm/>}/>
-          <Route path="orders" element={<Orders/>}/>
-          <Route path="users" element={<Users/>}/>
-          <Route path="reviews" element={<Reviews/>}/>
-
-          </Route>
-
-      
         <Route path="*" element={<NotFound />} />
-      </Routes>
-      {!isAdminArea && <Footer />}
-    </>
+      </Route>
+    </Routes>
   );
 }
 

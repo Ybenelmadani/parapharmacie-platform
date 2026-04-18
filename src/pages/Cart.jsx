@@ -84,7 +84,7 @@ export default function Cart() {
   const grandTotal = total + shipping;
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-[#f6f4f1]">
+    <div className="min-h-[calc(100vh-140px)] bg-slate-50/50">
       <div className="mx-auto max-w-[1320px] px-4 py-6 sm:px-6 lg:px-6 lg:py-9">
         <div className="mb-8 text-center lg:mb-12">
           <p className="text-[11px] font-semibold uppercase tracking-[0.55em] text-slate-500">{ui.title}</p>
@@ -99,7 +99,7 @@ export default function Cart() {
             <p className="text-lg font-semibold text-slate-800">{ui.empty}</p>
             <Link
               to="/products"
-              className="mt-6 inline-flex min-h-[56px] items-center justify-center rounded-[16px] bg-[#2f2d31] px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#232126]"
+              className="mt-6 inline-flex min-h-[56px] items-center justify-center rounded-[16px] bg-[#03045e] px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#020340]"
             >
               {ui.continueShopping}
             </Link>
@@ -107,7 +107,7 @@ export default function Cart() {
         ) : (
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-7">
             <section className="min-w-0">
-              <div className="rounded-[22px] border border-black/5 bg-white/90 px-4 py-3 shadow-[0_14px_36px_rgba(15,23,42,0.05)] sm:px-5 sm:py-3.5">
+              <div className="rounded-[22px] border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5 sm:py-3.5">
                 {items.map((item, index) => {
                   const image = getProductImage(item);
                   const variantLabel = getVariantLabel(item);
@@ -120,7 +120,7 @@ export default function Cart() {
                         index !== 0 ? "border-t border-black/10" : ""
                       }`}
                     >
-                      <div className="overflow-hidden rounded-[15px] bg-[#f2efea]">
+                      <div className="overflow-hidden rounded-[15px] bg-slate-50 border border-slate-100">
                         {image ? (
                           <img src={image} alt={item.variant?.product?.name || ui.product} className="h-20 w-full object-contain p-2 sm:h-24" />
                         ) : (
@@ -220,7 +220,7 @@ export default function Cart() {
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
                   to="/products"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-[14px] bg-[#e8e5e1] px-6 text-sm font-semibold uppercase tracking-wide text-slate-900 transition hover:bg-[#dcd8d2]"
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-[14px] bg-white border border-slate-200 px-6 text-sm font-semibold uppercase tracking-wide text-slate-900 transition hover:bg-slate-50 shadow-sm"
                 >
                   {ui.continueShopping}
                 </Link>
@@ -235,7 +235,7 @@ export default function Cart() {
             </section>
 
             <aside className="lg:sticky lg:top-24">
-              <div className="rounded-[22px] bg-[#efedeb] px-5 py-4.5 shadow-[0_14px_34px_rgba(15,23,42,0.05)] sm:px-5  p-3">
+              <div className="rounded-[22px] bg-white px-5 py-4.5 border border-slate-200 shadow-sm sm:px-5 p-3">
                 <div className="space-y-3.5 text-slate-800">
                   <div className="flex items-center justify-between gap-4 text-[15px] ">
                     <span>{articleCount} {articleCount > 1 ? ui.items : ui.item}</span>
@@ -259,7 +259,7 @@ export default function Cart() {
                 <button
                   type="button"
                   onClick={() => nav("/checkout")}
-                  className="inline-flex min-h-[52px] w-full items-center justify-center rounded-[8px] bg-[#2f2d31] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#232126]"
+                  className="inline-flex min-h-[52px] w-full items-center justify-center rounded-[8px] bg-[#16a34a] px-6 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_12px_24px_rgba(22,163,74,0.22)] transition hover:bg-[#15803d]"
                 >
                   {ui.order}
                 </button>

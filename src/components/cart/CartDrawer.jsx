@@ -123,7 +123,7 @@ export default function CartDrawer() {
                   event.preventDefault();
                   navigateFromDrawer("/products");
                 }}
-                className="mt-5 inline-flex min-h-[52px] items-center justify-center rounded-[14px] bg-[#2f2d31] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#232126]"
+                className="mt-5 inline-flex min-h-[52px] items-center justify-center rounded-[14px] bg-[#03045e] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#020340]"
               >
                 {ui.continueShopping}
               </Link>
@@ -141,7 +141,7 @@ export default function CartDrawer() {
                 return (
                   <div key={item.id} className="rounded-[20px] bg-white p-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)] sm:rounded-[24px] sm:p-4">
                     <div className="flex gap-3">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-[#f2efea] sm:h-20 sm:w-20 sm:rounded-[16px]">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-white border border-slate-200 sm:h-20 sm:w-20 sm:rounded-[16px]">
                         {image ? (
                           <img src={image} alt={product?.name || ui.product} className="h-full w-full object-contain p-2" />
                         ) : (
@@ -198,8 +198,8 @@ export default function CartDrawer() {
           )}
         </div>
 
-        <div className="border-t border-black/10 bg-white/85 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
-          <div className="rounded-[20px] bg-[#efedeb] p-3.5 sm:rounded-[24px] sm:p-4">
+        <div className="border-t border-black/10 bg-white px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
+          <div className="rounded-[20px] bg-white border border-slate-200 shadow-sm p-3.5 sm:rounded-[24px] sm:p-4">
             <div className="flex items-center justify-between text-sm text-slate-700">
               <span>{articleCount} {articleCount > 1 ? ui.items : ui.item}</span>
               <span className="font-semibold">{formatMoney(total)}</span>
@@ -232,7 +232,7 @@ export default function CartDrawer() {
                 navigateFromDrawer("/checkout");
               }}
               disabled={items.length === 0}
-              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#2f2d31] px-4 text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#232126] disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-[50px] sm:px-5 sm:text-sm"
+              className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[8px] bg-[#16a34a] px-4 text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#15803d] disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-[50px] sm:px-5 sm:text-sm"
             >
               {ui.checkout}
             </button>

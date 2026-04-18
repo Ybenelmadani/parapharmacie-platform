@@ -35,28 +35,28 @@ export default function Footer() {
   const ui = pick({
     fr: {
       joinCommunity: "Rejoignez la communaute",
-      followUs: "Suivez Adwart sur nos reseaux sociaux.",
+      followUs: "Suivez nos nouveautes parapharmacie, dermocosmetiques et conseils bien-etre.",
       help: "Aide",
       shopping: "Shopping",
-      moreFrom: "Plus d'Adwart",
+      moreFrom: "Explorer",
       helpAdvice: "Aide et conseils",
       shippingTax: "Livraison et taxes",
       serviceUpdates: "Mises a jour du service",
       trackOrder: "Suivre ma commande",
       returns: "Retours",
       contact: "Contact",
-      productGuides: "Guides produits",
+      productGuides: "Guides routines",
       reviews: "Avis",
-      priceMatch: "Alignement des prix",
+      priceMatch: "Prix et offres",
       giftVouchers: "Cartes cadeaux",
       rewardPoints: "Points de fidelite",
-      about: "A propos d'Adwart",
-      artBlog: "Blog art",
+      about: "A propos de la boutique",
+      artBlog: "Journal sante",
       publications: "Publications",
-      artClasses: "Cours d'art",
-      events: "Evenements",
-      expertCoaching: "Coaching expert",
-      webinars: "Webinaires",
+      artClasses: "Conseils et routines",
+      events: "Nouveautes",
+      expertCoaching: "Conseils pharma",
+      webinars: "Guides pratiques",
       terms: "CGV",
       privacy: "Politique de confidentialite",
       cookies: "Politique de cookies",
@@ -65,28 +65,28 @@ export default function Footer() {
     },
     en: {
       joinCommunity: "Join the community",
-      followUs: "Follow Adwart on our social media.",
+      followUs: "Follow our parapharmacy arrivals, dermocosmetic picks, and wellness advice.",
       help: "Help",
       shopping: "Shopping",
-      moreFrom: "More from Adwart",
+      moreFrom: "Explore",
       helpAdvice: "Help & advice",
       shippingTax: "Shipping & tax",
       serviceUpdates: "Service updates",
       trackOrder: "Track my order",
       returns: "Returns",
       contact: "Contact",
-      productGuides: "Product guides",
+      productGuides: "Routine guides",
       reviews: "Reviews",
-      priceMatch: "Price match",
+      priceMatch: "Pricing & offers",
       giftVouchers: "Gift vouchers",
       rewardPoints: "Reward points",
-      about: "About Adwart",
-      artBlog: "Art blog",
+      about: "About the store",
+      artBlog: "Health journal",
       publications: "Publications",
-      artClasses: "Art classes",
-      events: "Events",
-      expertCoaching: "Expert coaching",
-      webinars: "Webinars",
+      artClasses: "Care routines",
+      events: "New arrivals",
+      expertCoaching: "Pharma advice",
+      webinars: "Practical guides",
       terms: "T&Cs",
       privacy: "Privacy Policy",
       cookies: "Cookie Policy",
@@ -153,21 +153,21 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { label: "Facebook", href: "https://www.facebook.com/adwart.marrakech", icon: FacebookIcon },
+    { label: "Facebook", href: "https://www.facebook.com", icon: FacebookIcon },
     {
       label: "Instagram",
-      href: "https://www.instagram.com/adwart.marrakech?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+      href: "https://www.instagram.com",
       icon: InstagramIcon,
     },
-    { label: "TikTok", href: "https://www.tiktok.com/@adwart8?is_from_webapp=1&sender_device=pc", icon: TikTokIcon },
+    { label: "TikTok", href: "https://www.tiktok.com", icon: TikTokIcon },
   ];
 
   return (
-    <footer className="mt-16 border-t border-white/10 bg-black text-white">
+    <footer className="mt-16 bg-[#03045e] text-white">
       <Container className="py-12 md:py-14">
-        <div className="border-b border-white/25 pb-10">
+        <div className="border-b border-white/10 pb-10">
           <h3 className="text-lg font-black uppercase tracking-[0.16em]">{ui.joinCommunity}</h3>
-          <p className="mt-2 text-base text-white/80">{ui.followUs}</p>
+          <p className="mt-2 text-base text-white/70">{ui.followUs}</p>
           <div className="mt-6 flex flex-wrap items-center gap-4">
             {socialLinks.map(({ label, href, icon: Icon }) => (
               <a
@@ -175,10 +175,10 @@ export default function Footer() {
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/90 p-[2px] text-black transition hover:-translate-y-0.5 hover:bg-white"
+                className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/10 p-[2px] text-white transition hover:-translate-y-0.5 hover:bg-white/20"
                 aria-label={label}
               >
-                <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black text-white">
+                <span className="inline-flex h-full w-full items-center justify-center rounded-full">
                   <Icon />
                 </span>
               </a>
@@ -186,49 +186,49 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
+        {/* <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 lg:grid-cols-3"> */}
+          {/* <div>
             <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.help}</h4>
             <ul className="mt-5 space-y-2">
               {helpLinks.map((item) => (
                 <li key={item.label}>
-                  <Link to={item.to} className="text-sm text-white/85 hover:text-white">
+                  <Link to={item.to} className="text-sm text-slate-600 hover:text-slate-900">
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.shopping}</h4>
             <ul className="mt-5 space-y-2">
               {shoppingLinks.map((item) => (
                 <li key={item.label}>
-                  <Link to={item.to} className="text-sm text-white/85 hover:text-white">
+                  <Link to={item.to} className="text-sm text-slate-600 hover:text-slate-900">
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <h4 className="text-lg font-black uppercase tracking-[0.08em]">{ui.moreFrom}</h4>
             <ul className="mt-5 space-y-2">
               {moreLinks.map((item) => (
                 <li key={item.label}>
-                  <Link to={item.to} className="text-sm text-white/85 hover:text-white">
+                  <Link to={item.to} className="text-sm text-slate-600 hover:text-slate-900">
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
 
-        <div className="flex flex-col gap-8 border-t border-white/25 pt-7 md:flex-row md:items-end md:justify-between">
-          <div className="space-y-2 text-sm text-white/80">
+        <div className="flex flex-col gap-8 border-t border-white/10 pt-7 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-2 text-sm text-white/60">
             <div className="tracking-[0.06em]">
               <Link className="hover:text-white" to="/info/terms-conditions">
                 {ui.terms}
@@ -247,7 +247,7 @@ export default function Footer() {
             <p className="tracking-[0.04em]">{STORE_SUPPORT_EMAIL}</p>
             <p className="tracking-[0.04em]">{STORE_CITY}</p>
           </div>
-          <div className="text-4xl font-black italic tracking-tight">{STORE_NAME}</div>
+          <div className="text-4xl font-black tracking-[0.18em]">{STORE_NAME}</div>
         </div>
       </Container>
 

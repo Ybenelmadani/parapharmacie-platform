@@ -5,6 +5,8 @@ import Button from "../components/ui/Button";
 import Container from "../components/layout/Container";
 import { STORE_CITY, STORE_NAME, STORE_SUPPORT_EMAIL, STORE_SUPPORT_PHONE } from "../config/store";
 import { useI18n } from "../context/I18nContext";
+import aboutMainImage from "../assets/landing2.jpg";
+import aboutStoreImage from "../assets/para.jfif";
 
 const STORE_MAP_QUERY = encodeURIComponent(STORE_CITY);
 const STORE_MAP_EMBED_URL = `https://www.google.com/maps?q=${STORE_MAP_QUERY}&z=15&output=embed`;
@@ -111,9 +113,9 @@ export default function InfoPage() {
       contactMapDescription: "Visualisez l'emplacement du magasin et ouvrez l'itineraire en un clic.",
       contactOpenMap: "Ouvrir dans Google Maps",
       productGuidesTitle: "Guides produits",
-      productGuidesLead: "Trouvez des recommandations pour choisir le bon materiel artistique.",
+      productGuidesLead: "Trouvez des recommandations pour choisir le bon soin, le bon format et le bon usage.",
       reviewsTitle: "Avis",
-      reviewsLead: "Decouvrez les retours partages par les artistes et les acheteurs.",
+      reviewsLead: "Decouvrez les retours partages par les clientes et les acheteurs.",
       priceMatchTitle: "Alignement des prix",
       priceMatchLead: "Demandez une revision du prix si vous trouvez une offre equivalente moins chere.",
       giftVouchersTitle: "Cartes cadeaux",
@@ -121,21 +123,21 @@ export default function InfoPage() {
       rewardPointsTitle: "Points de fidelite",
       rewardPointsLead: "Cumulez des points et debloquez des avantages sur les commandes eligibles.",
       aboutTitle: "A propos de {store}",
-      aboutLead: "Notre mission est de simplifier l'acces a des fournitures creatives de qualite.",
-      about1: "{store} se concentre sur le materiel d'art, les produits de peinture et une experience d'achat plus fluide pour les clients.",
+      aboutLead: "Notre mission est de rendre les soins, la dermocosmetique et le bien-etre plus accessibles.",
+      about1: "{store} se concentre sur la parapharmacie, les soins du quotidien et une experience d'achat plus fluide pour les clients.",
       about2: "La vitrine, le panier, le paiement et les outils admin sont concus pour gerer un vrai catalogue et de vraies commandes.",
-      artBlogTitle: "Blog art",
-      artBlogLead: "Actualites, tutoriels et inspiration de notre equipe editoriale.",
+      artBlogTitle: "Journal sante",
+      artBlogLead: "Actualites, conseils et inspiration de notre equipe editoriale.",
       publicationsTitle: "Publications",
       publicationsLead: "Parcourez des ressources telechargeables et des publications editoriales.",
-      artClassesTitle: "Cours d'art",
-      artClassesLead: "Trouvez des cours debutants et avances en ligne et en presentiel.",
+      artClassesTitle: "Routines et conseils",
+      artClassesLead: "Retrouvez des guides simples pour construire une routine de soin plus claire et plus utile.",
       eventsTitle: "Evenements",
-      eventsLead: "Prochaines demonstrations, expositions et evenements en magasin.",
+      eventsLead: "Prochains lancements, pop-ups et evenements de marque.",
       expertCoachingTitle: "Coaching expert",
-      expertCoachingLead: "Reservez un accompagnement pratique avec des mentors artistiques experimentes.",
+      expertCoachingLead: "Reservez un accompagnement pratique autour des routines, textures et choix de produits.",
       webinarsTitle: "Webinaires",
-      webinarsLead: "Rejoignez des sessions gratuites ou premium autour des outils et techniques.",
+      webinarsLead: "Rejoignez des sessions gratuites ou premium autour des routines, textures et usages.",
     },
     en: {
       infoLabel: "{store} Info",
@@ -181,9 +183,9 @@ export default function InfoPage() {
       contactMapDescription: "See the store location and open directions in one click.",
       contactOpenMap: "Open in Google Maps",
       productGuidesTitle: "Product Guides",
-      productGuidesLead: "Find recommendations to choose the right art materials.",
+      productGuidesLead: "Find recommendations to choose the right care product, format, and usage.",
       reviewsTitle: "Reviews",
-      reviewsLead: "Discover feedback shared by artists and buyers.",
+      reviewsLead: "Discover feedback shared by customers and buyers.",
       priceMatchTitle: "Price Match",
       priceMatchLead: "Request a price review when you find an equivalent lower offer.",
       giftVouchersTitle: "Gift Vouchers",
@@ -191,21 +193,21 @@ export default function InfoPage() {
       rewardPointsTitle: "Reward Points",
       rewardPointsLead: "Collect points and unlock benefits on eligible orders.",
       aboutTitle: "About {store}",
-      aboutLead: "Our mission is to simplify access to quality creative supplies.",
-      about1: "{store} focuses on art materials, painting products, and a smoother buying experience for customers.",
+      aboutLead: "Our mission is to make care, dermocosmetics, and wellness more accessible.",
+      about1: "{store} focuses on parapharmacy products, daily care, and a smoother buying experience for customers.",
       about2: "The storefront, cart, checkout, and admin tooling are designed to support real catalog management and order handling.",
-      artBlogTitle: "Art Blog",
-      artBlogLead: "News, tutorials, and inspiration from our editorial team.",
+      artBlogTitle: "Health Journal",
+      artBlogLead: "News, care advice, and inspiration from our editorial team.",
       publicationsTitle: "Publications",
       publicationsLead: "Browse downloadable resources and editorial publications.",
-      artClassesTitle: "Art Classes",
-      artClassesLead: "Find beginner and advanced classes online and in-person.",
+      artClassesTitle: "Routines & Tips",
+      artClassesLead: "Find simple guidance to build clearer and more practical care routines.",
       eventsTitle: "Events",
-      eventsLead: "Upcoming live demos, exhibitions, and store events.",
+      eventsLead: "Upcoming launches, pop-ups, and brand events.",
       expertCoachingTitle: "Expert Coaching",
-      expertCoachingLead: "Book practical guidance with experienced art mentors.",
+      expertCoachingLead: "Book practical guidance around routines, textures, and product choices.",
       webinarsTitle: "Webinars",
-      webinarsLead: "Join free and premium sessions about tools and techniques.",
+      webinarsLead: "Join free and premium sessions about routines, textures, and usage.",
     },
     ar: {
       infoLabel: "معلومات {store}",
@@ -289,6 +291,7 @@ export default function InfoPage() {
     ],
   };
   const isContactPage = slug === "contact";
+  const isAboutPage = slug === "about-artstore";
   const contactItems = [
     { key: "phone", label: ui.contactPhone, value: STORE_SUPPORT_PHONE, href: `tel:${STORE_SUPPORT_PHONE.replace(/\s+/g, "")}`, icon: Phone, dir: "ltr" },
     { key: "email", label: ui.contactEmail, value: STORE_SUPPORT_EMAIL, href: `mailto:${STORE_SUPPORT_EMAIL}`, icon: Mail, dir: "ltr" },
@@ -297,7 +300,7 @@ export default function InfoPage() {
 
   return (
     <Container className="py-14">
-      <div className={`mx-auto rounded-3xl border border-slate-200 bg-white p-7 shadow-sm md:p-10 ${isContactPage ? "max-w-6xl" : "max-w-3xl"}`}>
+      <div className={`mx-auto rounded-3xl border border-slate-200 bg-white p-7 shadow-sm md:p-10 ${isContactPage || isAboutPage ? "max-w-6xl" : "max-w-3xl"}`}>
         <div className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">{ui.infoLabel.replace("{store}", STORE_NAME)}</div>
         <h1 className="mt-3 text-3xl font-black text-slate-900 md:text-4xl">{info.title}</h1>
         <p className="mt-4 text-slate-600">{info.lead}</p>
@@ -363,6 +366,40 @@ export default function InfoPage() {
                 referrerPolicy="no-referrer-when-downgrade"
                 className="h-[420px] w-full border-0"
               />
+            </div>
+          </div>
+        ) : isAboutPage ? (
+          <div className="mt-8 grid items-start gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="space-y-3 text-slate-600">
+              {(info.sections || []).map((section) => (
+                <p key={section}>{section}</p>
+              ))}
+
+              <div className="rounded-[24px] border border-sky-100 bg-sky-50 px-5 py-4 text-sm text-slate-700">
+                <div className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">{STORE_NAME}</div>
+                <div className="mt-2 font-semibold text-slate-900">{STORE_CITY}</div>
+                <div className="mt-1">{STORE_SUPPORT_EMAIL}</div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-slate-100 shadow-[0_22px_60px_rgba(15,23,42,0.08)]">
+                <img
+                  src={aboutMainImage}
+                  alt={info.title}
+                  className="h-[460px] w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="mt-5 overflow-hidden rounded-[24px] border border-white bg-white p-3 shadow-[0_18px_44px_rgba(15,23,42,0.12)] sm:ml-auto sm:mt-[-120px] sm:max-w-[260px]">
+                <img
+                  src={aboutStoreImage}
+                  alt={STORE_NAME}
+                  className="h-[220px] w-full rounded-[18px] object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
         ) : (

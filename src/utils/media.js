@@ -1,3 +1,26 @@
+function upgradeParapharmaImageUrl(url) {
+  const value = String(url || "").trim();
+  if (!value) return "";
+
+  const sizePattern = /-(?:home|small|cart|medium|large|thickbox)_default\//i;
+
+  try {
+    const parsed = new URL(value);
+    if (!/parapharma\.ma$/i.test(parsed.hostname)) {
+      return value;
+    }
+
+    if (!sizePattern.test(parsed.pathname)) {
+      return value;
+    }
+
+    parsed.pathname = parsed.pathname.replace(sizePattern, "-large_default/");
+    return parsed.toString();
+  } catch {
+    return value.replace(sizePattern, "-large_default/");
+  }
+}
+
 function getApiOrigin() {
   const base = process.env.REACT_APP_API_BASE_URL || "http://ecomerce_back-end.test/api";
   try {
@@ -7,12 +30,15 @@ function getApiOrigin() {
   }
 }
 
-export function resolveMediaUrl(rawUrl) {
+export function resolveMediaUrl(rawUrl, options = {}) {
+  const { preferHighRes = true } = options;
   const url = String(rawUrl || "").trim();
   if (!url) return "";
 
   const apiOrigin = getApiOrigin();
-  if (!apiOrigin) return url;
+  if (!apiOrigin) {
+    return preferHighRes ? upgradeParapharmaImageUrl(url) : url;
+  }
 
   
   if (url.startsWith("/")) {
@@ -25,9 +51,8 @@ export function resolveMediaUrl(rawUrl) {
     if (parsed.pathname.startsWith("/imported-products/") && parsed.origin !== apiOrigin) {
       return `${apiOrigin}${parsed.pathname}`;
     }
-    return url;
+    return preferHighRes ? upgradeParapharmaImageUrl(url) : url;
   } catch {
-    return url;
+    return preferHighRes ? upgradeParapharmaImageUrl(url) : url;
   }
 }
-

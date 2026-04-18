@@ -8,18 +8,31 @@ import { useI18n } from "../context/I18nContext";
 
 const PAGE_SIZE = 24;
 const QUICK_BRAND_LIMIT = 6;
-const FEATURED_COLOR_ORDER = ["Red", "Yellow", "Blue", "Green", "Black", "White", "Pink", "Orange", "Brown", "Grey"];
+const FEATURED_COLOR_ORDER = ["Transparent", "Claire", "Nude", "Beige", "Sable", "Medium", "Doree", "Brun", "Rose", "Rouge", "Blanc", "Noir", "Red", "Yellow", "Blue", "Green", "Black", "White", "Pink", "Orange", "Brown", "Grey"];
 const COLOR_SWATCHES = {
-  Red: { base: "#dc2626", glow: "#fca5a5" },
-  Yellow: { base: "#f59e0b", glow: "#fde68a" },
-  Blue: { base: "#2563eb", glow: "#93c5fd" },
-  Green: { base: "#3f7d2c", glow: "#a7f3d0" },
-  Black: { base: "#111827", glow: "#4b5563" },
-  White: { base: "#f8fafc", glow: "#e2e8f0" },
-  Pink: { base: "#db2777", glow: "#f9a8d4" },
-  Orange: { base: "#ea580c", glow: "#fdba74" },
-  Brown: { base: "#8b5e3c", glow: "#d6b08c" },
-  Grey: { base: "#64748b", glow: "#cbd5e1" },
+  Transparent: { base: "#e2e8f0", glow: "#f8fafc" },
+  Claire: { base: "#fcebde", glow: "#fff7f1" },
+  Nude: { base: "#e9cbb8", glow: "#f6e6dc" },
+  Beige: { base: "#d4bba0", glow: "#ebddcf" },
+  Sable: { base: "#deb887", glow: "#eedcb7" },
+  Medium: { base: "#c59275", glow: "#d9b6a3" },
+  Doree: { base: "#d29d5b", glow: "#e8c495" },
+  Teinte: { base: "#d8a687", glow: "#eecdbb" },
+  Brun: { base: "#5c4033", glow: "#8b6653" },
+  Rose: { base: "#fbcfe8", glow: "#fdf2f8" },
+  Rouge: { base: "#ef4444", glow: "#fca5a5" },
+  Blanc: { base: "#fffaf5", glow: "#eee2d8" },
+  Noir: { base: "#1e293b", glow: "#475569" },
+  Red: { base: "#c76a5d", glow: "#f4c2ba" },
+  Yellow: { base: "#d4a253", glow: "#f7ddb0" },
+  Blue: { base: "#6682a9", glow: "#c8d6e9" },
+  Green: { base: "#7a8f69", glow: "#dbe8ce" },
+  Black: { base: "#2d2321", glow: "#7f6b64" },
+  White: { base: "#fffaf5", glow: "#eee2d8" },
+  Pink: { base: "#cd7fa3", glow: "#f6cade" },
+  Orange: { base: "#d18657", glow: "#f4c8a6" },
+  Brown: { base: "#94705f", glow: "#dcc4b7" },
+  Grey: { base: "#9a938f", glow: "#ddd6d2" },
 };
 
 function mixProductsByBrand(list) {
@@ -68,8 +81,8 @@ function ColorShortcut({ color, active, onClick }) {
       aria-pressed={active}
       className={`group flex w-full items-center justify-between rounded-[18px] border px-3 py-2.5 text-left transition ${
         active
-          ? "border-slate-900 bg-slate-900 text-white shadow-[0_14px_28px_rgba(15,23,42,0.18)]"
-          : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+          ? "border-[#03045e] bg-[#03045e] text-white shadow-[0_16px_32px_rgba(3,4,94,0.18)]"
+          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-white"
       }`}
     >
       <span className="flex min-w-0 items-center gap-3">
@@ -78,15 +91,15 @@ function ColorShortcut({ color, active, onClick }) {
           style={swatchStyle}
         />
         <span className="min-w-0">
-          <span className={`block truncate text-base font-medium ${active ? "text-white" : "text-slate-800"}`}>
+          <span className={`block truncate text-base font-medium ${active ? "text-white" : "text-[#03045e]"}`}>
             {translateColor(color.name)}
           </span>
-          <span className={`block text-xs ${active ? "text-slate-300" : "text-slate-500"}`}>
+          <span className={`block text-xs ${active ? "text-white/70" : "text-slate-500"}`}>
             {ui.variants.replace("{count}", color.count)}
           </span>
         </span>
       </span>
-      <ChevronRight size={16} className={active ? "text-slate-300" : "text-slate-400"} />
+      <ChevronRight size={16} className={active ? "text-white/70" : "text-slate-400"} />
     </button>
   );
 }
@@ -96,26 +109,27 @@ export default function Products() {
   const ui = pick({
     fr: {
       loadError: "Impossible de charger les produits. Verifiez la connexion a l'API backend.",
-      eyebrow: "Catalogue",
-      title: "Boutique",
+      eyebrow: "Parapharmacie",
+      title: "Catalogue",
       subtitle: "Filtrez par categorie, marque, couleur et recherche.",
       results: "Resultats",
       showing: "{shown} sur {total}",
-      refine: "Affiner les produits",
-      refineTitle: "Trouver le bon materiel plus vite",
+      refine: "Affiner la selection",
+      refineTitle: "Trouver le bon produit plus vite",
+      refineDescription: "Utilisez la recherche, les categories et les marques pour acceder rapidement au bon produit.",
       categorySelected: "Categorie selectionnee",
       brandSelected: "Marque selectionnee",
       colorSelected: "Couleur : {color}",
       searchActive: "Recherche active",
-      colorFamilies: "Familles de couleurs",
-      popularShades: "Teintes populaires",
+      colorFamilies: "Filtres couleur",
+      popularShades: "Couleurs disponibles",
       allColors: "Toutes les couleurs",
-      moreShades: "Autres teintes",
-      remainingTones: "Explorer les teintes restantes",
-      popularBrands: "Marques populaires",
+      moreShades: "Autres couleurs",
+      remainingTones: "Explorer les couleurs restantes",
+      popularBrands: "Marques disponibles",
       quickAccess: "Acces rapide dans cette selection",
       noColors: "Aucune couleur disponible pour cette selection.",
-      moreShadesLater: "D'autres teintes apparaitront ici lorsqu'elles seront disponibles.",
+      moreShadesLater: "D'autres couleurs apparaitront ici lorsqu'elles seront disponibles.",
       noBrands: "Aucune marque disponible pour cette selection.",
       search: "Recherche",
       searchPlaceholder: "Rechercher par nom de produit...",
@@ -125,7 +139,7 @@ export default function Products() {
       allCategories: "Toutes les categories",
       allBrands: "Toutes les marques",
       reset: "Reinitialiser",
-      browseDescription: "Parcourez votre catalogue en direct avec des filtres plus propres et un acces plus rapide aux combinaisons categorie, marque et couleur.",
+      browseDescription: "Parcourez votre catalogue parapharmacie en direct avec un acces plus rapide aux categories, marques et recherches utiles.",
       pageOf: "Page {current} sur {last}",
       loadingProducts: "Chargement des produits...",
       showingProducts: "Affichage de {shown} sur {total} produits",
@@ -136,26 +150,27 @@ export default function Products() {
     },
     en: {
       loadError: "Unable to load products. Check backend API connection.",
-      eyebrow: "Catalogue",
-      title: "Shop",
+      eyebrow: "Parapharmacy",
+      title: "Catalog",
       subtitle: "Filter by category, brand, color and search.",
       results: "Results",
       showing: "{shown} of {total}",
-      refine: "Refine products",
-      refineTitle: "Find the right material faster",
+      refine: "Refine selection",
+      refineTitle: "Find the right product faster",
+      refineDescription: "Use search, categories, and brands to reach the right product faster.",
       categorySelected: "Category selected",
       brandSelected: "Brand selected",
       colorSelected: "Color: {color}",
       searchActive: "Search active",
-      colorFamilies: "Color families",
-      popularShades: "Popular shades",
+      colorFamilies: "Color filters",
+      popularShades: "Available colors",
       allColors: "All colors",
-      moreShades: "More shades",
-      remainingTones: "Explore the remaining tones",
-      popularBrands: "Popular brands",
+      moreShades: "More colors",
+      remainingTones: "Explore the remaining colors",
+      popularBrands: "Available brands",
       quickAccess: "Quick access in this selection",
       noColors: "No colors available for this selection.",
-      moreShadesLater: "More shades will appear here when available.",
+      moreShadesLater: "More colors will appear here when available.",
       noBrands: "No brands available for this selection.",
       search: "Search",
       searchPlaceholder: "Search by product name...",
@@ -165,7 +180,7 @@ export default function Products() {
       allCategories: "All categories",
       allBrands: "All brands",
       reset: "Reset",
-      browseDescription: "Browse your live catalog with cleaner filters and faster access to category, brand and color combinations.",
+      browseDescription: "Browse your live parapharmacy catalog with faster access to categories, brands, and useful searches.",
       pageOf: "Page {current} of {last}",
       loadingProducts: "Loading products...",
       showingProducts: "Showing {shown} of {total} products",
@@ -391,29 +406,29 @@ export default function Products() {
   const primaryColors = useMemo(() => orderedColors.slice(0, 6), [orderedColors]);
   const secondaryColors = useMemo(() => orderedColors.slice(6, 12), [orderedColors]);
   const quickBrands = useMemo(() => brands.slice(0, QUICK_BRAND_LIMIT), [brands]);
+  const hasColorOptions = orderedColors.length > 0;
 
   return (
-    <Container className="py-8">
-      <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+    <Container className="py-6">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500">Catalogue</p>
           <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500">{ui.eyebrow}</p>
-          <h1 className="mt-1 text-3xl font-black tracking-tight text-slate-950 md:text-[2rem]">{ui.title}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">{ui.subtitle}</p>
+          <h1 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#03045e] md:text-[2.2rem]">{ui.title}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-600">{ui.subtitle}</p>
         </div>
-        <div className="inline-flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 shadow-sm md:w-auto md:min-w-[230px]">
+        <div className="inline-flex w-full items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-600 shadow-[0_12px_26px_rgba(15,23,42,0.05)] md:w-auto md:min-w-[220px]">
           <span className="font-medium text-slate-500">{ui.results}</span>
-          <span className="font-semibold text-slate-900">
+          <span className="font-semibold text-[#03045e]">
             {ui.showing.replace("{shown}", products.length).replace("{total}", pageInfo.total)}
           </span>
         </div>
       </div>
 
-      <section className="mt-5 rounded-[22px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-4 shadow-[0_12px_28px_rgba(15,23,42,0.05)]">
+      <section className="mt-5 rounded-[26px] border border-slate-200 bg-white p-4 shadow-[0_18px_38px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-500">{ui.refine}</div>
-            <h2 className="mt-1 text-lg font-bold text-slate-950">{ui.refineTitle}</h2>
+            <h2 className="mt-2 text-lg font-semibold text-[#03045e]">{ui.refineTitle}</h2>
           </div>
           <div className="flex flex-wrap gap-2">
             {category_id ? (
@@ -439,87 +454,103 @@ export default function Products() {
           </div>
         </div>
 
-        <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(220px,0.8fr)]">
-          <section className="rounded-[24px] border border-slate-200 bg-white/85 p-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
-            <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3">
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.colorFamilies}</div>
-                <div className="mt-1 text-sm font-semibold text-slate-900">{ui.popularShades}</div>
-              </div>
-              {color ? (
-                <button
-                  type="button"
-                  onClick={() => updateSearchParam("color", "")}
-                  className="text-xs font-semibold text-slate-500 transition hover:text-slate-900"
-                >
-                  {ui.allColors}
-                </button>
-              ) : null}
-            </div>
-            <div className="mt-4 grid gap-2">
-              {primaryColors.length > 0 ? (
-                primaryColors.map((item) => (
-                  <ColorShortcut
-                    key={item.name}
-                    color={item}
-                    active={color === item.name}
-                    onClick={() => updateSearchParam("color", color === item.name ? "" : item.name)}
-                  />
-                ))
-              ) : (
-                <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
-                  {ui.noColors}
+        <div
+          className={`mt-4 grid gap-3 ${
+            hasColorOptions
+              ? "xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(200px,0.76fr)]"
+              : "xl:grid-cols-[minmax(0,1.2fr)_minmax(240px,0.8fr)]"
+          }`}
+        >
+          {hasColorOptions ? (
+            <>
+              <section className="rounded-[22px] border border-slate-200 bg-white p-3.5 shadow-[0_10px_22px_rgba(15,23,42,0.04)]">
+                <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                  <div>
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.colorFamilies}</div>
+                    <div className="mt-1 text-sm font-semibold text-[#03045e]">{ui.popularShades}</div>
+                  </div>
+                  {color ? (
+                    <button
+                      type="button"
+                      onClick={() => updateSearchParam("color", "")}
+                      className="text-xs font-semibold text-slate-400 transition hover:text-[#03045e]"
+                    >
+                      {ui.allColors}
+                    </button>
+                  ) : null}
                 </div>
-              )}
-            </div>
-          </section>
-
-          <section className="rounded-[24px] border border-slate-200 bg-white/85 p-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
-            <div className="border-b border-slate-100 pb-3">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.moreShades}</div>
-              <div className="mt-1 text-sm font-semibold text-slate-900">{ui.remainingTones}</div>
-            </div>
-            <div className="mt-4 grid gap-2">
-              {secondaryColors.length > 0 ? (
-                secondaryColors.map((item) => (
-                  <ColorShortcut
-                    key={item.name}
-                    color={item}
-                    active={color === item.name}
-                    onClick={() => updateSearchParam("color", color === item.name ? "" : item.name)}
-                  />
-                ))
-              ) : (
-                <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
-                  {ui.moreShadesLater}
+                <div className="mt-3 grid gap-2">
+                  {primaryColors.length > 0 ? (
+                    primaryColors.map((item) => (
+                      <ColorShortcut
+                        key={item.name}
+                        color={item}
+                        active={color === item.name}
+                        onClick={() => updateSearchParam("color", color === item.name ? "" : item.name)}
+                      />
+                    ))
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-400">
+                      {ui.noColors}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </section>
+              </section>
 
-          <section className="rounded-[24px] border border-slate-200 bg-white/85 p-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
-            <div className="border-b border-slate-100 pb-3">
+              <section className="rounded-[22px] border border-slate-200 bg-white p-3.5 shadow-[0_10px_22px_rgba(15,23,42,0.04)]">
+                <div className="border-b border-slate-200 pb-3">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.moreShades}</div>
+                  <div className="mt-1 text-sm font-semibold text-[#03045e]">{ui.remainingTones}</div>
+                </div>
+                <div className="mt-3 grid gap-2">
+                  {secondaryColors.length > 0 ? (
+                    secondaryColors.map((item) => (
+                      <ColorShortcut
+                        key={item.name}
+                        color={item}
+                        active={color === item.name}
+                        onClick={() => updateSearchParam("color", color === item.name ? "" : item.name)}
+                      />
+                    ))
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-400">
+                      {ui.moreShadesLater}
+                    </div>
+                  )}
+                </div>
+              </section>
+            </>
+          ) : (
+            <section className="rounded-[22px] border border-slate-200 bg-white p-4 shadow-[0_10px_22px_rgba(15,23,42,0.04)]">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.refine}</div>
+              <div className="mt-2 text-sm font-semibold text-[#03045e]">{ui.refineTitle}</div>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{ui.refineDescription}</p>
+            </section>
+          )}
+
+          <section className="rounded-[22px] border border-slate-200 bg-white p-3.5 shadow-[0_10px_22px_rgba(15,23,42,0.04)]">
+            <div className="border-b border-slate-200 pb-3">
               <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{ui.popularBrands}</div>
-              <div className="mt-1 text-sm font-semibold text-slate-900">{ui.quickAccess}</div>
+              <div className="mt-1 text-sm font-semibold text-[#03045e]">{ui.quickAccess}</div>
             </div>
-            <div className="mt-4 grid gap-2">
+            <div className="mt-3 grid gap-2">
               {quickBrands.length > 0 ? (
                 quickBrands.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => updateSearchParam("brand_id", String(item.id) === brand_id ? "" : String(item.id))}
-                    className={`rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${
+                    className={`rounded-2xl border px-4 py-2.5 text-left text-sm font-medium transition ${
                       String(item.id) === brand_id
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                        ? "border-[#03045e] bg-[#03045e] text-white"
+                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
                     {item.name}
                   </button>
                 ))
               ) : (
-                <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
+                <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-400">
                   {ui.noBrands}
                 </div>
               )}
@@ -527,13 +558,19 @@ export default function Products() {
           </section>
         </div>
 
-        <div className="mt-5 grid gap-3 xl:grid-cols-[minmax(0,1.4fr)_220px_220px_220px_120px]">
+        <div
+          className={`mt-4 grid gap-3 ${
+            hasColorOptions
+              ? "xl:grid-cols-[minmax(0,1.4fr)_205px_205px_205px_110px]"
+              : "xl:grid-cols-[minmax(0,1.4fr)_205px_205px_110px]"
+          }`}
+        >
           <div>
             <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
               {ui.search}
             </label>
             <input
-              className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-300"
+              className="h-10 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-[#03045e] outline-none transition placeholder:text-[#b39d93] focus:border-slate-300"
               placeholder={ui.searchPlaceholder}
               value={q}
               onChange={(e) => updateSearchParam("q", e.target.value)}
@@ -545,7 +582,7 @@ export default function Products() {
               {ui.category}
             </label>
             <select
-              className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+              className="h-10 w-full rounded-2xl border border-slate-200 bg-white px-3.5 text-sm text-[#03045e] outline-none transition focus:border-slate-300"
               value={category_id}
               onChange={(e) => updateSearchParam("category_id", e.target.value)}
             >
@@ -563,7 +600,7 @@ export default function Products() {
               {ui.brand}
             </label>
             <select
-              className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+              className="h-10 w-full rounded-2xl border border-slate-200 bg-white px-3.5 text-sm text-[#03045e] outline-none transition focus:border-slate-300"
               value={brand_id}
               onChange={(e) => updateSearchParam("brand_id", e.target.value)}
             >
@@ -576,32 +613,34 @@ export default function Products() {
             </select>
           </div>
 
-          <div>
-            <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              {ui.color}
-            </label>
-            <select
-              className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-slate-300"
-              value={color}
-              onChange={(e) => updateSearchParam("color", e.target.value)}
-            >
-              <option value="">{ui.allColors}</option>
-              {orderedColors.map((item) => (
-                <option key={item.name} value={item.name}>
-                  {translateColor(item.name)} ({item.count})
-                </option>
-              ))}
-            </select>
-          </div>
+          {hasColorOptions ? (
+            <div>
+              <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                {ui.color}
+              </label>
+              <select
+                className="h-10 w-full rounded-2xl border border-slate-200 bg-white px-3.5 text-sm text-[#03045e] outline-none transition focus:border-slate-300"
+                value={color}
+                onChange={(e) => updateSearchParam("color", e.target.value)}
+              >
+                <option value="">{ui.allColors}</option>
+                {orderedColors.map((item) => (
+                  <option key={item.name} value={item.name}>
+                    {translateColor(item.name)} ({item.count})
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
 
           <div className="flex items-end">
             <button
               type="button"
               onClick={() => setSp(new URLSearchParams())}
               disabled={!hasActiveFilters}
-              className={`h-10 w-full rounded-xl border text-sm font-semibold transition ${
+              className={`h-10 w-full rounded-2xl border text-sm font-semibold transition ${
                 hasActiveFilters
-                  ? "border-slate-900 bg-slate-900 text-white hover:bg-slate-800"
+                  ? "border-[#03045e] bg-[#03045e] text-white hover:bg-[#03045e]"
                   : "border-slate-200 bg-slate-100 text-slate-400"
               }`}
             >
@@ -613,34 +652,34 @@ export default function Products() {
 
       <main className="mt-6">
         <div className="mb-4 flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between">
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-slate-600">
             {ui.browseDescription}
           </div>
-          <div className="text-sm font-medium text-slate-500">
+          <div className="text-sm font-medium text-slate-400">
             {ui.pageOf.replace("{current}", pageInfo.current_page).replace("{last}", pageInfo.last_page)}
           </div>
         </div>
 
-        <div className="rounded-[22px] border border-slate-200 bg-white p-4 shadow-[0_12px_28px_rgba(15,23,42,0.04)] md:p-5">
-          {loading && <div className="mt-6 text-slate-500">{ui.loadingProducts}</div>}
+        <div className="rounded-[24px] border border-slate-200 bg-[rgba(255,255,255,0.84)] p-4 shadow-[0_18px_38px_rgba(15,23,42,0.05)]">
+          {loading && <div className="mt-6 text-slate-600">{ui.loadingProducts}</div>}
           {apiError && <div className="mt-6 text-rose-600">{apiError}</div>}
 
           {!loading && !apiError && (
             <>
-              <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3 text-sm text-slate-500">
+              <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3 text-sm text-slate-600">
                 <span>
                   {ui.showingProducts.replace("{shown}", products.length).replace("{total}", pageInfo.total)}
                 </span>
                 <span>{hasActiveFilters ? ui.filteredResults : ui.allProducts}</span>
               </div>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {mixedProducts.map((p) => (
                   <ProductCard key={p.id} p={p} />
                 ))}
               </div>
-              {products.length === 0 && <div className="mt-10 text-center text-slate-500">{ui.noProducts}</div>}
+              {products.length === 0 && <div className="mt-10 text-center text-slate-600">{ui.noProducts}</div>}
 
-              {loadingMore && <div className="mt-8 text-center text-slate-500">{ui.loadingMore}</div>}
+              {loadingMore && <div className="mt-8 text-center text-slate-600">{ui.loadingMore}</div>}
               <div ref={loadMoreRef} className="h-1" />
             </>
           )}

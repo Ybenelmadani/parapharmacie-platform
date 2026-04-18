@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { http } from "../api/http";
 import { STORE_SHIPPING_FEE } from "../config/store";
 import { useAuth } from "../context/AuthContext";
@@ -208,99 +209,103 @@ export default function Checkout() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl p-6">
-      <h1 className="text-3xl font-black tracking-tight">{ui.title}</h1>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+      className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8"
+    >
+      <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 mb-2">{ui.title}</h1>
+      <div className="h-1 w-20 bg-para-green-400 rounded-full mb-8"></div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <form onSubmit={submit} className="space-y-4 lg:col-span-2">
-          {error ? <div className="rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-red-700">{error}</div> : null}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <form onSubmit={submit} className="space-y-6 lg:col-span-2">
+          {error ? <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-red-100 bg-red-50 p-4 text-sm text-red-700 shadow-sm">{error}</motion.div> : null}
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-black">{ui.customerShipping}</h2>
-            {user ? <div className="mb-4 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm text-sky-800">{ui.savedHint}</div> : null}
+          <div className="rounded-[30px] border border-para-marine-100 bg-white p-6 shadow-[0_10px_30px_rgba(59,130,246,0.03)]">
+            <h2 className="mb-5 text-xl font-bold text-slate-800">{ui.customerShipping}</h2>
+            {user ? <div className="mb-5 rounded-2xl border border-para-green-200 bg-para-green-50 px-5 py-4 text-sm text-para-green-800 shadow-sm">{ui.savedHint}</div> : null}
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <input className="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder={ui.fullName} value={form.name} onChange={(event) => setField("name", event.target.value)} required />
-              <input className="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder={ui.email} value={form.email} onChange={(event) => setField("email", event.target.value)} required />
-              <input className="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder={ui.phone} value={form.phone} onChange={(event) => setField("phone", event.target.value)} required />
-              <input className="w-full rounded-xl border border-slate-200 px-4 py-3 md:col-span-2" placeholder={ui.address} value={form.address} onChange={(event) => setField("address", event.target.value)} required />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <input className="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:ring-2 focus:ring-para-marine-200 focus:border-para-marine-300 outline-none transition-all" placeholder={ui.fullName} value={form.name} onChange={(event) => setField("name", event.target.value)} required />
+              <input className="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:ring-2 focus:ring-para-marine-200 focus:border-para-marine-300 outline-none transition-all" placeholder={ui.email} value={form.email} onChange={(event) => setField("email", event.target.value)} required />
+              <input className="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:ring-2 focus:ring-para-marine-200 focus:border-para-marine-300 outline-none transition-all" placeholder={ui.phone} value={form.phone} onChange={(event) => setField("phone", event.target.value)} required />
+              <input className="w-full rounded-2xl border border-slate-200 px-5 py-4 md:col-span-2 focus:ring-2 focus:ring-para-marine-200 focus:border-para-marine-300 outline-none transition-all" placeholder={ui.address} value={form.address} onChange={(event) => setField("address", event.target.value)} required />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
-            <p className="font-semibold">{ui.paymentMethod}</p>
-            <p className="mt-1 text-sm">{ui.paymentDescription}</p>
+          <div className="rounded-[30px] border border-para-green-200 bg-para-green-50/50 p-6 shadow-sm">
+            <p className="font-bold text-para-green-800 text-lg">{ui.paymentMethod}</p>
+            <p className="mt-2 text-sm text-para-green-700">{ui.paymentDescription}</p>
           </div>
 
-          <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
+          <label className="flex items-start gap-4 rounded-[24px] border border-slate-200 bg-white p-5 text-sm text-slate-700 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
             <input
               type="checkbox"
               checked={eligibilityConfirmed}
               onChange={(event) => setEligibilityConfirmed(event.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-para-green-600 focus:ring-para-green-500 cursor-pointer"
               required
             />
-            <span>{ui.eligibilityLabel}</span>
+            <span className="font-medium text-slate-800">{ui.eligibilityLabel}</span>
           </label>
 
-          <details className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-            <summary className="cursor-pointer list-none font-semibold text-slate-900">
+          <details className="group rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700 transition-all open:bg-white open:shadow-sm">
+            <summary className="cursor-pointer list-none font-semibold text-slate-900 group-open:text-para-green-700 transition-colors">
               {ui.eligibilityView}
             </summary>
-            <div className="mt-3 space-y-3">
+            <div className="mt-4 space-y-4 border-t border-slate-100 pt-4">
               <p>{ui.eligibilityIntro}</p>
-              <ul className="space-y-2 pl-5 text-slate-600">
+              <ul className="space-y-2 pl-5 text-slate-600 list-disc marker:text-para-marine-400">
                 <li>{ui.eligibilityPoint1}</li>
                 <li>{ui.eligibilityPoint2}</li>
                 <li>{ui.eligibilityPoint3}</li>
               </ul>
               <Link
                 to="/info/terms-conditions"
-                className="inline-flex font-semibold text-slate-900 underline underline-offset-4 transition hover:text-slate-700"
+                className="inline-flex font-semibold text-para-marine-500 underline underline-offset-4 transition hover:text-para-marine-600"
               >
                 {ui.eligibilityFullLink}
               </Link>
             </div>
           </details>
 
-          <button disabled={submitting} className="w-full rounded-2xl bg-black py-4 text-lg font-semibold text-white disabled:opacity-60">
+          <button disabled={submitting} className="w-full rounded-[24px] bg-para-green-600 py-4.5 text-lg font-bold text-white shadow-[0_10px_20px_rgba(22,163,74,0.3)] transition-all hover:bg-para-green-700 hover:shadow-[0_15px_30px_rgba(22,163,74,0.4)] disabled:opacity-60 disabled:hover:scale-100 p-4">
             {submitting ? ui.processing : ui.placeOrder}
           </button>
         </form>
 
-        <div className="h-fit rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-xl font-black">{ui.summary}</h2>
+        <div className="h-fit rounded-[30px] border border-para-marine-100 bg-white p-7 shadow-[0_15px_40px_rgba(59,130,246,0.06)] sticky top-28">
+          <h2 className="text-xl font-bold text-slate-800">{ui.summary}</h2>
 
-          <div className="mt-4 space-y-3">
+          <div className="mt-6 space-y-4">
             {summary.map((row) => (
-              <div key={row.id} className="flex items-start justify-between gap-3">
+              <div key={row.id} className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <div className="truncate font-semibold">{row.name}</div>
-                  <div className="text-xs text-slate-500">
+                  <div className="truncate font-semibold text-slate-900">{row.name}</div>
+                  <div className="text-sm font-medium text-slate-400 mt-0.5">
                     {ui.qty} × {row.qty}
                   </div>
                 </div>
-                <div className="font-bold">{formatMoney(row.line)}</div>
+                <div className="font-bold text-slate-800">{formatMoney(row.line)}</div>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 space-y-3 border-t border-slate-200 pt-4">
+          <div className="mt-8 space-y-4 border-t border-slate-100 pt-6">
             <div className="flex items-center justify-between">
-              <div className="font-semibold text-slate-600">{ui.subtotal}</div>
-              <div className="font-bold">{formatMoney(total)}</div>
+              <div className="font-medium text-slate-500">{ui.subtotal}</div>
+              <div className="font-bold text-slate-800">{formatMoney(total)}</div>
             </div>
             <div className="flex items-center justify-between">
-              <div className="font-semibold text-slate-600">{ui.shipping}</div>
-              <div className="font-bold">{formatMoney(shipping)}</div>
+              <div className="font-medium text-slate-500">{ui.shipping}</div>
+              <div className="font-bold text-slate-800">{formatMoney(shipping)}</div>
             </div>
-            <div className="flex items-center justify-between border-t border-slate-200 pt-3">
-              <div className="font-semibold text-slate-600">{ui.total}</div>
-              <div className="text-2xl font-black">{formatMoney(grandTotal)}</div>
+            <div className="flex items-center justify-between border-t border-slate-100 pt-5 mt-5">
+              <div className="font-bold text-slate-600 uppercase tracking-widest text-xs mt-1">{ui.total}</div>
+              <div className="text-3xl font-black text-slate-900 tracking-tight">{formatMoney(grandTotal)}</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,14 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light;
+  --font-body: "Manrope", "Cairo", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  /* Parapharmacy Palette */
+  --store-bg: #f8fafc; /* Crisp Slate 50 */
+  --store-bg-soft: #eff6ff; /* Soft Marine */
+  --store-surface: rgba(255, 255, 255, 0.95);
+  --store-card: rgba(255, 255, 255, 1);
+  --store-border: rgba(59, 130, 246, 0.12); /* Marine border */
+  --store-text: #0f172a; /* Slate 900 */
+  --store-muted: #64748b; /* Slate 500 */
+  --store-accent: #16a34a; /* Health Green */
+  --store-accent-dark: #15803d; /* Darker Health Green */
+  --store-deep: #03045e; /* Deep Marine/Navy */
+}
 
-:root { color-scheme: light; }
 html[dir="rtl"] body {
   direction: rtl;
 }
 
-body { @apply bg-slate-50 text-slate-900; }
+html {
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+body {
+  @apply text-slate-900 antialiased;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.05), transparent 30%),
+    radial-gradient(circle at top right, rgba(3, 4, 94, 0.03), transparent 25%),
+    linear-gradient(180deg, #ffffff 0%, var(--store-bg) 60%, #f1f5f9 100%);
+  color: var(--store-text);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--store-deep);
+}
+
+.store-shell {
+  position: relative;
+}
+
+.store-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.5), transparent 18%),
+    radial-gradient(circle at 80% 10%, rgba(96,165,250, 0.08), transparent 22%),
+    linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+  opacity: 0.9;
+  z-index: -1;
+}
 
 .admin-shell {
   background:

@@ -1,31 +1,41 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUp,
   ChevronLeft,
   ChevronRight,
-  Play,
 } from "lucide-react";
 import Container from "../components/layout/Container";
 import ProductCard from "../components/product/ProductCard";
 import { CatalogAPI } from "../api/catalog";
 import { useI18n } from "../context/I18nContext";
 import { resolveMediaUrl } from "../utils/media";
-import allProductsCategoryImage from "../assets/categories/all product.jpeg";
-import drawingCategoryImage from "../assets/categories/drawing.jpeg";
-import fabricGlassCeramicsCategoryImage from "../assets/categories/fabric class.jpeg";
-import mixedMediaCategoryImage from "../assets/categories/mixed media.jpeg";
-import paintCategoryImage from "../assets/categories/paint.jpeg";
-import paperStorageCategoryImage from "../assets/categories/paper storage.jpeg";
-import sculptureClayCategoryImage from "../assets/categories/scuplture & clay.jpeg";
+import landingHeroImage from "../assets/landing2.jpg";
+import storefrontImage from "../assets/para.jfif";
+import naturalCareImage from "../assets/p.jfif";
+import pharmacyInteriorImage from "../assets/Nord Parisien - Inside Pharmacy.jfif";
+import pharmacistImage from "../assets/Compounding Pharmacy Corpus Christi.jfif";
 
 const CATEGORY_IMAGE_MATCHERS = [
-  { image: drawingCategoryImage, matches: ["drawing", "color"] },
-  { image: paintCategoryImage, matches: ["painting", "paint", "paints", "brushes"] },
-  { image: sculptureClayCategoryImage, matches: ["sculpture", "clay", "studio"] },
-  { image: mixedMediaCategoryImage, matches: ["mixed media", "collage"] },
-  { image: fabricGlassCeramicsCategoryImage, matches: ["fabric", "glass", "ceramic"] },
-  { image: paperStorageCategoryImage, matches: ["paper", "surface", "storage", "organization"] },
+  { image: pharmacistImage, matches: ["skin", "soin", "dermo", "derm", "beauty", "beaute", "visage", "face", "serum", "cream"] },
+  { image: naturalCareImage, matches: ["bio", "nature", "natural", "huile", "wellness", "bien etre", "nutrition", "complement", "vitamin"] },
+  { image: landingHeroImage, matches: ["bebe", "baby", "hygiene", "hygiene", "oral", "dental", "hair", "cheveux"] },
+  { image: storefrontImage, matches: ["pharma", "parapharma", "sante", "health", "materiel", "accessoire"] },
+];
+
+const DEFAULT_CATEGORY_IMAGES = [
+  storefrontImage,
+  pharmacistImage,
+  pharmacyInteriorImage,
+  naturalCareImage,
+  landingHeroImage,
+];
+
+const LANDING_HERO_IMAGES = [
+  landingHeroImage,
+  pharmacistImage,
+  storefrontImage,
 ];
 
 function normalizeCategoryName(value) {
@@ -138,34 +148,16 @@ function SectionTitle({ eyebrow, title, action, to = "/products" }) {
 }
 
 function Reveal({ children, className = "", delay = 0 }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`${className} transition-all duration-700 ease-out ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
-      }`}
+    <motion.div
+      initial={{ y: 25, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.7, delay: delay / 1000, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 
@@ -176,7 +168,6 @@ function CategoryCard({ category, featured = false, delay = 0, className = "" })
     en: { noImage: "No image available", items: "{count} items", explore: "Explore category" },
     ar: { noImage: "لا توجد صورة متاحة", items: "{count} منتجات", explore: "استكشف الفئة" },
   });
-  const useCoverImage = featured || category.imageFit === "cover";
 
   return (
     <Reveal delay={delay} className={className}>
@@ -185,77 +176,45 @@ function CategoryCard({ category, featured = false, delay = 0, className = "" })
         className="group block h-full transition-transform duration-300 hover:-translate-y-1.5"
       >
         <div
-          className={`flex h-full flex-col overflow-hidden rounded-[28px] border shadow-[0_18px_50px_rgba(15,23,42,0.06)] transition-all duration-300 group-hover:shadow-[0_26px_70px_rgba(15,23,42,0.12)] ${
-            featured
-              ? "border-neutral-900 bg-neutral-900 text-white"
-              : "border-white/60 bg-white text-neutral-900"
+          className={`flex h-full flex-col overflow-hidden rounded-[28px] border bg-white shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition-all duration-300 group-hover:shadow-[0_20px_50px_rgba(3,4,94,0.15)] hover:-translate-y-1 ${
+            featured ? "border-transparent" : "border-slate-100"
           }`}
         >
           <div
-            className={`relative overflow-hidden ${
-              featured ? "bg-neutral-800" : "bg-neutral-100"
-            }`}
+            className="relative overflow-hidden bg-white"
           >
             {category.image ? (
-              <div className="flex h-[230px] w-full items-center justify-center overflow-hidden">
-                {useCoverImage ? (
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05] ${
-                      featured ? "opacity-80" : ""
-                    }`}
-                    loading="lazy"
-                  />
-                ) : (
-                  <>
-                    <img
-                      src={category.image}
-                      alt=""
-                      aria-hidden="true"
-                      className="absolute inset-0 h-full w-full scale-110 object-cover opacity-12 blur-xl transition-transform duration-500 group-hover:scale-[1.15]"
-                      loading="lazy"
-                    />
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="relative h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
-                      loading="lazy"
-                    />
-                  </>
-                )}
+              <div className="flex h-[230px] w-full items-center justify-center overflow-hidden bg-white">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                  loading="lazy"
+                />
               </div>
             ) : (
-              <div className="flex h-[230px] w-full items-center justify-center text-sm font-medium text-neutral-500">
+              <div className="flex h-[230px] w-full items-center justify-center text-sm font-medium text-slate-300">
                 {ui.noImage}
               </div>
             )}
-
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/10 via-black/0 to-transparent" />
           </div>
 
-          <div className="flex flex-1 flex-col justify-between px-5 pb-5 pt-4">
+          <div className="flex flex-1 flex-col justify-between px-6 pb-6 pt-5 bg-[#03045e] text-white">
             <div>
               <div
-                className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${
-                  featured ? "bg-white/12 text-white/80" : "bg-neutral-100 text-neutral-500"
-                }`}
+                className="inline-flex rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm"
               >
                 {ui.items.replace("{count}", category.count)}
               </div>
               <h3
-                className={`mt-4 text-2xl font-semibold leading-tight ${
-                  featured ? "text-white" : "text-neutral-900"
-                }`}
+                className="mt-4 text-2xl font-bold leading-tight text-white tracking-tight"
               >
                 {category.name}
               </h3>
             </div>
 
             <div
-              className={`mt-8 inline-flex items-center gap-2 text-sm font-medium ${
-                featured ? "text-white/85" : "text-neutral-700"
-              }`}
+              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition-colors group-hover:text-white"
             >
               {ui.explore}
               <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -397,6 +356,7 @@ export default function Home() {
       allProducts: "كل المنتجات",
     },
   });
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -470,7 +430,6 @@ export default function Home() {
       alive = false;
     };
   }, []);
-
   const imagePool = useMemo(() => {
     const seen = new Set();
     const pool = [];
@@ -492,7 +451,7 @@ export default function Home() {
   }, [products]);
 
   const firstCatalogImage = useMemo(() => {
-    return imagePool[0]?.image || "";
+    return imagePool[0]?.image || LANDING_HERO_IMAGES[0] || "";
   }, [imagePool]);
 
   const mixedProducts = useMemo(() => {
@@ -502,23 +461,21 @@ export default function Home() {
   }, [products]);
 
   const heroSlides = useMemo(() => {
-    const source = mixedProducts.slice(0, 2);
+    const source = mixedProducts.slice(0, LANDING_HERO_IMAGES.length);
     if (source.length === 0) {
-      return [
-        {
-          id: "fallback-1",
+      return LANDING_HERO_IMAGES.map((image, index) => ({
+          id: `fallback-${index + 1}`,
           eyebrow: ui.fallbackEyebrow,
           title: ui.fallbackTitle,
           subtitle: ui.fallbackSubtitle,
           description: ui.fallbackDescription,
-          image: firstCatalogImage,
+          image,
           bg: "from-neutral-100 to-neutral-100",
           accent: "text-neutral-900",
-        },
-      ];
+        }));
     }
 
-    return source.map((product) => ({
+    return source.map((product, index) => ({
       id: product.id,
       eyebrow: product?.category?.name?.toUpperCase() || ui.featured,
       title: product?.name || ui.studioSelection,
@@ -528,7 +485,7 @@ export default function Home() {
       description:
         shortText(product?.description, 170) ||
         ui.curatedMaterials,
-      image: getProductImage(product) || firstCatalogImage,
+      image: LANDING_HERO_IMAGES[index] || getProductImage(product) || firstCatalogImage,
       bg: "from-neutral-100 to-neutral-100",
       accent: "text-neutral-900",
     }));
@@ -616,7 +573,11 @@ export default function Home() {
     const mapped = topLevelCategories.map((category, index) => {
       const showcase = categoryShowcase[String(category.id)] || {};
       const staticCategoryImage = getStaticCategoryImage(category.name);
-      const categoryImage = staticCategoryImage || showcase.image || firstCatalogImage;
+      const categoryImage =
+        staticCategoryImage ||
+        showcase.image ||
+        DEFAULT_CATEGORY_IMAGES[index % DEFAULT_CATEGORY_IMAGES.length] ||
+        firstCatalogImage;
 
       return {
         id: category.id,
@@ -634,7 +595,7 @@ export default function Home() {
       {
         id: "all-categories",
         name: ui.allProducts,
-        image: allProductsCategoryImage || categoryShowcase.allProducts?.image || firstCatalogImage,
+        image: landingHeroImage || categoryShowcase.allProducts?.image || firstCatalogImage,
         imageFit: "cover",
         href: "/products",
         count: allCount,
@@ -679,9 +640,7 @@ export default function Home() {
     const top = reviews.slice(0, 3).map((review) => ({
       id: review.id,
       title: `${review?.user?.name || ui.customer} x ${review?.product?.name || "Adwart"}`,
-      description:
-        shortText(review?.comment, 140) ||
-        ui.reviewFallback,
+      description: shortText(review?.comment, 140) || ui.reviewFallback,
       rating: Number(review?.rating) || 0,
     }));
     if (top.length) return top;
@@ -700,88 +659,116 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const topLevelCategoryCount = useMemo(
+    () => categories.filter((category) => !category?.parent_id).length,
+    [categories]
+  );
+
   const currentSlide = heroSlides[Math.min(heroIndex, Math.max(0, heroSlides.length - 1))];
+  const isHeroImageLoading = loading && !currentSlide?.image;
 
   return (
-    <div className="min-h-screen bg-[#fbfaf7] pb-14 text-neutral-900">
+    <div className="min-h-screen bg-slate-50 pb-14 text-neutral-900">
       <main>
         <section className="pt-7 md:pt-9">
           <Container>
-            <Reveal className="overflow-hidden rounded-[34px] border border-black/5 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
-              <div className="grid min-h-[480px] sm:min-h-[560px] lg:min-h-[620px] lg:grid-cols-2">
-                <div className={`bg-gradient-to-br ${currentSlide?.bg || "from-neutral-100 to-neutral-100"} p-8 md:p-12 lg:p-16`}>
+            <Reveal className="relative overflow-hidden rounded-[40px] bg-[#eff6ff] md:mx-[-18px] lg:mx-[-28px]">
+              <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#bfdbfe]/40 to-transparent pointer-events-none" />
+              
+              <div className="grid min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:grid-cols-2 items-center">
+                <div className="relative z-10 px-8 py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
                   <div
                     key={`hero-copy-${currentSlide?.id || "fallback"}`}
-                    className="animate-in fade-in slide-in-from-left-8 duration-700"
+                    className="relative z-10 animate-in fade-in slide-in-from-left-8 duration-700"
                   >
-                    <p className={`mb-6 text-xs uppercase tracking-[0.35em] ${currentSlide?.accent || "text-neutral-900"}`}>
-                      {currentSlide?.eyebrow || ui.featured}
-                    </p>
-                    <h1 className="mb-6 text-4xl font-semibold leading-[0.95] tracking-tight text-neutral-900 md:text-6xl">
+                    <div className="mb-6 inline-flex items-center gap-3">
+                      <span className="h-px w-8 bg-[#03045e]"></span>
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#03045e]">
+                        {currentSlide?.eyebrow || ui.featured}
+                      </span>
+                    </div>
+                    
+                    <h1 className="mb-6 text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-[#03045e]">
                       {currentSlide?.title || ui.studioSelection}
                     </h1>
-                    <p className="mb-4 text-lg leading-relaxed text-neutral-900 md:text-2xl">{currentSlide?.subtitle}</p>
-                    <p className="mb-10 max-w-lg text-base leading-8 text-neutral-600 md:text-lg">{currentSlide?.description}</p>
+                    
+                    <p className="mb-8 max-w-lg text-lg sm:text-xl leading-relaxed text-[#03045e]/80">
+                      {currentSlide?.subtitle || currentSlide?.description}
+                    </p>
 
-                    <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-4 mt-10">
                       <Link
                         to="/products"
-                        className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-7 py-4 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[#03045e] px-8 py-4 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
                       >
                         {ui.exploreCollection}
                         <ChevronRight className="h-4 w-4" />
                       </Link>
-                      <Link
-                        to="/info/about-artstore"
-                        className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/80 px-6 py-4 text-sm font-medium text-neutral-900 transition-colors hover:bg-white"
-                      >
-                        <Play className="h-4 w-4 fill-current" />
-                        {ui.readMore}
-                      </Link>
                     </div>
 
-                    {heroSlides.length > 1 ? (
-                      <div className="mt-12 flex items-center gap-3">
-                        {heroSlides.map((slide, index) => (
-                          <button
-                            key={slide.id}
-                            type="button"
-                            onClick={() => setHeroIndex(index)}
-                            className={`h-2.5 rounded-full transition-all ${
-                              heroIndex === index ? "w-10 bg-neutral-900" : "w-2.5 bg-neutral-400/60"
-                            }`}
-                            aria-label={ui.goToSlide.replace("{index}", index + 1)}
-                          />
-                        ))}
-                      </div>
-                    ) : null}
+                    <div className="mt-16 grid grid-cols-3 gap-6 border-t border-[#03045e]/10 pt-8">
+                       <div>
+                         <div className="text-3xl font-black text-[#03045e]">{products.length || 96}+</div>
+                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
+                           {ui.allProducts}
+                         </div>
+                       </div>
+                       <div>
+                         <div className="text-3xl font-black text-[#03045e]">{topLevelCategoryCount || 6}</div>
+                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
+                           {ui.categories}
+                         </div>
+                       </div>
+                       <div>
+                         <div className="text-3xl font-black text-[#03045e]">{heroSlides.length}</div>
+                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
+                           {ui.liveCatalog}
+                         </div>
+                       </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="relative min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] overflow-hidden bg-neutral-100">
-                  {currentSlide?.image ? (
-                    <img
-                      key={`hero-image-${currentSlide?.id || "fallback"}`}
-                      src={currentSlide?.image}
-                      alt={currentSlide?.title || "Adwart"}
-                      className="h-full w-full animate-in fade-in zoom-in-95 object-cover duration-700"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-sm font-medium text-neutral-500">
-                      {ui.noImage}
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
-                  {heroSlides.length > 1 ? (
-                    <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                      <div className="rounded-full bg-white/88 px-5 py-3 text-sm font-medium text-neutral-900 backdrop-blur">
-                        {ui.liveCatalog}
-                      </div>
-                      <div className="flex items-center gap-2">
+                <div className="relative h-full w-full min-h-[400px] lg:min-h-full overflow-hidden p-6 lg:p-12 pl-0">
+                  <div className="relative h-full w-full overflow-hidden rounded-[30px] shadow-2xl">
+                    <AnimatePresence mode="wait">
+                      {currentSlide?.image ? (
+                        <motion.img
+                          key={`hero-image-${currentSlide?.id || "fallback"}`}
+                          src={currentSlide?.image}
+                          alt={currentSlide?.title || "Adwart"}
+                          initial={{ opacity: 0, scale: 1.05 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.8, ease: "easeOut" }}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      ) : isHeroImageLoading ? (
+                        <motion.div 
+                           key="loading"
+                           initial={{ opacity: 0 }} 
+                           animate={{ opacity: 1 }} 
+                           exit={{ opacity: 0 }}
+                           className="absolute inset-0 h-full w-full animate-pulse bg-neutral-200" 
+                        />
+                      ) : (
+                        <motion.div 
+                           key="no-image"
+                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                           className="absolute inset-0 flex h-full w-full items-center justify-center bg-neutral-200 text-sm font-medium text-neutral-500">
+                          {ui.noImage}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+                    {heroSlides.length > 1 ? (
+                      <div className="absolute bottom-6 right-6 flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => setHeroIndex((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/88 backdrop-blur transition-colors hover:bg-white"
+                          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-[#03045e] backdrop-blur transition-transform hover:scale-110 shadow-lg"
                           aria-label={ui.previousSlide}
                         >
                           <ChevronLeft className="h-5 w-5" />
@@ -789,33 +776,21 @@ export default function Home() {
                         <button
                           type="button"
                           onClick={() => setHeroIndex((prev) => (prev + 1) % heroSlides.length)}
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/88 backdrop-blur transition-colors hover:bg-white"
+                          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#03045e] text-white shadow-lg transition-transform hover:scale-110"
                           aria-label={ui.nextSlide}
                         >
                           <ChevronRight className="h-5 w-5" />
                         </button>
                       </div>
-                    </div>
-                  ) : null}
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </Reveal>
-
-            <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-              {"ADWART".split("").map((letter, idx) => (
-                <div
-                  key={idx}
-                  style={{ animationDelay: `${120 + idx * 55}ms` }}
-                  className="animate-in fade-in slide-in-from-bottom-4 rounded-[24px] border border-neutral-200 bg-white px-6 py-6 text-center shadow-sm duration-700"
-                >
-                  <span className="text-2xl font-semibold tracking-[0.35em] text-neutral-900 md:text-3xl">{letter}</span>
-                </div>
-              ))}
-            </div>
           </Container>
         </section>
 
-        <section className="border-y border-black/5 bg-[#fbfaf7] py-24">
+        <section className="border-y border-black/5 bg-slate-50 py-24">
           <Container>
             <Reveal>
               <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -861,17 +836,16 @@ export default function Home() {
           </Container>
         </section>
 
-        <section className="bg-[#fbfaf7] pb-24 pt-24">
+        <section className="bg-slate-50 pb-24 pt-24">
           <Container>
             <Reveal>
               <SectionTitle eyebrow={ui.giftSelection} title={ui.giftsTitle} action={ui.viewAllProducts} to="/products?q=gift" />
             </Reveal>
-            
-            
-            <div  className="grid gap-6 md:grid-cols-4 xl:grid-cols-4">
+
+            <div className="grid gap-6 md:grid-cols-4 xl:grid-cols-4">
               {loading &&
                 Array.from({ length: 4 }).map((_, idx) => (
-                  <div key={`gift-skeleton-${idx}`} className="h-[430px] animate-pulse rounded-[28px] border border-neutral-200 bg-neutral-200"/>
+                  <div key={`gift-skeleton-${idx}`} className="h-[430px] animate-pulse rounded-[28px] border border-neutral-200 bg-neutral-200" />
                 ))}
               {!loading &&
                 giftProducts.map((product, index) => (
@@ -883,7 +857,7 @@ export default function Home() {
           </Container>
         </section>
 
-        <section className="border-y border-black/5 bg-[#fbfaf7] py-24">
+        <section className="border-y border-black/5 bg-slate-50 py-24">
           <Container>
             <Reveal>
               <SectionTitle eyebrow={ui.newProducts} title={ui.newProductsTitle} action={ui.browseNewest} to="/products" />
@@ -903,13 +877,13 @@ export default function Home() {
           </Container>
         </section>
 
-        <section className="bg-[#fbfaf7] py-24">
+        <section className="bg-slate-50 py-24">
           <Container>
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-2">
               <Reveal className="relative overflow-hidden rounded-[34px] bg-neutral-900 p-10 text-white md:p-12">
                 <p className="mb-4 text-xs uppercase tracking-[0.35em] text-white/60">{ui.brands}</p>
                 <h2 className="mb-5 text-4xl font-semibold md:text-5xl">{ui.worldOfAdwart}</h2>
-                <p className="max-w-2xl text-lg leading-8 text-white/80">
+                <p className="max-w-2xl text-lg leading-8 text-slate-600">
                   {ui.brandsDescription}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -950,12 +924,12 @@ export default function Home() {
                 )}
                 <div className="p-8">
                   <p className="mb-4 text-xs uppercase tracking-[0.35em] text-neutral-500">{ui.customerStory}</p>
-                  <h3 className="mb-3 text-2xl font-semibold text-neutral-900">
+                  <h6 className="mb-3 text-2xl font-serif text-neutral-900">
                     {highlightReview?.user?.name || ui.verifiedCustomer} {ui.onWord}{" "}
                     {highlightReview?.product?.name || ui.ourCatalog}
-                  </h3>
+                  </h6>
                   <p className="leading-7 text-neutral-600">
-                    {shortText(highlightReview?.comment, 220) || ui.reviewFallback}
+                    <i>{shortText(highlightReview?.comment, 220) || ui.reviewFallback}</i>
                   </p>
                 </div>
               </Reveal>
@@ -966,7 +940,7 @@ export default function Home() {
                 <Reveal key={story.id} delay={index * 90} className="h-full">
                   <div className="flex h-full flex-col rounded-[28px] border border-neutral-200 bg-white p-8 transition-shadow hover:shadow-xl">
                     <p className="mb-4 text-xs uppercase tracking-[0.35em] text-neutral-500">{ui.episode}</p>
-                    <h3 className="mb-4 text-2xl font-semibold text-neutral-900">{story.title}</h3>
+                    <h6 className="mb-4 text-2xl font-serif text-neutral-900">{story.title}</h6>
                     <p className="mb-6 leading-7 text-neutral-600">{story.description}</p>
                     <div className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-neutral-900">
                       {story.rating > 0 ? ui.rating.replace("{rating}", story.rating) : ui.readMoreShort}
@@ -978,7 +952,6 @@ export default function Home() {
             </div>
           </Container>
         </section>
-
       </main>
 
       {showScrollTop ? (

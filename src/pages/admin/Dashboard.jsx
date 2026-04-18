@@ -49,17 +49,7 @@ function shouldShowAxisLabel(index, total) {
   return index % Math.ceil(total / 6) === 0;
 }
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function downloadExcelFile(name, content) {
-  const blob = new Blob([`\uFEFF${content}`], { type: "application/vnd.ms-excel;charset=utf-8;" });
+function downloadBlob(name, blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -92,11 +82,12 @@ function Chip({ children }) {
   );
 }
 
-function ToolbarButton({ icon: Icon, children, onClick, dark = false }) {
+function ToolbarButton({ icon: Icon, children, onClick, dark = false, disabled = false }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       style={{
         border: dark ? "1px solid #0f172a" : "1px solid #cbd5e1",
         borderRadius: 14,
@@ -107,7 +98,8 @@ function ToolbarButton({ icon: Icon, children, onClick, dark = false }) {
         display: "inline-flex",
         alignItems: "center",
         gap: 8,
-        cursor: "pointer",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.6 : 1,
       }}
     >
       <Icon size={16} />
@@ -453,6 +445,7 @@ export default function Dashboard() {
   const [data, setData] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [exporting, setExporting] = useState("");
 
   useEffect(() => {
     let live = true;
@@ -515,153 +508,27 @@ export default function Dashboard() {
     { icon: Boxes, label: ui.products, value: n.format(data.summary.total_products), helper: ui.catalogHelper, bg: "linear-gradient(135deg, #9a3412, #ea580c 55%, #fdba74)" },
   ];
 
-  const exportExcel = () => {
-    const summaryRows = [
-      [ui.period, currentPeriodLabel],
-      [ui.revenue, formatMoney(data.summary.total_revenue)],
-      [ui.orders, n.format(data.summary.total_orders)],
-      [ui.customers, n.format(data.summary.total_customers)],
-      [ui.products, n.format(data.summary.total_products)],
-    ]
-      .map(
-        ([label, value]) =>
-          `<tr class="row"><td class="label">${escapeHtml(label)}</td><td class="value">${escapeHtml(value)}</td><td></td><td></td><td></td></tr>`
-      )
-      .join("");
+  const exportReport = async (format) => {
+    setExporting(format);
+    setError("");
+    try {
+      const response = await http.get(`/admin/dashboard/export/${format}`, {
+        params: { period, lang: language },
+        responseType: "blob",
+      });
 
-    const statusRows = statusData
-      .map(
-        (item) =>
-          `<tr class="row"><td>${escapeHtml(item.label)}</td><td class="number">${escapeHtml(item.count)}</td><td></td><td></td><td></td></tr>`
-      )
-      .join("");
-
-    const latestRows = data.latest_orders
-      .map(
-        (order) => `
-          <tr class="row">
-            <td class="number">${escapeHtml(order.id)}</td>
-            <td>${escapeHtml(order.customer_name || "-")}</td>
-            <td>${escapeHtml(STATUS[order.status]?.[language] || STATUS[order.status]?.fr || order.status)}</td>
-            <td>${escapeHtml(order.created_at ? formatDate(order.created_at, { year: "numeric", month: "short", day: "numeric" }) : "-")}</td>
-            <td>${escapeHtml(formatMoney(order.total))}</td>
-          </tr>`
-      )
-      .join("");
-
-    const topRows = data.top_products
-      .map(
-        (product) => `
-          <tr class="row">
-            <td>${escapeHtml(product.name)}</td>
-            <td class="number">${escapeHtml(product.quantity_sold)}</td>
-            <td>${escapeHtml(formatMoney(product.revenue))}</td>
-            <td></td>
-            <td></td>
-          </tr>`
-      )
-      .join("");
-
-    const workbook = `<!doctype html>
-      <html lang="${escapeHtml(language)}">
-        <head>
-          <meta charset="utf-8" />
-          <style>
-            body { font-family: Calibri, Arial, sans-serif; margin: 24px; color: #0f172a; }
-            .title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-            .subtitle { font-size: 12px; color: #475569; margin-bottom: 20px; }
-            .grid { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 24px; }
-            .grid col.w1 { width: 220px; }
-            .grid col.w2 { width: 220px; }
-            .grid col.w3 { width: 180px; }
-            .grid col.w4 { width: 180px; }
-            .grid col.w5 { width: 180px; }
-            .section { background: #0f172a; color: #ffffff; font-weight: 700; font-size: 14px; }
-            .section td { padding: 10px 12px; border: 1px solid #cbd5e1; }
-            .head { background: #f8fafc; font-weight: 700; color: #334155; }
-            .head td { padding: 9px 12px; border: 1px solid #cbd5e1; }
-            .row td { padding: 9px 12px; border: 1px solid #cbd5e1; background: #ffffff; }
-            .label { font-weight: 600; color: #334155; }
-            .value { font-weight: 700; }
-            .number { text-align: right; }
-            .space td { border: none; height: 10px; background: transparent; padding: 0; }
-          </style>
-        </head>
-        <body>
-          <div class="title">${escapeHtml(ui.pdfTitle)}</div>
-          <div class="subtitle">${escapeHtml(ui.period)}: ${escapeHtml(currentPeriodLabel)}</div>
-
-          <table class="grid">
-            <colgroup><col class="w1" /><col class="w2" /><col class="w3" /><col class="w4" /><col class="w5" /></colgroup>
-            <tr class="section"><td colspan="5">${escapeHtml(ui.sectionSummary)}</td></tr>
-            <tr class="head"><td>${escapeHtml(ui.sectionSummary)}</td><td>${escapeHtml(ui.total)}</td><td></td><td></td><td></td></tr>
-            ${summaryRows}
-            <tr class="space"><td colspan="5"></td></tr>
-            <tr class="section"><td colspan="5">${escapeHtml(ui.sectionStatuses)}</td></tr>
-            <tr class="head"><td>${escapeHtml(ui.status)}</td><td>${escapeHtml(ui.total)}</td><td></td><td></td><td></td></tr>
-            ${statusRows}
-            <tr class="space"><td colspan="5"></td></tr>
-            <tr class="section"><td colspan="5">${escapeHtml(ui.sectionLatest)}</td></tr>
-            <tr class="head"><td>#</td><td>${escapeHtml(ui.customer)}</td><td>${escapeHtml(ui.status)}</td><td>${escapeHtml(ui.date)}</td><td>${escapeHtml(ui.total)}</td></tr>
-            ${latestRows || `<tr class="row"><td colspan="5">${escapeHtml(ui.noData)}</td></tr>`}
-            <tr class="space"><td colspan="5"></td></tr>
-            <tr class="section"><td colspan="5">${escapeHtml(ui.sectionTop)}</td></tr>
-            <tr class="head"><td>${escapeHtml(ui.product)}</td><td>${escapeHtml(ui.quantity)}</td><td>${escapeHtml(ui.generated)}</td><td></td><td></td></tr>
-            ${topRows || `<tr class="row"><td colspan="5">${escapeHtml(ui.noData)}</td></tr>`}
-          </table>
-        </body>
-      </html>`;
-
-    downloadExcelFile(`dashboard-${period}.xls`, workbook);
-  };
-
-  const exportPdf = () => {
-    const popup = window.open("", "_blank", "noopener,noreferrer,width=1000,height=900");
-    if (!popup) return;
-
-    const summaryHtml = cards
-      .map(
-        (card) => `
-          <div class="summary-card">
-            <div class="summary-label">${escapeHtml(card.label)}</div>
-            <div class="summary-value">${escapeHtml(card.value)}</div>
-            <div class="summary-helper">${escapeHtml(card.helper)}</div>
-          </div>`
-      )
-      .join("");
-
-    const statusHtml = statusData
-      .map((item) => `<tr><td>${escapeHtml(item.label)}</td><td>${escapeHtml(item.count)}</td></tr>`)
-      .join("");
-
-    const latestHtml = data.latest_orders
-      .map(
-        (order) => `
-          <tr>
-            <td>#${escapeHtml(order.id)}</td>
-            <td>${escapeHtml(order.customer_name || "-")}</td>
-            <td>${escapeHtml(STATUS[order.status]?.[language] || STATUS[order.status]?.fr || order.status)}</td>
-            <td>${escapeHtml(order.created_at ? formatDate(order.created_at, { year: "numeric", month: "short", day: "numeric" }) : "-")}</td>
-            <td>${escapeHtml(formatMoney(order.total))}</td>
-          </tr>`
-      )
-      .join("");
-
-    const topHtml = data.top_products
-      .map(
-        (product) => `
-          <tr>
-            <td>${escapeHtml(product.name)}</td>
-            <td>${escapeHtml(product.quantity_sold)}</td>
-            <td>${escapeHtml(formatMoney(product.revenue))}</td>
-          </tr>`
-      )
-      .join("");
-
-    popup.document.write(`<!doctype html><html lang="${escapeHtml(language)}"><head><meta charset="utf-8" /><title>${escapeHtml(ui.pdfTitle)}</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#0f172a}h1,h2{margin:0 0 10px}p{margin:0 0 14px;color:#475569}.summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 28px}.summary-card{border:1px solid #e2e8f0;border-radius:16px;padding:16px;background:#f8fafc}.summary-label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase}.summary-value{font-size:24px;font-weight:900;margin:8px 0}.summary-helper{font-size:12px;color:#64748b}table{width:100%;border-collapse:collapse;margin:12px 0 28px}th,td{border:1px solid #e2e8f0;padding:10px;text-align:left}th{background:#f8fafc}</style></head><body><h1>${escapeHtml(ui.pdfTitle)}</h1><p>${escapeHtml(ui.period)}: ${escapeHtml(currentPeriodLabel)}</p><p>${escapeHtml(ui.reportGenerated)} ${escapeHtml(formatDate(new Date(), { year: "numeric", month: "long", day: "numeric" }))}</p><div class="summary">${summaryHtml}</div><h2>${escapeHtml(ui.sectionStatuses)}</h2><table><thead><tr><th>${escapeHtml(ui.status)}</th><th>${escapeHtml(ui.total)}</th></tr></thead><tbody>${statusHtml}</tbody></table><h2>${escapeHtml(ui.sectionLatest)}</h2><table><thead><tr><th>#</th><th>${escapeHtml(ui.customer)}</th><th>${escapeHtml(ui.status)}</th><th>${escapeHtml(ui.date)}</th><th>${escapeHtml(ui.total)}</th></tr></thead><tbody>${latestHtml}</tbody></table><h2>${escapeHtml(ui.sectionTop)}</h2><table><thead><tr><th>${escapeHtml(ui.product)}</th><th>${escapeHtml(ui.quantity)}</th><th>${escapeHtml(ui.generated)}</th></tr></thead><tbody>${topHtml}</tbody></table></body></html>`);
-    popup.document.close();
-    popup.focus();
-    setTimeout(() => popup.print(), 250);
+      const extension = format === "excel" ? "xlsx" : "pdf";
+      const type =
+        format === "excel"
+          ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          : "application/pdf";
+      const blob = new Blob([response.data], { type });
+      downloadBlob(`dashboard-${period}.${extension}`, blob);
+    } catch {
+      setError(ui.error);
+    } finally {
+      setExporting("");
+    }
   };
 
   return (
@@ -692,8 +559,12 @@ export default function Dashboard() {
               </select>
             </label>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: rtl ? "flex-start" : "flex-end" }}>
-              <ToolbarButton icon={Download} onClick={exportExcel}>{ui.exportExcel}</ToolbarButton>
-              <ToolbarButton icon={Printer} onClick={exportPdf} dark>{ui.exportPdf}</ToolbarButton>
+              <ToolbarButton icon={Download} onClick={() => exportReport("excel")} disabled={exporting === "excel"}>
+                {ui.exportExcel}
+              </ToolbarButton>
+              <ToolbarButton icon={Printer} onClick={() => exportReport("pdf")} dark disabled={exporting === "pdf"}>
+                {ui.exportPdf}
+              </ToolbarButton>
             </div>
           </div>
         </div>
