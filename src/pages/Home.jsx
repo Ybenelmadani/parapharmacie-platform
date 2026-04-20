@@ -16,23 +16,18 @@ import landingHeroImage from "../assets/landing2.jpg";
 import landing1Image from "../assets/landing1.png";
 import landing3Image from "../assets/landing3.jfif";
 import skincareImage from "../assets/logo.jpg";
-import ecoImage from "../assets/concept éco énergie verte, label 100% naturel….jfif";
+import ecoImage from "../assets/eco-natural.jfif";
 import cremeImage from "../assets/creme.jfif";
-import painReliefImage from "../assets/A 'Pain Relief' With No Side Effects, Surgery Or….jfif";
-import teethImage from "../assets/Diş taşlarından doğal yollarla kurtulmanız mümkün….jfif";
+import painReliefImage from "../assets/pain-relief.jfif";
+import teethImage from "../assets/teeth-care.jfif";
 import storefrontImage from "../assets/para.png";
 import naturalCareImage from "../assets/p.png";
 import pharmacyInteriorImage from "../assets/Nord Parisien - Inside Pharmacy.png";
 import pharmacistImage from "../assets/Compounding Pharmacy Corpus Christi.png";
-import appareilsAccessoriesImage from "../assets/categories/appareils and accessories.jfif";
 import bebesMamansImage from "../assets/categories/babes_mamanes.jfif";
-import buccoDentaireImage from "../assets/categories/bucco-dentaire.jfif";
 import capillaireImage from "../assets/categories/capillaire.png";
-import complementAlimentaireImage from "../assets/categories/complement-alimentaire.jfif";
 import corpsCategoryImage from "../assets/categories/corps.jfif";
-import visageCategoryImage from "../assets/categories/Follow Annika Vallant on instagram for more….jfif";
 import hommeCategoryImage from "../assets/categories/homme.jfif";
-import hygieneCategoryImage from "../assets/categories/hygiene.jfif";
 
 const CATEGORY_IMAGE_MATCHERS = [
   { image: cremeImage, fit: "cover", matches: ["visage", "face", "serum", "cream", "dermo", "beaute", "beauty", "soin"] },
