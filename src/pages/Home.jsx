@@ -15,7 +15,7 @@ import { resolveMediaUrl } from "../utils/media";
 import landingHeroImage from "../assets/landing2.jpg";
 import landing1Image from "../assets/landing1.png";
 import landing3Image from "../assets/landing3.jfif";
-import skincareImage from "../assets/#pharmacy #skincare #aesthetic.png";
+import skincareImage from "../assets/logo.jpg";
 import ecoImage from "../assets/concept éco énergie verte, label 100% naturel….jfif";
 import cremeImage from "../assets/creme.jfif";
 import painReliefImage from "../assets/A 'Pain Relief' With No Side Effects, Surgery Or….jfif";
