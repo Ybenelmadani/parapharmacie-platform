@@ -15,6 +15,7 @@ import Checkout from "./pages/Checkout";
 import MyAccount from "./pages/MyAccount";
 import MyOrders from "./pages/MyOrders";
 import InfoPage from "./pages/InfoPage";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 // Auth pages
@@ -109,6 +110,7 @@ function AppContent() {
       {/* Store Frontend with Page Transitions */}
       <Route element={<AnimatedFrontendLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />

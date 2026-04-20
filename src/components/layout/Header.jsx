@@ -409,7 +409,7 @@ export default function Header() {
           <Link to="/info/contact" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#5b4ca0] transition-all hover:scale-105 hover:text-[#16a34a]">
             {ui.contact}
           </Link>
-          <Link to="/info/about-artstore" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#5b4ca0] transition-all hover:scale-105 hover:text-[#16a34a]">
+          <Link to="/about" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#5b4ca0] transition-all hover:scale-105 hover:text-[#16a34a]">
             {ui.about}
           </Link>
         </nav>
@@ -728,7 +728,7 @@ export default function Header() {
                   <Link to="/info/contact" onClick={() => setMobileMenuOpen(false)} className="rounded-[18px] border border-[#bfdbfe] px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#111827] shadow-[0_10px_24px_rgba(59,130,246, 0.12)] transition-all hover:text-[#16a34a]">
                     {ui.contact}
                   </Link>
-                  <Link to="/info/about-artstore" onClick={() => setMobileMenuOpen(false)} className="rounded-[18px] border border-[#bfdbfe] px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#111827] shadow-[0_10px_24px_rgba(59,130,246, 0.12)] transition-all hover:text-[#16a34a]">
+                  <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="rounded-[18px] border border-[#bfdbfe] px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#111827] shadow-[0_10px_24px_rgba(59,130,246, 0.12)] transition-all hover:text-[#16a34a]">
                     {ui.about}
                   </Link>
                 </div>

@@ -37,6 +37,16 @@ function writeCache(key, data, ttl = CACHE_TTL_MS) {
   }
 }
 
+function removeCache(key) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {
+    // Ignore storage/privacy errors and continue without cache invalidation.
+  }
+}
+
 async function cachedGet(key, loader, ttl = CACHE_TTL_MS) {
   const cached = readCache(key);
   if (cached !== null) return cached;
@@ -53,6 +63,29 @@ function generateKey(base, params) {
     return `${base}:${JSON.stringify(params)}`;
   } catch {
     return base;
+  }
+}
+
+function productCacheKey(id) {
+  return `catalog:product:v2:${id}`;
+}
+
+function clearCatalogCacheByPrefix(prefix) {
+  if (typeof window === "undefined") return;
+
+  try {
+    const keysToRemove = [];
+
+    for (let index = 0; index < window.sessionStorage.length; index += 1) {
+      const key = window.sessionStorage.key(index);
+      if (key && key.startsWith(prefix)) {
+        keysToRemove.push(key);
+      }
+    }
+
+    keysToRemove.forEach(removeCache);
+  } catch {
+    // Ignore storage/privacy errors and continue without cache invalidation.
   }
 }
 
@@ -78,12 +111,23 @@ export const CatalogAPI = {
   productsPage: (params = {}) => 
     cachedGet(generateKey("catalog:productsPage:v2", params), () => http.get("/products", { params }).then((r) => r.data)),
     
-  product: (id) => 
-    cachedGet(`catalog:product:v2:${id}`, () => http.get(`/products/${id}`).then(r => r.data)),
+  product: (id, options = {}) => {
+    const key = productCacheKey(id);
+
+    if (options?.fresh) {
+      removeCache(key);
+    }
+
+    return cachedGet(key, () => http.get(`/products/${id}`).then(r => r.data));
+  },
 
   variants: (params = {}) => 
     cachedGet(generateKey("catalog:variants:v2", params), () => http.get("/variants", { params }).then(r => r.data)),
     
   reviews: (params = {}) => 
     cachedGet(generateKey("catalog:reviews:v2", params), () => http.get("/reviews", { params }).then(r => r.data)),
+
+  invalidateProduct: (id) => removeCache(productCacheKey(id)),
+
+  invalidateReviews: () => clearCatalogCacheByPrefix("catalog:reviews:v2"),
 };

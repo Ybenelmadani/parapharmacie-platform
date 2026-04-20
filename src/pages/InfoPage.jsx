@@ -6,7 +6,7 @@ import Container from "../components/layout/Container";
 import { STORE_CITY, STORE_NAME, STORE_SUPPORT_EMAIL, STORE_SUPPORT_PHONE } from "../config/store";
 import { useI18n } from "../context/I18nContext";
 import aboutMainImage from "../assets/landing2.jpg";
-import aboutStoreImage from "../assets/para.jfif";
+import aboutStoreImage from "../assets/para.png";
 
 const STORE_MAP_QUERY = encodeURIComponent(STORE_CITY);
 const STORE_MAP_EMBED_URL = `https://www.google.com/maps?q=${STORE_MAP_QUERY}&z=15&output=embed`;

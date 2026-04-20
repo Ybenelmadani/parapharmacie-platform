@@ -209,7 +209,7 @@ export default function Categories() {
       await http.post("/admin/categories", {
         name: cleanName,
         description: description.trim() || null,
-        parent_id: parentId ? Number(parentId) : null,
+        parent_id: parentId || null,
       });
 
       setName("");
@@ -254,7 +254,7 @@ export default function Categories() {
       await http.put(`/admin/categories/${id}`, {
         name: cleanName,
         description: editDescription.trim() || null,
-        parent_id: editParentId ? Number(editParentId) : null,
+        parent_id: editParentId || null,
       });
 
       setSuccess(ui.updateSuccess);

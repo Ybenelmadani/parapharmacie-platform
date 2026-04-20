@@ -5,6 +5,7 @@ import {
   ArrowUp,
   ChevronLeft,
   ChevronRight,
+  Star,
 } from "lucide-react";
 import Container from "../components/layout/Container";
 import ProductCard from "../components/product/ProductCard";
@@ -12,30 +13,53 @@ import { CatalogAPI } from "../api/catalog";
 import { useI18n } from "../context/I18nContext";
 import { resolveMediaUrl } from "../utils/media";
 import landingHeroImage from "../assets/landing2.jpg";
-import storefrontImage from "../assets/para.jfif";
-import naturalCareImage from "../assets/p.jfif";
-import pharmacyInteriorImage from "../assets/Nord Parisien - Inside Pharmacy.jfif";
-import pharmacistImage from "../assets/Compounding Pharmacy Corpus Christi.jfif";
+import landing1Image from "../assets/landing1.png";
+import landing3Image from "../assets/landing3.jfif";
+import skincareImage from "../assets/#pharmacy #skincare #aesthetic.png";
+import ecoImage from "../assets/concept éco énergie verte, label 100% naturel….jfif";
+import cremeImage from "../assets/creme.jfif";
+import painReliefImage from "../assets/A 'Pain Relief' With No Side Effects, Surgery Or….jfif";
+import teethImage from "../assets/Diş taşlarından doğal yollarla kurtulmanız mümkün….jfif";
+import storefrontImage from "../assets/para.png";
+import naturalCareImage from "../assets/p.png";
+import pharmacyInteriorImage from "../assets/Nord Parisien - Inside Pharmacy.png";
+import pharmacistImage from "../assets/Compounding Pharmacy Corpus Christi.png";
+import appareilsAccessoriesImage from "../assets/categories/appareils and accessories.jfif";
+import bebesMamansImage from "../assets/categories/babes_mamanes.jfif";
+import buccoDentaireImage from "../assets/categories/bucco-dentaire.jfif";
+import capillaireImage from "../assets/categories/capillaire.png";
+import complementAlimentaireImage from "../assets/categories/complement-alimentaire.jfif";
+import corpsCategoryImage from "../assets/categories/corps.jfif";
+import visageCategoryImage from "../assets/categories/Follow Annika Vallant on instagram for more….jfif";
+import hommeCategoryImage from "../assets/categories/homme.jfif";
+import hygieneCategoryImage from "../assets/categories/hygiene.jfif";
 
 const CATEGORY_IMAGE_MATCHERS = [
-  { image: pharmacistImage, matches: ["skin", "soin", "dermo", "derm", "beauty", "beaute", "visage", "face", "serum", "cream"] },
-  { image: naturalCareImage, matches: ["bio", "nature", "natural", "huile", "wellness", "bien etre", "nutrition", "complement", "vitamin"] },
-  { image: landingHeroImage, matches: ["bebe", "baby", "hygiene", "hygiene", "oral", "dental", "hair", "cheveux"] },
-  { image: storefrontImage, matches: ["pharma", "parapharma", "sante", "health", "materiel", "accessoire"] },
+  { image: cremeImage, fit: "cover", matches: ["visage", "face", "serum", "cream", "dermo", "beaute", "beauty", "soin"] },
+  { image: ecoImage, fit: "cover", matches: ["complement", "alimentaire", "nutrition", "vitamin", "wellness", "bien etre"] },
+  { image: bebesMamansImage, fit: "cover", matches: ["bebes", "bebes mamans", "bebes and mamans", "bebe", "mamans", "maman", "baby"] },
+  { image: teethImage, fit: "cover", matches: ["bucco", "dentaire", "oral", "dental"] },
+  { image: capillaireImage, fit: "contain", matches: ["capillaire", "cheveux", "hair"] },
+  { image: skincareImage, fit: "cover", matches: ["hygiene", "soins"] },
+  { image: corpsCategoryImage, fit: "cover", matches: ["corps", "body"] },
+  { image: painReliefImage, fit: "cover", matches: ["appareils", "accessoires", "accessory", "materiel", "douleur"] },
+  { image: hommeCategoryImage, fit: "cover", matches: ["homme", "hommes", "men"] },
 ];
 
 const DEFAULT_CATEGORY_IMAGES = [
+  skincareImage,
+  ecoImage,
+  cremeImage,
   storefrontImage,
   pharmacistImage,
-  pharmacyInteriorImage,
-  naturalCareImage,
-  landingHeroImage,
 ];
 
 const LANDING_HERO_IMAGES = [
   landingHeroImage,
-  pharmacistImage,
-  storefrontImage,
+  landing1Image,
+  landing3Image,
+  pharmacyInteriorImage,
+  naturalCareImage,
 ];
 
 function normalizeCategoryName(value) {
@@ -50,13 +74,13 @@ function normalizeCategoryName(value) {
 
 function getStaticCategoryImage(categoryName) {
   const normalizedName = normalizeCategoryName(categoryName);
-  if (!normalizedName) return "";
+  if (!normalizedName) return null;
 
   const match = CATEGORY_IMAGE_MATCHERS.find(({ matches }) =>
     matches.some((candidate) => normalizedName.includes(candidate))
   );
 
-  return match?.image || "";
+  return match || null;
 }
 
 function getProductImage(product) {
@@ -77,6 +101,49 @@ function shortText(value, limit = 180) {
   if (!text) return "";
   if (text.length <= limit) return text;
   return `${text.slice(0, Math.max(0, limit - 3))}...`;
+}
+
+function getInitials(value, fallback = "CL") {
+  const parts = String(value || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2);
+
+  if (parts.length === 0) {
+    return fallback;
+  }
+
+  return parts.map((part) => part[0]?.toUpperCase() || "").join("");
+}
+
+function formatReviewDate(value) {
+  if (!value) return "";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+
+  return parsed.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function ReviewStars({ rating, size = "sm", muted = false }) {
+  const numericRating = Math.max(0, Math.min(5, Number(rating) || 0));
+  const iconSize = size === "lg" ? "h-5 w-5" : "h-4 w-4";
+
+  return (
+    <div className={`flex items-center gap-1 ${muted ? "text-slate-300" : "text-amber-400"}`}>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Star
+          key={`review-star-${index}`}
+          className={`${iconSize} ${index < numericRating ? "fill-current" : ""}`}
+        />
+      ))}
+    </div>
+  );
 }
 
 function uniqueProductsById(items) {
@@ -188,7 +255,9 @@ function CategoryCard({ category, featured = false, delay = 0, className = "" })
                 <img
                   src={category.image}
                   alt={category.name}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                  className={`h-full w-full transition-transform duration-500 group-hover:scale-[1.05] ${
+                    category.imageFit === "contain" ? "object-contain p-4" : "object-cover"
+                  }`}
                   loading="lazy"
                 />
               </div>
@@ -572,9 +641,9 @@ export default function Home() {
     const topLevelCategories = categories.filter((category) => !category?.parent_id);
     const mapped = topLevelCategories.map((category, index) => {
       const showcase = categoryShowcase[String(category.id)] || {};
-      const staticCategoryImage = getStaticCategoryImage(category.name);
+      const staticCategoryAsset = getStaticCategoryImage(category.name);
       const categoryImage =
-        staticCategoryImage ||
+        staticCategoryAsset?.image ||
         showcase.image ||
         DEFAULT_CATEGORY_IMAGES[index % DEFAULT_CATEGORY_IMAGES.length] ||
         firstCatalogImage;
@@ -583,7 +652,7 @@ export default function Home() {
         id: category.id,
         name: category.name || `${ui.categories} ${index + 1}`,
         image: categoryImage,
-        imageFit: staticCategoryImage ? "cover" : "contain",
+        imageFit: staticCategoryAsset?.fit || (showcase.image ? "contain" : "cover"),
         href: `/products?category_id=${category.id}`,
         count: Number(showcase.count) || 0,
       };
@@ -639,19 +708,25 @@ export default function Home() {
   const storyCards = useMemo(() => {
     const top = reviews.slice(0, 3).map((review) => ({
       id: review.id,
-      title: `${review?.user?.name || ui.customer} x ${review?.product?.name || "Adwart"}`,
+      userName: review?.user?.name || ui.customer,
+      productName: review?.product?.name || ui.ourCatalog,
       description: shortText(review?.comment, 140) || ui.reviewFallback,
       rating: Number(review?.rating) || 0,
+      createdAt: review?.created_at || review?.createdAt || "",
+      hasReview: true,
     }));
     if (top.length) return top;
 
     return products.slice(0, 3).map((product) => ({
       id: `product-${product.id}`,
-      title: product?.name || "Adwart Product",
+      userName: ui.customer,
+      productName: product?.name || "Adwart Product",
       description: shortText(product?.description, 140) || ui.latestProduct,
       rating: 0,
+      createdAt: "",
+      hasReview: false,
     }));
-  }, [products, reviews, ui.customer, ui.latestProduct, ui.reviewFallback]);
+  }, [products, reviews, ui.customer, ui.latestProduct, ui.ourCatalog, ui.reviewFallback]);
 
   useEffect(() => {
     const onScroll = () => setShowScrollTop(window.scrollY > 600);
@@ -908,14 +983,18 @@ export default function Home() {
                 <div className="absolute right-10 top-10 h-20 w-20 rounded-full bg-white/10" />
               </Reveal>
 
-              <Reveal delay={130} className="overflow-hidden rounded-[34px] border border-neutral-200 bg-white">
+              <Reveal delay={130} className="overflow-hidden rounded-[34px] border border-neutral-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
                 {highlightImage ? (
-                  <div className="flex h-[320px] w-full items-center justify-center overflow-hidden bg-white">
+                  <div className="relative flex h-[320px] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-sky-50">
                     <img
                       src={highlightImage}
                       alt={highlightReview?.product?.name || ui.customerStory}
-                      className="h-full w-full object-contain p-4"
+                      className="h-full w-full object-contain p-6"
                     />
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/20 to-transparent" />
+                    <div className="absolute left-6 top-6 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-700 shadow-sm backdrop-blur">
+                      {ui.customerStory}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex h-[320px] w-full items-center justify-center bg-neutral-200 text-sm font-medium text-neutral-500">
@@ -923,14 +1002,45 @@ export default function Home() {
                   </div>
                 )}
                 <div className="p-8">
-                  <p className="mb-4 text-xs uppercase tracking-[0.35em] text-neutral-500">{ui.customerStory}</p>
-                  <h6 className="mb-3 text-2xl font-serif text-neutral-900">
-                    {highlightReview?.user?.name || ui.verifiedCustomer} {ui.onWord}{" "}
-                    {highlightReview?.product?.name || ui.ourCatalog}
-                  </h6>
-                  <p className="leading-7 text-neutral-600">
-                    <i>{shortText(highlightReview?.comment, 220) || ui.reviewFallback}</i>
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#03045e] text-sm font-black uppercase tracking-wide text-white shadow-sm">
+                        {getInitials(highlightReview?.user?.name, "AV")}
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                          {ui.verifiedCustomer}
+                        </p>
+                        <h6 className="mt-1 text-2xl font-serif text-neutral-900">
+                          {highlightReview?.user?.name || ui.customer}
+                        </h6>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {ui.onWord} {highlightReview?.product?.name || ui.ourCatalog}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl bg-amber-50 px-4 py-3 text-right">
+                      <ReviewStars rating={highlightReview?.rating || 0} size="lg" />
+                      <div className="mt-2 text-sm font-semibold text-slate-700">
+                        {ui.rating.replace("{rating}", Number(highlightReview?.rating) || 0)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="mt-8 text-[clamp(1.05rem,1.9vw,1.35rem)] font-medium leading-8 text-slate-700">
+                    "{shortText(highlightReview?.comment, 220) || ui.reviewFallback}"
                   </p>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-3">
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                      {highlightReview?.product?.name || ui.ourCatalog}
+                    </span>
+                    {formatReviewDate(highlightReview?.created_at || highlightReview?.createdAt) ? (
+                      <span className="text-sm text-slate-400">
+                        {formatReviewDate(highlightReview?.created_at || highlightReview?.createdAt)}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </Reveal>
             </div>
@@ -938,13 +1048,42 @@ export default function Home() {
             <div className="grid items-stretch gap-6 md:grid-cols-3">
               {storyCards.map((story, index) => (
                 <Reveal key={story.id} delay={index * 90} className="h-full">
-                  <div className="flex h-full flex-col rounded-[28px] border border-neutral-200 bg-white p-8 transition-shadow hover:shadow-xl">
-                    <p className="mb-4 text-xs uppercase tracking-[0.35em] text-neutral-500">{ui.episode}</p>
-                    <h6 className="mb-4 text-2xl font-serif text-neutral-900">{story.title}</h6>
-                    <p className="mb-6 leading-7 text-neutral-600">{story.description}</p>
-                    <div className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-neutral-900">
-                      {story.rating > 0 ? ui.rating.replace("{rating}", story.rating) : ui.readMoreShort}
-                      <ChevronRight className="h-4 w-4" />
+                  <div className="group flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(15,23,42,0.12)]">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-sm font-black uppercase tracking-wide text-[#03045e]">
+                          {getInitials(story.userName, "CL")}
+                        </div>
+                        <div>
+                          <p className="text-base font-semibold text-slate-900">{story.userName}</p>
+                          <p className="mt-1 text-xs uppercase tracking-[0.24em] text-slate-400">
+                            {ui.onWord} {story.productName}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                        {ui.episode}
+                      </span>
+                    </div>
+
+                    <div className="mt-6 flex items-center justify-between gap-3">
+                      <ReviewStars rating={story.rating} muted={!story.hasReview} />
+                      {story.createdAt ? (
+                        <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+                          {formatReviewDate(story.createdAt)}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <p className="mt-6 text-lg leading-8 text-slate-700">
+                      "{story.description}"
+                    </p>
+
+                    <div className="mt-auto pt-8">
+                      <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#03045e] transition-colors group-hover:text-sky-700">
+                        {story.rating > 0 ? ui.rating.replace("{rating}", story.rating) : ui.readMoreShort}
+                        <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
                     </div>
                   </div>
                 </Reveal>

@@ -22,7 +22,7 @@ function upgradeParapharmaImageUrl(url) {
 }
 
 function getApiOrigin() {
-  const base = process.env.REACT_APP_API_BASE_URL || "http://ecomerce_back-end.test/api";
+  const base = process.env.REACT_APP_API_BASE_URL || "http://ecommerce_parapharmacie.test/api";
   try {
     return new URL(base).origin;
   } catch {

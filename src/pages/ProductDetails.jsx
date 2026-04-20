@@ -222,8 +222,26 @@ export default function ProductDetails() {
                   }
 
                   try {
-                    await ReviewsAPI.create({ product_id: product.id, rating, comment });
-                    const refreshed = await CatalogAPI.product(id);
+                    const createdReview = await ReviewsAPI.create({ product_id: product.id, rating, comment });
+
+                    setProduct((currentProduct) => {
+                      if (!currentProduct) return currentProduct;
+
+                      const currentReviews = Array.isArray(currentProduct.reviews) ? currentProduct.reviews : [];
+                      const dedupedReviews = currentReviews.filter(
+                        (review) => String(review?.id) !== String(createdReview?.id)
+                      );
+
+                      return {
+                        ...currentProduct,
+                        reviews: [createdReview, ...dedupedReviews],
+                      };
+                    });
+
+                    CatalogAPI.invalidateProduct(id);
+                    CatalogAPI.invalidateReviews();
+
+                    const refreshed = await CatalogAPI.product(id, { fresh: true });
                     setProduct(refreshed);
                     setComment("");
                     setRating(5);
