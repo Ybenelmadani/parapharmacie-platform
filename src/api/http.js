@@ -1,7 +1,22 @@
 import axios from "axios";
 
+const DEFAULT_API_BASE_URL = "http://ecommerce_parapharmacie.test/api";
+
+export function getApiBaseUrl() {
+  return (process.env.REACT_APP_API_BASE_URL || DEFAULT_API_BASE_URL).trim();
+}
+
+export function shouldUseLocalApiFallback() {
+  const explicitValue = String(process.env.REACT_APP_USE_LOCAL_DATA || "").trim().toLowerCase();
+
+  if (explicitValue === "true") return true;
+  if (explicitValue === "false") return false;
+
+  return /ecommerce_parapharmacie\.test/i.test(getApiBaseUrl());
+}
+
 export const http = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://ecommerce_parapharmacie.test/api",
+  baseURL: getApiBaseUrl(),
   headers: { Accept: "application/json" },
 });
 

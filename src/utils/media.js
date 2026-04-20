@@ -35,6 +35,10 @@ export function resolveMediaUrl(rawUrl, options = {}) {
   const url = String(rawUrl || "").trim();
   if (!url) return "";
 
+  if (url.startsWith("/static/") || url.startsWith("static/")) {
+    return url.startsWith("/") ? url : `/${url}`;
+  }
+
   const apiOrigin = getApiOrigin();
   if (!apiOrigin) {
     return preferHighRes ? upgradeParapharmaImageUrl(url) : url;

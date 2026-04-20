@@ -1,5 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { http } from "../api/http";
+import { http, shouldUseLocalApiFallback } from "../api/http";
+import {
+  addMockCartItem,
+  clearMockCart,
+  getMockCart,
+  removeMockCartItem,
+  updateMockCartItem,
+} from "../data/mockCatalog";
 import { useAuth } from "./AuthContext";
 import { useI18n } from "./I18nContext";
 import { useToast } from "./ToastContext";
@@ -68,8 +75,15 @@ export function CartProvider({ children }) {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
+      if (shouldUseLocalApiFallback()) {
+        setItems(getMockCart().items || []);
+        return;
+      }
+
       const res = await http.get("/cart");
       setItems(res.data?.items || []);
+    } catch {
+      setItems(getMockCart().items || []);
     } finally {
       setLoading(false);
     }
@@ -81,6 +95,21 @@ export function CartProvider({ children }) {
 
   const add = useCallback(async (variantId, quantity = 1, options = {}) => {
     try {
+      if (shouldUseLocalApiFallback()) {
+        const data = addMockCartItem(variantId, quantity);
+        setItems(data.items || []);
+
+        if (shouldAutoOpenCartDrawer()) {
+          setOpen(true);
+        }
+
+        if (!options.silentSuccess) {
+          success(options.successMessage || ui.added);
+        }
+
+        return data;
+      }
+
       const res = await http.post("/cart/items", {
         product_variant_id: variantId,
         quantity,
@@ -97,6 +126,21 @@ export function CartProvider({ children }) {
 
       return res.data;
     } catch (error) {
+      if (!error?.response) {
+        const data = addMockCartItem(variantId, quantity);
+        setItems(data.items || []);
+
+        if (shouldAutoOpenCartDrawer()) {
+          setOpen(true);
+        }
+
+        if (!options.silentSuccess) {
+          success(options.successMessage || ui.added);
+        }
+
+        return data;
+      }
+
       notifyError(getApiMessage(error, options.errorMessage || ui.addError));
       return null;
     }
@@ -104,10 +148,22 @@ export function CartProvider({ children }) {
 
   const updateQty = useCallback(async (cartItemId, quantity) => {
     try {
+      if (shouldUseLocalApiFallback()) {
+        const data = updateMockCartItem(cartItemId, quantity);
+        setItems(data.items || []);
+        return data;
+      }
+
       const res = await http.patch(`/cart/items/${cartItemId}`, { quantity });
       setItems(res.data?.items || []);
       return res.data;
     } catch (error) {
+      if (!error?.response) {
+        const data = updateMockCartItem(cartItemId, quantity);
+        setItems(data.items || []);
+        return data;
+      }
+
       notifyError(getApiMessage(error, ui.updateError));
       return null;
     }
@@ -115,11 +171,25 @@ export function CartProvider({ children }) {
 
   const remove = useCallback(async (cartItemId) => {
     try {
+      if (shouldUseLocalApiFallback()) {
+        const data = removeMockCartItem(cartItemId);
+        setItems(data.items || []);
+        success(ui.removed);
+        return data;
+      }
+
       const res = await http.delete(`/cart/items/${cartItemId}`);
       setItems(res.data?.items || []);
       success(ui.removed);
       return res.data;
     } catch (error) {
+      if (!error?.response) {
+        const data = removeMockCartItem(cartItemId);
+        setItems(data.items || []);
+        success(ui.removed);
+        return data;
+      }
+
       notifyError(getApiMessage(error, ui.removeError));
       return null;
     }
@@ -127,11 +197,25 @@ export function CartProvider({ children }) {
 
   const clear = useCallback(async () => {
     try {
+      if (shouldUseLocalApiFallback()) {
+        const data = clearMockCart();
+        setItems(data.items || []);
+        success(ui.cleared);
+        return data;
+      }
+
       const res = await http.delete("/cart/clear");
       setItems(res.data?.items || []);
       success(ui.cleared);
       return res.data;
     } catch (error) {
+      if (!error?.response) {
+        const data = clearMockCart();
+        setItems(data.items || []);
+        success(ui.cleared);
+        return data;
+      }
+
       notifyError(getApiMessage(error, ui.clearError));
       return null;
     }
