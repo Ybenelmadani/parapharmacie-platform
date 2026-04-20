@@ -16,6 +16,8 @@ import hommeCategoryImage from "../assets/categories/homme.jfif";
 import hygieneCategoryImage from "../assets/categories/hygiene.jfif";
 import appareilsAccessoriesImage from "../assets/categories/appareils and accessories.jfif";
 
+const productImageContext = require.context("../assets/mock-products", false, /\.(png|jpe?g|webp)$/);
+
 const REVIEW_STORAGE_KEY = "mock-catalog:reviews:v1";
 const CART_STORAGE_KEY = "mock-catalog:cart:v1";
 
@@ -204,6 +206,11 @@ const LIFESTYLE_IMAGES = [
   ecoImage,
 ];
 
+const PRODUCT_IMAGE_POOL = productImageContext
+  .keys()
+  .sort((first, second) => first.localeCompare(second))
+  .map((key) => productImageContext(key));
+
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
@@ -273,6 +280,7 @@ function buildProducts() {
   let productId = 1;
   let variantId = 1000;
   let imageId = 5000;
+  let productImageIndex = 0;
 
   CATEGORY_DEFINITIONS.forEach((category, categoryIndex) => {
     for (let index = 0; index < 12; index += 1) {
@@ -283,6 +291,7 @@ function buildProducts() {
       const secondaryImage = LIFESTYLE_IMAGES[(index + categoryIndex) % LIFESTYLE_IMAGES.length];
       const name = `${descriptor} ${target}`;
       const basePrice = category.basePrice + categoryIndex * 4 + (index % 5) * 9;
+      const productImage = PRODUCT_IMAGE_POOL[productImageIndex] || category.image;
       const variants = [];
 
       for (let variantIndex = 0; variantIndex < 3; variantIndex += 1) {
@@ -317,13 +326,14 @@ function buildProducts() {
         },
         created_at: new Date(2026, categoryIndex, index + 1).toISOString(),
         images: [
-          { id: imageId++, image_path: category.image, is_main: true },
+          { id: imageId++, image_path: productImage, is_main: true },
           { id: imageId++, image_path: secondaryImage, is_main: false },
           { id: imageId++, image_path: category.lifestyle, is_main: false },
         ],
         variants,
       });
 
+      productImageIndex += 1;
       productId += 1;
     }
   });
