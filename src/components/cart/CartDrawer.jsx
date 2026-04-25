@@ -123,7 +123,7 @@ export default function CartDrawer() {
                   event.preventDefault();
                   navigateFromDrawer("/products");
                 }}
-                className="mt-5 inline-flex min-h-[52px] items-center justify-center rounded-[14px] bg-[#03045e] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#020340]"
+                className="mt-5 inline-flex min-h-[52px] items-center justify-center rounded-[14px] bg-[#0ea5e9] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#0284c7]"
               >
                 {ui.continueShopping}
               </Link>

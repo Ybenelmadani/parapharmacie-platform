@@ -141,7 +141,7 @@ export default function ProductCard({ p }) {
         </Link>
       </div>
 
-      <div className="flex flex-1 flex-col p-5 bg-[#03045e] text-white relative">
+      <div className="flex flex-1 flex-col p-5 bg-[#0ea5e9] text-white relative">
         <div className="truncate text-[11px] font-semibold tracking-widest uppercase text-white/60 mb-1">
           {p.brand?.name}
         </div>
@@ -170,7 +170,7 @@ export default function ProductCard({ p }) {
           <button 
             onClick={handleAddToCart} 
             disabled={adding || isOutOfStock}
-            className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all ${isOutOfStock ? 'bg-white/10 text-white/40 cursor-not-allowed' : 'bg-white text-[#03045e] hover:bg-white/90 shadow-[0_8px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_24px_rgba(255,255,255,0.25)]'}`}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all ${isOutOfStock ? 'bg-white/10 text-white/40 cursor-not-allowed' : 'bg-white text-[#0ea5e9] hover:bg-white/90 shadow-[0_8px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_24px_rgba(255,255,255,0.25)]'}`}
            >
             <ShoppingCart size={16} />
             {adding ? ui.adding : isOutOfStock ? ui.outOfStock : ui.addToCart}

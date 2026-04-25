@@ -10,6 +10,7 @@ import { resolveMediaUrl } from "../../utils/media";
 import { useToast } from "../../context/ToastContext";
 import { useI18n } from "../../context/I18nContext";
 import LanguageSwitcher from "./LanguageSwitcher";
+import logoImage from "../../assets/new_logo.png";
 
 const MAX_TOP_CATEGORIES = 10;
 
@@ -369,15 +370,10 @@ export default function Header() {
 
         <Link
           to="/"
-          className="min-w-0 flex-1 transition-all hover:scale-[1.01] md:flex-none md:hover:scale-105"
+          className="transition-all hover:scale-[1.02] flex items-center mr-4 md:mr-8"
           aria-label={`${ui.homeAria} ${STORE_NAME}`}
         >
-          <span className="flex w-full min-w-0 flex-col justify-center rounded-[20px] border border-slate-200 bg-white px-3 py-2 shadow-sm md:min-w-[168px] md:rounded-[22px] md:px-5 md:py-2.5">
-            <span className="truncate text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 md:text-[10px] md:tracking-[0.34em]">Parapharmacie Maroc</span>
-            <span className="mt-1 truncate text-[12px] font-black uppercase tracking-[0.12em] text-[#03045e] md:text-base md:tracking-[0.24em]">
-              {STORE_NAME}
-            </span>
-          </span>
+          <img src={logoImage} alt={STORE_NAME} className="h-14 w-14 md:h-[68px] md:w-[68px] object-contain mix-blend-multiply scale-[1.3] md:scale-[1.5]" />
         </Link>
 
         <nav className="hidden min-w-0 items-center gap-6 md:flex lg:gap-7">

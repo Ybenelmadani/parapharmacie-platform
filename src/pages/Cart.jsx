@@ -99,7 +99,7 @@ export default function Cart() {
             <p className="text-lg font-semibold text-slate-800">{ui.empty}</p>
             <Link
               to="/products"
-              className="mt-6 inline-flex min-h-[56px] items-center justify-center rounded-[16px] bg-[#03045e] px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#020340]"
+              className="mt-6 inline-flex min-h-[56px] items-center justify-center rounded-[16px] bg-[#0ea5e9] px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#0284c7]"
             >
               {ui.continueShopping}
             </Link>

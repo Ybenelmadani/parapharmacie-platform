@@ -80,7 +80,7 @@ export default function ImageGallery({ images = [] }) {
                   type="button"
                   onClick={goPrevious}
                   aria-label={ui.previous}
-                  className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#03045e] shadow-[0_12px_24px_rgba(55,35,29,0.12)] backdrop-blur transition hover:bg-white"
+                  className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#0ea5e9] shadow-[0_12px_24px_rgba(55,35,29,0.12)] backdrop-blur transition hover:bg-white"
                 >
                   <ChevronLeft size={22} />
                 </button>
@@ -89,12 +89,12 @@ export default function ImageGallery({ images = [] }) {
                   type="button"
                   onClick={goNext}
                   aria-label={ui.next}
-                  className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#03045e] shadow-[0_8px_20px_rgba(3,4,94,0.15)] backdrop-blur transition hover:bg-white"
+                  className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#0ea5e9] shadow-[0_8px_20px_rgba(14,165,233,0.15)] backdrop-blur transition hover:bg-white"
                 >
                   <ChevronRight size={22} />
                 </button>
 
-                <div className="absolute bottom-4 right-4 rounded-full bg-[#03045e]/80 px-3 py-1 text-xs font-semibold text-white">
+                <div className="absolute bottom-4 right-4 rounded-full bg-[#0ea5e9]/80 px-3 py-1 text-xs font-semibold text-white">
                   {activeIndex + 1}/{galleryImages.length}
                 </div>
               </>
@@ -115,7 +115,7 @@ export default function ImageGallery({ images = [] }) {
             onClick={() => setActiveIndex(index)}
             className={`h-20 w-24 shrink-0 overflow-hidden rounded-2xl border bg-white transition ${
               activeIndex === index
-                ? "border-[#03045e] shadow-[0_8px_20px_rgba(3,4,94,0.18)]"
+                ? "border-[#0ea5e9] shadow-[0_8px_20px_rgba(14,165,233,0.18)]"
                 : "border-slate-200 opacity-60 hover:opacity-100 hover:shadow-sm"
             }`}
           >

@@ -30,14 +30,14 @@ export default function About() {
   const yHero = useTransform(scrollYProgress, [0, 1], [0, 300]);
 
   return (
-    <div className="min-h-screen bg-[#fafafc] text-slate-900 font-sans selection:bg-[#03045e] selection:text-white">
+    <div className="min-h-screen bg-[#fafafc] text-slate-900 font-sans selection:bg-[#0ea5e9] selection:text-white">
       
       {/* 1. HERO PARALLAX SECTION */}
-      <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden bg-[#03045e]">
+      <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden bg-[#0ea5e9]">
         {/* Parallax Background */}
         <motion.div style={{ y: yHero }} className="absolute inset-0">
-          <div className="absolute inset-0 bg-[#03045e]/40 mix-blend-multiply z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#03045e] via-transparent to-transparent z-10" />
+          <div className="absolute inset-0 bg-[#0ea5e9]/40 mix-blend-multiply z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0ea5e9] via-transparent to-transparent z-10" />
           <img
             src={interiorImage}
             alt="Intérieur Pharmacie"
@@ -75,13 +75,13 @@ export default function About() {
             {/* Left Image Column */}
             <div className="relative">
               <Reveal className="h-full">
-                <div className="group relative h-full min-h-[500px] overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(3,4,94,0.15)]">
+                <div className="group relative h-full min-h-[500px] overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(14,165,233,0.15)]">
                   <img
                     src={pharmacyImage}
                     alt="Devanture Parapharmacie"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#03045e]/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0ea5e9]/80 via-transparent to-transparent" />
                   
                   {/* Glass Card on Image */}
                   <div className="absolute bottom-8 left-8 right-8 rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur-lg">
@@ -94,10 +94,10 @@ export default function About() {
             {/* Right Text Column */}
             <div className="flex flex-col justify-center pt-8">
               <Reveal delay={100} direction="left">
-                <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#03045e]/60">
+                <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#0ea5e9]/60">
                   Notre Histoire
                 </p>
-                <h2 className="mb-8 text-4xl font-bold leading-tight tracking-tight text-[#03045e] md:text-5xl">
+                <h2 className="mb-8 text-4xl font-bold leading-tight tracking-tight text-[#0ea5e9] md:text-5xl">
                   L'excellence comme <br/> point de départ.
                 </h2>
                 
@@ -112,12 +112,12 @@ export default function About() {
 
                 <div className="mt-12 flex items-center gap-6">
                   <div className="flex flex-col">
-                    <span className="text-4xl font-black text-[#03045e]">15+</span>
+                    <span className="text-4xl font-black text-[#0ea5e9]">15+</span>
                     <span className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Années d'expertise</span>
                   </div>
                   <div className="h-12 w-px bg-slate-200"></div>
                   <div className="flex flex-col">
-                    <span className="text-4xl font-black text-[#03045e]">5k+</span>
+                    <span className="text-4xl font-black text-[#0ea5e9]">5k+</span>
                     <span className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Produits certifiés</span>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export default function About() {
         <Container className="relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <Reveal>
-              <h2 className="text-4xl font-bold tracking-tight text-[#03045e] md:text-5xl">Nos piliers fondateurs</h2>
+              <h2 className="text-4xl font-bold tracking-tight text-[#0ea5e9] md:text-5xl">Nos piliers fondateurs</h2>
               <p className="mt-6 text-lg text-slate-600">L'ambition de vous offrir ce qu'il y a de meilleur, sans compromis.</p>
             </Reveal>
           </div>
@@ -157,11 +157,11 @@ export default function About() {
               }
             ].map((item, idx) => (
               <Reveal key={idx} delay={idx * 150} direction="up">
-                <div className="group h-full rounded-[2.5rem] bg-white/70 p-10 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_40px_rgba(3,4,94,0.08)] border border-white">
-                  <div className="mb-8 inline-flex rounded-2xl bg-[#03045e] p-4 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+                <div className="group h-full rounded-[2.5rem] bg-white/70 p-10 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_40px_rgba(14,165,233,0.08)] border border-white">
+                  <div className="mb-8 inline-flex rounded-2xl bg-[#0ea5e9] p-4 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
                     {item.icon}
                   </div>
-                  <h3 className="mb-4 text-2xl font-bold text-[#03045e]">{item.title}</h3>
+                  <h3 className="mb-4 text-2xl font-bold text-[#0ea5e9]">{item.title}</h3>
                   <p className="text-slate-600 leading-relaxed font-medium">{item.desc}</p>
                 </div>
               </Reveal>
@@ -176,7 +176,7 @@ export default function About() {
           <div className="grid lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-5 order-2 lg:order-1">
               <Reveal direction="right">
-                <h2 className="text-4xl font-bold tracking-tight text-[#03045e] md:text-5xl mb-6">
+                <h2 className="text-4xl font-bold tracking-tight text-[#0ea5e9] md:text-5xl mb-6">
                   Rencontrez nos spécialistes.
                 </h2>
                 <p className="text-lg text-slate-600 leading-relaxed max-w-lg mb-8">
@@ -203,7 +203,7 @@ export default function About() {
                 <div className="mt-12">
                   <Link
                     to="/info/contact"
-                    className="inline-flex items-center gap-2 border-b-2 border-[#03045e] pb-1 text-lg font-bold text-[#03045e] transition-all hover:text-[#16a34a] hover:border-[#16a34a]"
+                    className="inline-flex items-center gap-2 border-b-2 border-[#0ea5e9] pb-1 text-lg font-bold text-[#0ea5e9] transition-all hover:text-[#16a34a] hover:border-[#16a34a]"
                   >
                     Demander conseil
                     <ChevronRight className="h-5 w-5" />
@@ -220,7 +220,7 @@ export default function About() {
                     alt="Notre équipe"
                     className="w-full object-cover max-h-[600px]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#03045e] via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0ea5e9] via-transparent to-transparent opacity-60" />
                 </div>
                 
                 {/* Floating element */}
@@ -234,10 +234,10 @@ export default function About() {
                      <div className="h-12 w-12 rounded-full border-2 border-white bg-slate-200"></div>
                      <div className="h-12 w-12 rounded-full border-2 border-white bg-slate-300"></div>
                      <div className="h-12 w-12 rounded-full border-2 border-white bg-slate-400"></div>
-                     <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-[#03045e] text-xs font-bold text-white">+5</div>
+                     <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-[#0ea5e9] text-xs font-bold text-white">+5</div>
                    </div>
                    <div>
-                     <p className="font-bold text-[#03045e]">Équipe experte</p>
+                     <p className="font-bold text-[#0ea5e9]">Équipe experte</p>
                      <p className="text-sm font-medium text-slate-500">À votre service</p>
                    </div>
                  </div>
@@ -252,7 +252,7 @@ export default function About() {
       <section className="py-24">
         <Container>
           <Reveal>
-            <div className="relative overflow-hidden rounded-[3rem] bg-[#03045e] px-8 py-20 text-center shadow-[0_30px_60px_rgba(3,4,94,0.3)] md:px-16 lg:px-24">
+            <div className="relative overflow-hidden rounded-[3rem] bg-[#0ea5e9] px-8 py-20 text-center shadow-[0_30px_60px_rgba(14,165,233,0.3)] md:px-16 lg:px-24">
               
               {/* Decorative shapes */}
               <div className="absolute -top-[50%] -left-[10%] h-[300px] w-[300px] rounded-full bg-gradient-to-br from-blue-400/30 to-purple-500/30 blur-3xl" />
@@ -267,7 +267,7 @@ export default function About() {
                 </p>
                 <Link
                   to="/products"
-                  className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-5 text-lg font-bold text-[#03045e] transition-all hover:scale-105 hover:bg-[#eff6ff] hover:shadow-[0_15px_30px_rgba(255,255,255,0.2)]"
+                  className="inline-flex items-center gap-3 rounded-full bg-white px-10 py-5 text-lg font-bold text-[#0ea5e9] transition-all hover:scale-105 hover:bg-[#eff6ff] hover:shadow-[0_15px_30px_rgba(255,255,255,0.2)]"
                 >
                   Accéder à la boutique
                   <ArrowRight className="h-6 w-6" />

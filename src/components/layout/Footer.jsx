@@ -136,7 +136,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="mt-16 bg-[#03045e] text-white">
+    <footer className="mt-16 bg-[#0ea5e9] text-white">
       <Container className="py-12 md:py-14">
         <div className="border-b border-white/10 pb-10">
           <h3 className="text-lg font-black uppercase tracking-[0.16em]">{ui.joinCommunity}</h3>

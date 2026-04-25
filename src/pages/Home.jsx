@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
+  Maximize,
 } from "lucide-react";
 import Container from "../components/layout/Container";
 import ProductCard from "../components/product/ProductCard";
@@ -238,7 +239,7 @@ function CategoryCard({ category, featured = false, delay = 0, className = "" })
         className="group block h-full transition-transform duration-300 hover:-translate-y-1.5"
       >
         <div
-          className={`flex h-full flex-col overflow-hidden rounded-[28px] border bg-white shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition-all duration-300 group-hover:shadow-[0_20px_50px_rgba(3,4,94,0.15)] hover:-translate-y-1 ${
+          className={`flex h-full flex-col overflow-hidden rounded-[28px] border bg-white shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition-all duration-300 group-hover:shadow-[0_20px_50px_rgba(14,165,233,0.15)] hover:-translate-y-1 ${
             featured ? "border-transparent" : "border-slate-100"
           }`}
         >
@@ -263,7 +264,7 @@ function CategoryCard({ category, featured = false, delay = 0, className = "" })
             )}
           </div>
 
-          <div className="flex flex-1 flex-col justify-between px-6 pb-6 pt-5 bg-[#03045e] text-white">
+          <div className="flex flex-1 flex-col justify-between px-6 pb-6 pt-5 bg-[#0ea5e9] text-white">
             <div>
               <div
                 className="inline-flex rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm"
@@ -742,120 +743,35 @@ export default function Home() {
       <main>
         <section className="pt-7 md:pt-9">
           <Container>
-            <Reveal className="relative overflow-hidden rounded-[40px] bg-[#eff6ff] md:mx-[-18px] lg:mx-[-28px]">
-              <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#bfdbfe]/40 to-transparent pointer-events-none" />
-              
-              <div className="grid min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:grid-cols-2 items-center">
-                <div className="relative z-10 px-8 py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
-                  <div
-                    key={`hero-copy-${currentSlide?.id || "fallback"}`}
-                    className="relative z-10 animate-in fade-in slide-in-from-left-8 duration-700"
-                  >
-                    <div className="mb-6 inline-flex items-center gap-3">
-                      <span className="h-px w-8 bg-[#03045e]"></span>
-                      <span className="text-xs font-bold uppercase tracking-widest text-[#03045e]">
-                        {currentSlide?.eyebrow || ui.featured}
-                      </span>
-                    </div>
-                    
-                    <h1 className="mb-6 text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-[#03045e]">
-                      {currentSlide?.title || ui.studioSelection}
-                    </h1>
-                    
-                    <p className="mb-8 max-w-lg text-lg sm:text-xl leading-relaxed text-[#03045e]/80">
-                      {currentSlide?.subtitle || currentSlide?.description}
-                    </p>
-
-                    <div className="flex flex-wrap items-center gap-4 mt-10">
-                      <Link
-                        to="/products"
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[#03045e] px-8 py-4 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
-                      >
-                        {ui.exploreCollection}
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-
-                    <div className="mt-16 grid grid-cols-3 gap-6 border-t border-[#03045e]/10 pt-8">
-                       <div>
-                         <div className="text-3xl font-black text-[#03045e]">{products.length || 96}+</div>
-                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
-                           {ui.allProducts}
-                         </div>
-                       </div>
-                       <div>
-                         <div className="text-3xl font-black text-[#03045e]">{topLevelCategoryCount || 6}</div>
-                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
-                           {ui.categories}
-                         </div>
-                       </div>
-                       <div>
-                         <div className="text-3xl font-black text-[#03045e]">{heroSlides.length}</div>
-                         <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#03045e]/60">
-                           {ui.liveCatalog}
-                         </div>
-                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative h-full w-full min-h-[400px] lg:min-h-full overflow-hidden p-6 lg:p-12 pl-0">
-                  <div className="relative h-full w-full overflow-hidden rounded-[30px] shadow-2xl">
-                    <AnimatePresence mode="wait">
-                      {currentSlide?.image ? (
-                        <motion.img
-                          key={`hero-image-${currentSlide?.id || "fallback"}`}
-                          src={currentSlide?.image}
-                          alt={currentSlide?.title || "Adwart"}
-                          initial={{ opacity: 0, scale: 1.05 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.8, ease: "easeOut" }}
-                          className="absolute inset-0 h-full w-full object-cover"
-                        />
-                      ) : isHeroImageLoading ? (
-                        <motion.div 
-                           key="loading"
-                           initial={{ opacity: 0 }} 
-                           animate={{ opacity: 1 }} 
-                           exit={{ opacity: 0 }}
-                           className="absolute inset-0 h-full w-full animate-pulse bg-neutral-200" 
-                        />
-                      ) : (
-                        <motion.div 
-                           key="no-image"
-                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                           className="absolute inset-0 flex h-full w-full items-center justify-center bg-neutral-200 text-sm font-medium text-neutral-500">
-                          {ui.noImage}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-                    {heroSlides.length > 1 ? (
-                      <div className="absolute bottom-6 right-6 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setHeroIndex((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-[#03045e] backdrop-blur transition-transform hover:scale-110 shadow-lg"
-                          aria-label={ui.previousSlide}
-                        >
-                          <ChevronLeft className="h-5 w-5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setHeroIndex((prev) => (prev + 1) % heroSlides.length)}
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#03045e] text-white shadow-lg transition-transform hover:scale-110"
-                          aria-label={ui.nextSlide}
-                        >
-                          <ChevronRight className="h-5 w-5" />
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
+            <Reveal className="relative overflow-hidden rounded-[40px] bg-black md:mx-[-18px] lg:mx-[-28px] min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
+              <video
+                id="hero-video"
+                src="/chroma-kameleon.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  const videoElement = document.getElementById("hero-video");
+                  if (videoElement) {
+                    if (videoElement.requestFullscreen) {
+                      videoElement.requestFullscreen();
+                    } else if (videoElement.webkitRequestFullscreen) {
+                      videoElement.webkitRequestFullscreen();
+                    } else if (videoElement.msRequestFullscreen) {
+                      videoElement.msRequestFullscreen();
+                    }
+                  }
+                }}
+                className="absolute bottom-6 right-6 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-black/60 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:bottom-10 md:right-10"
+                aria-label="Plein écran"
+              >
+                <Maximize size={24} />
+              </button>
             </Reveal>
           </Container>
         </section>
@@ -999,7 +915,7 @@ export default function Home() {
                 <div className="p-8">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#03045e] text-sm font-black uppercase tracking-wide text-white shadow-sm">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#0ea5e9] text-sm font-black uppercase tracking-wide text-white shadow-sm">
                         {getInitials(highlightReview?.user?.name, "AV")}
                       </div>
                       <div>
@@ -1046,7 +962,7 @@ export default function Home() {
                   <div className="group flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(15,23,42,0.12)]">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-sm font-black uppercase tracking-wide text-[#03045e]">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-sm font-black uppercase tracking-wide text-[#0ea5e9]">
                           {getInitials(story.userName, "CL")}
                         </div>
                         <div>
@@ -1075,7 +991,7 @@ export default function Home() {
                     </p>
 
                     <div className="mt-auto pt-8">
-                      <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#03045e] transition-colors group-hover:text-sky-700">
+                      <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#0ea5e9] transition-colors group-hover:text-sky-700">
                         {story.rating > 0 ? ui.rating.replace("{rating}", story.rating) : ui.readMoreShort}
                         <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </div>

@@ -18,7 +18,7 @@
   --store-muted: #64748b; /* Slate 500 */
   --store-accent: #16a34a; /* Health Green */
   --store-accent-dark: #15803d; /* Darker Health Green */
-  --store-deep: #03045e; /* Deep Marine/Navy */
+  --store-deep: #0ea5e9; /* Deep Marine/Navy */
 }
 
 html[dir="rtl"] body {
@@ -113,5 +113,18 @@ body {
   .admin-shell__surface {
     border-radius: 24px;
     padding: 16px;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
   }
 }
