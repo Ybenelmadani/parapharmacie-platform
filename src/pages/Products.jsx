@@ -7,7 +7,6 @@ import { CatalogAPI } from "../api/catalog";
 import { useI18n } from "../context/I18nContext";
 
 const PAGE_SIZE = 24;
-const QUICK_BRAND_LIMIT = 6;
 const FEATURED_COLOR_ORDER = ["Transparent", "Claire", "Nude", "Beige", "Sable", "Medium", "Doree", "Brun", "Rose", "Rouge", "Blanc", "Noir", "Red", "Yellow", "Blue", "Green", "Black", "White", "Pink", "Orange", "Brown", "Grey"];
 const COLOR_SWATCHES = {
   Transparent: { base: "#e2e8f0", glow: "#f8fafc" },
@@ -404,9 +403,6 @@ export default function Products() {
     });
   }, [colors]);
 
-  const primaryColors = useMemo(() => orderedColors.slice(0, 6), [orderedColors]);
-  const secondaryColors = useMemo(() => orderedColors.slice(6, 12), [orderedColors]);
-  const quickBrands = useMemo(() => brands.slice(0, QUICK_BRAND_LIMIT), [brands]);
   const hasColorOptions = orderedColors.length > 0;
 
   return (

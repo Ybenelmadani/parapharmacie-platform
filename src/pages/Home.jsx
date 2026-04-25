@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowUp,
-  ChevronLeft,
   ChevronRight,
   Star,
   Maximize,
@@ -428,7 +427,6 @@ export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [categoryShowcase, setCategoryShowcase] = useState({});
   const [loading, setLoading] = useState(true);
-  const [heroIndex, setHeroIndex] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -524,57 +522,6 @@ export default function Home() {
       return product?.brand?.id || product?.brand_id || product?.brand?.name || "unknown";
     });
   }, [products]);
-
-  const heroSlides = useMemo(() => {
-    const source = mixedProducts.slice(0, LANDING_HERO_IMAGES.length);
-    if (source.length === 0) {
-      return LANDING_HERO_IMAGES.map((image, index) => ({
-          id: `fallback-${index + 1}`,
-          eyebrow: ui.fallbackEyebrow,
-          title: ui.fallbackTitle,
-          subtitle: ui.fallbackSubtitle,
-          description: ui.fallbackDescription,
-          image,
-          bg: "from-neutral-100 to-neutral-100",
-          accent: "text-neutral-900",
-        }));
-    }
-
-    return source.map((product, index) => ({
-      id: product.id,
-      eyebrow: product?.category?.name?.toUpperCase() || ui.featured,
-      title: product?.name || ui.studioSelection,
-      subtitle: product?.brand?.name
-        ? ui.by.replace("{brand}", product.brand.name)
-        : ui.thoughtfulTools,
-      description:
-        shortText(product?.description, 170) ||
-        ui.curatedMaterials,
-      image: LANDING_HERO_IMAGES[index] || getProductImage(product) || firstCatalogImage,
-      bg: "from-neutral-100 to-neutral-100",
-      accent: "text-neutral-900",
-    }));
-  }, [
-    firstCatalogImage,
-    mixedProducts,
-    ui.by,
-    ui.curatedMaterials,
-    ui.fallbackDescription,
-    ui.fallbackEyebrow,
-    ui.fallbackSubtitle,
-    ui.fallbackTitle,
-    ui.featured,
-    ui.studioSelection,
-    ui.thoughtfulTools,
-  ]);
-
-  useEffect(() => {
-    if (heroSlides.length <= 1) return;
-    const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [heroSlides.length]);
 
   useEffect(() => {
     let active = true;
@@ -729,14 +676,6 @@ export default function Home() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const topLevelCategoryCount = useMemo(
-    () => categories.filter((category) => !category?.parent_id).length,
-    [categories]
-  );
-
-  const currentSlide = heroSlides[Math.min(heroIndex, Math.max(0, heroSlides.length - 1))];
-  const isHeroImageLoading = loading && !currentSlide?.image;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-14 text-neutral-900">
