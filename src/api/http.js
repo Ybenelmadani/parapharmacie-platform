@@ -10,9 +10,8 @@ export function shouldUseLocalApiFallback() {
   const explicitValue = String(process.env.REACT_APP_USE_LOCAL_DATA || "").trim().toLowerCase();
 
   if (explicitValue === "true") return true;
-  if (explicitValue === "false") return false;
 
-  return /ecommerce_parapharmacie\.test/i.test(getApiBaseUrl());
+  return false;
 }
 
 export const http = axios.create({

@@ -16,7 +16,7 @@ export const STORE_SHIPPING_FEE = readNumber(
   process.env.REACT_APP_SHIPPING_FEE,
   DEFAULT_SHIPPING_FEE
 );
-export const STORE_SUPPORT_PHONE = (process.env.REACT_APP_SUPPORT_PHONE || "+212 6 29 69 66 56").trim();
+export const STORE_SUPPORT_PHONE = (process.env.REACT_APP_SUPPORT_PHONE || "+212 7 66 53 75 01").trim();
 export const STORE_SUPPORT_EMAIL = (
   process.env.REACT_APP_SUPPORT_EMAIL || "contact@parapharmacie.ma"
 ).trim();

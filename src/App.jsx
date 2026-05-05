@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import CartDrawer from "./components/cart/CartDrawer";
+import AdvisorWidget from "./components/ai/AdvisorWidget";
 
 // Store pages
 import Home from "./pages/Home";
@@ -59,6 +60,7 @@ function AnimatedFrontendLayout() {
     <div className="flex min-h-screen flex-col">
       <Header />
       <CartDrawer />
+      <AdvisorWidget />
       <div className="flex-1 flex flex-col">
         <AnimatePresence mode="wait">
           <motion.div

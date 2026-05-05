@@ -76,7 +76,7 @@ function generateKey(base, params) {
 }
 
 function productCacheKey(id) {
-  return `catalog:product:v3:${id}`;
+  return `catalog:product:v5:${id}`;
 }
 
 function clearCatalogCacheByPrefix(prefix) {
@@ -112,7 +112,7 @@ async function loadWithFallback(remoteLoader, mockLoader) {
 
 export const CatalogAPI = {
   categories: () =>
-    cachedGet("catalog:categories:v4", () =>
+    cachedGet("catalog:categories:v5", () =>
       loadWithFallback(
         () => http.get("/categories").then((r) => r.data),
         () => getMockCategories()
@@ -120,7 +120,7 @@ export const CatalogAPI = {
     ),
   
   brands: (params = {}) => 
-    cachedGet(generateKey("catalog:brands:v3", params), () =>
+    cachedGet(generateKey("catalog:brands:v5", params), () =>
       loadWithFallback(
         () => http.get("/brands", { params }).then((r) => r.data),
         () => getMockBrands(params)
@@ -128,7 +128,7 @@ export const CatalogAPI = {
     ),
     
   colors: (params = {}) => 
-    cachedGet(generateKey("catalog:colors:v3", params), () =>
+    cachedGet(generateKey("catalog:colors:v5", params), () =>
       loadWithFallback(
         () => http.get("/variants", { params: { ...params, facet: "colors" } }).then((r) => r.data),
         () => getMockColors(params)
@@ -136,7 +136,7 @@ export const CatalogAPI = {
     ),
 
   products: (params = {}) =>
-    cachedGet(generateKey("catalog:products:v3", params), () =>
+    cachedGet(generateKey("catalog:products:v5", params), () =>
       loadWithFallback(
         () =>
           http.get("/products", { params }).then((r) => {
@@ -150,7 +150,7 @@ export const CatalogAPI = {
     ),
     
   productsPage: (params = {}) => 
-    cachedGet(generateKey("catalog:productsPage:v3", params), () =>
+    cachedGet(generateKey("catalog:productsPage:v5", params), () =>
       loadWithFallback(
         () => http.get("/products", { params }).then((r) => r.data),
         () => getMockProductsPage(params)
@@ -158,7 +158,7 @@ export const CatalogAPI = {
     ),
     
   product: (id, options = {}) => {
-    const key = `catalog:product:v3:${id}`;
+    const key = `catalog:product:v5:${id}`;
 
     if (options?.fresh) {
       removeCache(key);
@@ -173,7 +173,7 @@ export const CatalogAPI = {
   },
 
   variants: (params = {}) => 
-    cachedGet(generateKey("catalog:variants:v3", params), () =>
+    cachedGet(generateKey("catalog:variants:v5", params), () =>
       loadWithFallback(
         () => http.get("/variants", { params }).then((r) => r.data),
         () => getMockColors(params)
@@ -181,7 +181,7 @@ export const CatalogAPI = {
     ),
     
   reviews: (params = {}) => 
-    cachedGet(generateKey("catalog:reviews:v3", params), () =>
+    cachedGet(generateKey("catalog:reviews:v5", params), () =>
       loadWithFallback(
         () => http.get("/reviews", { params }).then((r) => r.data),
         () => getMockReviews(params)
@@ -190,5 +190,5 @@ export const CatalogAPI = {
 
   invalidateProduct: (id) => removeCache(productCacheKey(id)),
 
-  invalidateReviews: () => clearCatalogCacheByPrefix("catalog:reviews:v3"),
+  invalidateReviews: () => clearCatalogCacheByPrefix("catalog:reviews:v5"),
 };

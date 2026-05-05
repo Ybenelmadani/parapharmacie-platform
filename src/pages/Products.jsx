@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronRight, Search, X, Grid3x3, LayoutGrid } from "lucide-react";
+import { ChevronRight, Search, Grid3x3, LayoutGrid } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import Container from "../components/layout/Container";
 import ProductCard from "../components/product/ProductCard";
@@ -104,7 +104,7 @@ function ColorShortcut({ color, active, onClick }) {
 }
 
 export default function Products() {
-  const { pick, translateColor } = useI18n();
+  const { pick } = useI18n();
   const ui = pick({
     fr: {
       loadError: "Impossible de charger les produits. Verifiez la connexion a l'API backend.",
@@ -442,47 +442,6 @@ export default function Products() {
       <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
         <aside className="w-full shrink-0 lg:w-[280px] xl:w-[320px]">
           <div className="flex flex-col gap-6">
-            
-            {hasActiveFilters && (
-              <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900">Filtres actifs</h3>
-                  <button
-                    onClick={() => setSp(new URLSearchParams())}
-                    className="text-xs font-semibold text-[#0ea5e9] hover:underline"
-                  >
-                    Effacer tout
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {category_id && (
-                    <button onClick={() => updateSearchParam("category_id", "")} className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600">
-                      <span>{ui.categorySelected}</span>
-                      <X size={12} className="text-slate-400 group-hover:text-rose-500" />
-                    </button>
-                  )}
-                  {brand_id && (
-                    <button onClick={() => updateSearchParam("brand_id", "")} className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600">
-                      <span>{ui.brandSelected}</span>
-                      <X size={12} className="text-slate-400 group-hover:text-rose-500" />
-                    </button>
-                  )}
-                  {color && (
-                    <button onClick={() => updateSearchParam("color", "")} className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600">
-                      <span>{ui.colorSelected.replace("{color}", translateColor(color))}</span>
-                      <X size={12} className="text-slate-400 group-hover:text-rose-500" />
-                    </button>
-                  )}
-                  {q.trim() && (
-                    <button onClick={() => updateSearchParam("q", "")} className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600">
-                      <span>Recherche: {q}</span>
-                      <X size={12} className="text-slate-400 group-hover:text-rose-500" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
             <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm flex flex-col gap-6">
               
               <div>

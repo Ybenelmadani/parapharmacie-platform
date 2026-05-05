@@ -4,6 +4,7 @@ import { CatalogAPI } from "../api/catalog";
 import { ReviewsAPI } from "../api/reviews";
 import ImageGallery from "../components/product/ImageGallery";
 import VariantPicker from "../components/product/VariantPicker";
+import ProductCard from "../components/product/ProductCard";
 import Container from "../components/layout/Container";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
@@ -45,6 +46,7 @@ export default function ProductDetails() {
       submit: "Envoyer",
       noReviews: "Aucun avis pour le moment.",
       dash: "—",
+      relatedProducts: "autres produits dans la même catégorie :",
     },
     en: {
       loadError: "Unable to load this product right now.",
@@ -69,6 +71,7 @@ export default function ProductDetails() {
       submit: "Submit",
       noReviews: "No reviews yet.",
       dash: "-",
+      relatedProducts: "other products in the same category :",
     },
     ar: {
       loadError: "تعذر تحميل هذا المنتج حالياً.",
@@ -93,20 +96,31 @@ export default function ProductDetails() {
       submit: "إرسال",
       noReviews: "لا توجد مراجعات بعد.",
       dash: "-",
+      relatedProducts: "منتجات أخرى في نفس الفئة :",
     },
   });
 
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [variantId, setVariantId] = useState(null);
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     CatalogAPI.product(id)
       .then((data) => {
         setProduct(data);
         setVariantId(data.variants?.[0]?.id || null);
+        
+        if (data.category?.id) {
+          CatalogAPI.products({ category_id: data.category.id, limit: 17 })
+            .then((related) => {
+              setRelatedProducts(related.filter((p) => String(p.id) !== String(id)).slice(0, 16));
+            })
+            .catch(() => {});
+        }
       })
       .catch(() => {
         notifyError(ui.loadError);
@@ -270,6 +284,28 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
+      
+      {relatedProducts.length > 0 && (
+        <div className="mt-20">
+          <div className="mb-8 flex items-end gap-3 border-b-2 border-[#ea580c] pb-3">
+            <span className="text-3xl leading-none">🎨</span>
+            <h2 
+              className="text-2xl sm:text-3xl font-bold text-[#0ea5e9]" 
+              style={{ fontFamily: "'Caveat', 'Comic Sans MS', cursive", fontStyle: "italic" }}
+            >
+              {relatedProducts.length} {ui.relatedProducts}
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {relatedProducts.map((related) => (
+              <div key={related.id} className="h-full">
+                <ProductCard p={related} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </Container>
   );
 }
