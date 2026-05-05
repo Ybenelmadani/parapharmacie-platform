@@ -19,7 +19,7 @@ import skincareImage from "../assets/logo.jpg";
 import ecoImage from "../assets/eco-natural.jfif";
 import cremeImage from "../assets/creme.jfif";
 import painReliefImage from "../assets/pain-relief.jfif";
-import teethImage from "../assets/teeth-care.jfif";
+import teethImage from "../assets/categories/bucco-dentaire.jfif";
 import storefrontImage from "../assets/para.png";
 import naturalCareImage from "../assets/p.png";
 import pharmacyInteriorImage from "../assets/Nord Parisien - Inside Pharmacy.png";
